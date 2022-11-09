@@ -13,5 +13,4 @@ public class Movement {
         double y_time_component = start.getYdistance(end)/crane.getVy();
         return Math.max((int)y_time_component, (int) x_time_component);
     }
-
 }
