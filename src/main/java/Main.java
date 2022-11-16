@@ -20,7 +20,13 @@ public class Main {
 
         inputData.makeStacks(field);
         ArrayList<Integer> list = new ArrayList<>(1);
+        Container container = new Container(7, 1);
+        containers.put(7, container);
         field.placeContainer(new Container(6, 2), new ArrayList<Integer>(Arrays.asList(1, 2)));
+        field.placeContainer(new Container(5, 1), new ArrayList<Integer>(Arrays.asList(3)));
+        field.placeContainer(container, new ArrayList<Integer>(Arrays.asList(3)));
+        if(field.isValidContainerDestination(container, new ArrayList<Integer>(Arrays.asList(2))) && field.isMovableContainer(container)) field.moveContainer(container, new ArrayList<Integer>(Arrays.asList(2)));
+
         visualizeField();
     }
 

@@ -4,27 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" name="Changes" comment="Session 1 fixed&#10;1. Coordinate System&#10;2. Movement&#10;3. Crane trajectory&#10;4. Collision prevention">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_code_gson_gson_2_10.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Assignment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Field.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/InputData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Slot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" name="Changes" comment="Placing and moving container">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ContainerStacking.iml" beforeDir="false" afterPath="$PROJECT_DIR$/ContainerStacking.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/terminal_4_3.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/terminal_4_3.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Container.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Container.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Coordinate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Coordinate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Crane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Crane.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Field.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Movement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Movement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Crane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Crane.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Field.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Field.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Field.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Slot.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Slot.class" afterDir="false" />
+    </list>
+    <list id="b2a15bc9-0db9-455a-b857-d407b0b8ac0c" name="Changes by lucas" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/Crane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Crane.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,6 +31,14 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="LineStatusTrackerManager">
+    <file path="$PROJECT_DIR$/src/main/java/Crane.java">
+      <ranges>
+        <range start1="26" end1="27" start2="26" end2="27" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
+        <range start1="32" end1="33" start2="32" end2="33" changelist="b2a15bc9-0db9-455a-b857-d407b0b8ac0c" />
+      </ranges>
+    </file>
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -52,21 +50,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "last_opened_file_path": "/home/woutd/Documents/School/Industriele Ingenieurswetenschappen/Ma1/Sem1/Algoritmen/Project/ContainerStacking",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.keymap"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="$USER_HOME$/.jdks/corretto-17.0.4.1" />
@@ -94,7 +93,12 @@
       <workItem from="1666197702597" duration="4388000" />
       <workItem from="1666796129515" duration="379000" />
       <workItem from="1667997155653" duration="7504000" />
-      <workItem from="1668004710993" duration="2242000" />
+      <workItem from="1668004710993" duration="2456000" />
+      <workItem from="1668022621183" duration="122000" />
+      <workItem from="1668022756908" duration="60000" />
+      <workItem from="1668411384135" duration="76000" />
+      <workItem from="1668587600378" duration="139000" />
+      <workItem from="1668588712386" duration="9384000" />
     </task>
     <task id="LOCAL-00001" summary="InitialPush">
       <created>1666197741595</created>
@@ -124,7 +128,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667997525436</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Stacking">
+      <created>1668007077267</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1668007077267</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -145,17 +156,23 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="InitialPush" />
     <MESSAGE value="Session 1 fixed&#10;1. Coordinate System&#10;2. Movement&#10;3. Crane trajectory&#10;4. Collision prevention" />
-    <option name="LAST_COMMIT_MESSAGE" value="Session 1 fixed&#10;1. Coordinate System&#10;2. Movement&#10;3. Crane trajectory&#10;4. Collision prevention" />
+    <MESSAGE value="Stacking" />
+    <MESSAGE value="Placing and moving container" />
+    <option name="LAST_COMMIT_MESSAGE" value="Placing and moving container" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/InputData.java</url>
-          <line>18</line>
-          <option name="timeStamp" value="1" />
+          <url>file://$PROJECT_DIR$/src/main/java/Field.java</url>
+          <line>137</line>
+          <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

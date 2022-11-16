@@ -68,18 +68,28 @@ public class Field {
         if(slots.get(0) != null) height = slots.get(0).getTotalHeight();
         for(int slotId : destinationSlots) {
             if(slots.get(slotId) != null) {
+                System.out.println("Container "+ container.getId()+" cannot be placed.");
+                System.out.println("Destination surface is not flat.");
                 if(height != slots.get(slotId).getTotalHeight()) return false;
             }
             else {
+                System.out.println("Container "+ container.getId()+" cannot be placed.");
+                System.out.println("Destination surface is not flat.");
                 if(height != 0) return false;
             }
         }
 
         // Check if new height doesn't maxHeight
-        if(height == MAX_HEIGHT) return false;
+        if(height == MAX_HEIGHT) {
+            System.out.println("Container "+ container.getId()+" cannot be placed.");
+            System.out.println("Max height exceeded.");
+            return false;
+        }
 
         // Check if destinationSlots have enough space
         if(destinationSlots.size() != container.getLength()) {
+            System.out.println("Container "+ container.getId()+" cannot be placed.");
+            System.out.println("Not enough space to place the container.");
             return false;
         }
 

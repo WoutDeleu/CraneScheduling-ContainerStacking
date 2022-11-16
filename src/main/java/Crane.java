@@ -24,7 +24,7 @@ public class Crane {
         return trajectory;
     }
 
-    /// TODO: ?? Time unit, how/when?
+
     public void addToTrajectory(Coordinate start, Coordinate end, int startTime, int endTime) {
         trajectory.put(startTime, start);
 
