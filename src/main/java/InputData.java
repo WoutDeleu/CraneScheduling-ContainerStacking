@@ -42,7 +42,7 @@ public class InputData {
     public void makeStacks(Field field) {
         for(Container container : containers) {
             int containerId = container.getId();
-            List<Slot> slotsContainer = field.getSlot(containerId);
+            List<Slot> slotsContainer = field.getSlot_containerId(containerId);
             for(Slot slot : slotsContainer) {
                 slot.addToStack(containerId);
             }

@@ -10,11 +10,39 @@ public class Slot {
         stack.push(id);
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void deleteTopStack() {
+        stack.pop();
+    }
+
     public int getId() {
         return id;
     }
 
+
     public int getHeightContainer(int containerId) {
-        return stack.indexOf(containerId);
+        return stack.indexOf(containerId)+1;
+    }
+    public int getTotalHeight() {
+        return stack.size();
+    }
+    public Stack<Integer> getStack() {
+        return stack;
+    }
+
+    public String printStackInfo() {
+        return "(" + stack.peek() + ", " + stack.size() + ")";
+    }
+
+    public int peekStack() {
+        return stack.peek();
+
     }
 }

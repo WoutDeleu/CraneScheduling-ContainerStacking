@@ -4,12 +4,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Main {
+    private static final int MAX_HEIGHT = 4;
+
     private static Field field;
     private static Map<Integer,Container> containers = new HashMap<>();
 
@@ -17,10 +16,12 @@ public class Main {
         InputData inputData = readFile("data/terminal_4_3.json");
 
         containers = inputData.getContainersMap();
-        field = new Field(inputData.getSlots(), inputData.getAssignmentsMap());
+        field = new Field(inputData.getSlots(), inputData.getAssignmentsMap(), MAX_HEIGHT);
 
         inputData.makeStacks(field);
-        System.out.println(field.getHeightContainer(3));
+        ArrayList<Integer> list = new ArrayList<>(1);
+        field.placeContainer(new Container(6, 2), new ArrayList<Integer>(Arrays.asList(1, 2)));
+        visualizeField();
     }
 
     public static InputData readFile(String path) {
@@ -35,4 +36,19 @@ public class Main {
         }
         return inputData;
     }
+
+    public static void visualizeField() {
+        Slot[][] fieldMatrix = field.getFieldMatrix();
+        for(int i = 0 ; i < fieldMatrix.length; i++) {
+            for(int j = 0 ; j < fieldMatrix[i].length; j++) {
+                if(fieldMatrix[i][j] != null) {
+                    System.out.print(fieldMatrix[i][j].printStackInfo() + "\t");
+                }
+                else System.out.print("....\t" );
+            }
+            System.out.println();
+        }
+    }
 }
+
+
