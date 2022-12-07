@@ -6,8 +6,17 @@ import java.util.List;
 import java.util.Map;
 
 public class InputData {
+    @SerializedName("lengt")
+    private int length;
+    @SerializedName("width")
+    private int width;
+    @SerializedName("maxHeight")
+    private int maxHeight;
+
     @SerializedName("slots")
     private List<Slot> slots = new ArrayList<>();
+    @SerializedName("cranes")
+    private List<Crane> cranes = new ArrayList<>();
     @SerializedName("assignments")
     private List<Assignment> assignments = new ArrayList<>();
     @SerializedName("containers")

@@ -8,9 +8,12 @@ public class Field {
     private List<Slot> slots;
     private Map<Integer, Assignment> assignment;
 
+    public List<Slot> getSlots() {
+        return slots;
+    }
     public Field(List<Slot> slot, Map<Integer, Assignment> assignment, int MAX_HEIGHT) {
         this.MAX_HEIGHT = MAX_HEIGHT;
-        this.slots =slot;
+        this.slots = slot;
         this.assignment = assignment;
     }
     // Return a list of slots on which the container is placed

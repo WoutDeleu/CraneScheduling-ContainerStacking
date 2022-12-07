@@ -1,0 +1,5 @@
+%CraneId;ContainerId;PickupTime;EndTime;PickupPosX;PickupPosY;EndPosX;EndPosY;
+1;6;30;45;31;0.5;16;0.5;
+1;8;60;104;1;0.5;55;0.5;
+1;;104;119;55;0.5;40;0.5;
+2;9;94;120;81;0.5;55;0.5;

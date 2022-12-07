@@ -1,7 +1,25 @@
+import com.google.gson.annotations.SerializedName;
+
 import java.util.*;
 
 public class Crane {
+    @SerializedName("x")
+    private double x;
+    @SerializedName("y")
+    private double y;
+    @SerializedName("ymin")
+    private int ymin;
+    @SerializedName("ymax")
+    private int ymax;
+    @SerializedName("id")
+    private int id;
+    @SerializedName("xmax")
+    private int xmax;
+    @SerializedName("xmin")
+    private int xmin;
+    @SerializedName("xspeed")
     private int Vx; // Velocity in X-direction
+    @SerializedName("yspeed")
     private int Vy; // Velocity in Y-direction
 
     Map<Integer, Coordinate> trajectory;

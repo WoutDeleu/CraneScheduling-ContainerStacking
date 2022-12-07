@@ -2,7 +2,8 @@ import java.util.ArrayList;
 
 public class Assignment {
     private int container_id;
-    private ArrayList<Integer> slot_id;
+//    private ArrayList<Integer> slot_id;
+    private int lot_id;
 
     public Assignment(int container_id, ArrayList<Integer> slot_id) {
         this.container_id = container_id;
