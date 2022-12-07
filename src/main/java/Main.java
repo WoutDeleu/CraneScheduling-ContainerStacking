@@ -13,6 +13,7 @@ public class Main {
 
     public static void main(String[] args) {
         InputData inputData = readFile("data/terminal22_1_100_1_10.json");
+        inputData.formatAssignemnent()
 
         containers = inputData.getContainersMap();
         field = new Field(inputData.getSlots(), inputData.getAssignmentsMap(), MAX_HEIGHT);

@@ -74,11 +74,11 @@ public class Crane {
                     Coordinate coordinate3 = crane2.getTrajectory().get(t3);
                     Coordinate coordinate4 = crane2.getTrajectory().get(t4);
 
-                    int x1 = Math.min(coordinate1.getX(), coordinate2.getX());
-                    int x2 = Math.max(coordinate1.getX(), coordinate2.getX());
+                    double x1 = Math.min(coordinate1.getX(), coordinate2.getX());
+                    double x2 = Math.max(coordinate1.getX(), coordinate2.getX());
 
-                    int x3 = Math.min(coordinate4.getX(), coordinate3.getX());
-                    int x4 = Math.max(coordinate4.getX(), coordinate3.getX());
+                    double x3 = Math.min(coordinate4.getX(), coordinate3.getX());
+                    double x4 = Math.max(coordinate4.getX(), coordinate3.getX());
 ;
                     return !(x2+safeDistance >= x3 && x1+safeDistance <= x4);
                 }

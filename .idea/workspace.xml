@@ -4,20 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" name="Changes" comment="Placing and moving container">
-      <change afterPath="$PROJECT_DIR$/data/outputEx.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/terminal22_1_100_1_10.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/terminal22_1_100_1_10target.json" afterDir="false" />
+    <list default="true" id="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" name="Changes" comment="New Json">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Assignment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Assignment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Coordinate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Coordinate.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Crane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Crane.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Field.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/InputData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/InputData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Assignment.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Assignment.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Crane.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Crane.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Field.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Field.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/InputData.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/InputData.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Slot.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Slot.class" afterDir="false" />
     </list>
     <list id="b2a15bc9-0db9-455a-b857-d407b0b8ac0c" name="Changes by lucas" comment="">
       <change beforePath="$PROJECT_DIR$/src/main/java/Crane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Crane.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Field.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Slot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Slot.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -38,10 +40,9 @@
   <component name="LineStatusTrackerManager">
     <file path="$PROJECT_DIR$/src/main/java/Crane.java">
       <ranges>
-        <range start1="0" end1="0" start2="0" end2="2" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="3" end1="3" start2="5" end2="20" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="4" end1="4" start2="21" end2="22" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="32" end1="33" start2="50" end2="51" changelist="b2a15bc9-0db9-455a-b857-d407b0b8ac0c" />
+        <range start1="50" end1="53" start2="50" end2="53" changelist="b2a15bc9-0db9-455a-b857-d407b0b8ac0c" />
+        <range start1="76" end1="78" start2="76" end2="78" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
+        <range start1="79" end1="81" start2="79" end2="81" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
       </ranges>
     </file>
   </component>
@@ -78,6 +79,7 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="ContainerStacking" />
+      <option name="VM_PARAMETERS" value="-ea" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -108,7 +110,7 @@
       <workItem from="1668712672475" duration="96000" />
       <workItem from="1669015351537" duration="21000" />
       <workItem from="1669796851257" duration="6205000" />
-      <workItem from="1670400002857" duration="2595000" />
+      <workItem from="1670400002857" duration="8133000" />
     </task>
     <task id="LOCAL-00001" summary="InitialPush">
       <created>1666197741595</created>
@@ -152,7 +154,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668599010184</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="New Json">
+      <created>1670402981130</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1670402981130</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -175,16 +184,12 @@
     <MESSAGE value="Session 1 fixed&#10;1. Coordinate System&#10;2. Movement&#10;3. Crane trajectory&#10;4. Collision prevention" />
     <MESSAGE value="Stacking" />
     <MESSAGE value="Placing and moving container" />
-    <option name="LAST_COMMIT_MESSAGE" value="Placing and moving container" />
+    <MESSAGE value="New Json" />
+    <option name="LAST_COMMIT_MESSAGE" value="New Json" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
-          <line>16</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
           <properties class="com.google.gson.JsonSyntaxException" package="com.google.gson" />
           <option name="timeStamp" value="2" />

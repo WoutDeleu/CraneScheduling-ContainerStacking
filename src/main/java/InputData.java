@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class InputData {
-    @SerializedName("lengt")
+    @SerializedName("length")
     private int length;
     @SerializedName("width")
     private int width;
@@ -56,5 +56,25 @@ public class InputData {
                 slot.addToStack(containerId);
             }
         }
+    }
+
+    public void formatAssignment() {
+        for(Assignment assignment : assignments) {
+            int length = containers.get(assignment.getContainer_id()).getLength();
+            Slot slot = slots.get(assignment.getSlot_id());
+            int y = slot.getY();
+            for(int i= slot.getX(); i<=length+slot.getX(); i++) {
+                assignment.addSlot(getSlot_x_y(i, y));
+            }
+        }
+    }
+    public Slot getSlot_x_y(int x, int y) {
+        for (Slot slot : slots) {
+            if(slot.getX() == x && slot.getY() == y) {
+                return slot;
+            }
+        }
+        assert false: "No slot found for the given x and y coordinates";
+        return null;
     }
 }

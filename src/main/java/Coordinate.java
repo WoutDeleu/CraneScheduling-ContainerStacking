@@ -1,25 +1,23 @@
 public class Coordinate {
-    private int x; // Crane itself moves over X
-    private int y; // Crane head moves over Y
-    private int z; // Height
+    private double x; // Crane itself moves over X
+    private double y; // Crane head moves over Y
 
 
-    public Coordinate(int x, int y, int z) {
+    public Coordinate(double x, double y) {
         this.x = x;
         this.y = y;
-        this.z = z;
     }
-    public int getXdistance(Coordinate coordinate) {
+    public double getXdistance(Coordinate coordinate) {
         return Math.abs(x - coordinate.x);
     }
-    public int getYdistance(Coordinate coordinate) {
+    public double getYdistance(Coordinate coordinate) {
         return Math.abs(y - coordinate.y);
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
-    public int getY() {
+    public double getY() {
         return y;
     }
 
