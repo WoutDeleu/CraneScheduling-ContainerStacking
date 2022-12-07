@@ -7,12 +7,14 @@ import java.util.*;
 
 public class Main {
     private static final int MAX_HEIGHT = 4;
-
     private static Field field;
     private static Map<Integer,Container> containers = new HashMap<>();
 
+    private static boolean NEW_FIELD = true;
     public static void main(String[] args) {
-        InputData inputData = readFile("data/terminal22_1_100_1_10.json");
+        String fileName = "terminal22_1_100_1_10";
+//        String fileName = "terminal_4_3";
+        InputData inputData = InputData.readFile("data/" + fileName+ ".json");
         inputData.formatAssignment();
 
         containers = inputData.getContainersMap();
@@ -20,34 +22,31 @@ public class Main {
 
         inputData.makeStacks(field);
 
-//        testBasicFunctionality();
-        testSchedule();
+        if(inputData.getTargetHeight() == 0) {
+            // Reformat stacks equal to the target field
+            InputTarget inputTarget = InputTarget.readFile("data/" + fileName + "target.json");
+            inputTarget.formatAssignment(inputData.getContainers(), inputData.getSlots());
+
+            Field targetField = new Field(inputData.getSlots(), inputTarget.getAssignmentsMap(), inputTarget.getMaxheight());
+
+            findDifferences(targetField);
+
+        }
+        else {
+            // Format the stack so they don't exceed the target height
+        }
 
 
         visualizeField();
     }
 
-    private static void testSchedule() {
-        InputData inputData = readFile("data/terminal_4_3.json");
-        Field targetField = new Field(inputData.getSlots(), inputData.getAssignmentsMap(), MAX_HEIGHT);
-        List<Integer[]> differences = findDifferences(targetField);
-    }
-
-    private static void testBasicFunctionality() {
-        ArrayList<Integer> list = new ArrayList<>(1);
-        Container container = new Container(7, 1);
-        containers.put(7, container);
-        field.placeContainer(new Container(6, 2), new ArrayList<>(Arrays.asList(1, 2)));
-        field.placeContainer(new Container(5, 1), new ArrayList<>(Arrays.asList(3)));
-        field.placeContainer(container, new ArrayList<>(Arrays.asList(3)));
-        if(field.isValidContainerDestination(container, new ArrayList<>(Arrays.asList(2))) && field.isMovableContainer(container)) field.moveContainer(container, new ArrayList<Integer>(Arrays.asList(2)));
-    }
 
     private static List<Integer[]> findDifferences(Field targetField) {
         ArrayList<Integer[]> differences_slotId_containerId = new ArrayList<>();
         for(Slot slot :  field.getSlots()) {
             Slot targetSlot = targetField.getSlot_slotId(slot.getId());
             int minHeight = Math.min(slot.getTotalHeight(), targetSlot.getTotalHeight());
+            System.out.println(minHeight);
             for(int i = 0; i < minHeight; i++) {
                 Stack<Integer> original = targetSlot.getStack();
                 Stack<Integer> target = targetSlot.getStack();
@@ -58,20 +57,13 @@ public class Main {
         }
         return differences_slotId_containerId;
     }
-    public static InputData readFile(String path) {
-        InputData inputData = null;
-        try {
-            String jsonString = Files.readString(Paths.get(path));
-            Gson gson = new Gson();
-            inputData = gson.fromJson(jsonString, InputData.class);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return inputData;
-    }
 
+
+    /*****************************TESTING**************************************/
     public static void visualizeField() {
+        System.out.println("x ->");
+        System.out.println("y |");
+        System.out.println();
         Slot[][] fieldMatrix = field.getFieldMatrix();
         for(int i = 0 ; i < fieldMatrix.length; i++) {
             for(int j = 0 ; j < fieldMatrix[i].length; j++) {
@@ -83,8 +75,14 @@ public class Main {
             System.out.println();
         }
     }
+    private static void testBasicFunctionality() {
+        ArrayList<Integer> list = new ArrayList<>(1);
+        Container container = new Container(7, 1);
+        containers.put(7, container);
+        field.placeContainer(new Container(6, 2), new ArrayList<>(Arrays.asList(1, 2)));
+        field.placeContainer(new Container(5, 1), new ArrayList<>(Arrays.asList(3)));
+        field.placeContainer(container, new ArrayList<>(Arrays.asList(3)));
+        if(field.isValidContainerDestination(container, new ArrayList<>(Arrays.asList(2))) && field.isMovableContainer(container)) field.moveContainer(container, new ArrayList<Integer>(Arrays.asList(2)));
+    }
+    /*****************************TESTING**************************************/
 }
-
-
-// todo
-// coordinate system for crane

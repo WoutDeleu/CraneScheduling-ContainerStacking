@@ -1,5 +1,9 @@
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,8 +14,11 @@ public class InputData {
     private int length;
     @SerializedName("width")
     private int width;
-    @SerializedName("maxHeight")
+    @SerializedName("maxheight")
     private int maxHeight;
+    @SerializedName("targetheight")
+    private int targetHeight;
+
 
     @SerializedName("slots")
     private List<Slot> slots = new ArrayList<>();
@@ -27,18 +34,19 @@ public class InputData {
     public List<Slot> getSlots() {
         return slots;
     }
+    public int getTargetHeight() {
+        return targetHeight;
+    }
     public List<Container> getContainers() {
         return containers;
     }
+
     public Map<Integer, Container> getContainersMap() {
         Map<Integer, Container> cont = new HashMap<>();
         for(Container container : this.containers) {
             cont.put(container.getId(), container);
         }
         return cont;
-    }
-    public List<Assignment> getAssignments() {
-        return assignments;
     }
     public Map<Integer, Assignment> getAssignmentsMap() {
         Map<Integer, Assignment> assign = new HashMap<>();
@@ -60,13 +68,31 @@ public class InputData {
 
     public void formatAssignment() {
         for(Assignment assignment : assignments) {
-            int length = containers.get(assignment.getContainer_id()).getLength();
-            Slot slot = slots.get(assignment.getSlot_id());
+            int length = getContainerFromId(assignment.getContainer_id()).getLength();
+            Slot slot = getSlotFromId(assignment.getSlot_id());
             int y = slot.getY();
-            for(int i= slot.getX(); i<=length+slot.getX(); i++) {
+            for(int i= slot.getX(); i<length+slot.getX(); i++) {
                 assignment.addSlot(getSlot_x_y(i, y));
             }
         }
+    }
+    public Container getContainerFromId(int id) {
+        for(Container container : this.containers) {
+            if(container.getId() == id) {
+                return container;
+            }
+        }
+        assert false: "No container with id " + id;
+        return null;
+    }
+    public Slot getSlotFromId(int id) {
+        for(Slot slot : this.slots) {
+            if(slot.getId() == id) {
+                return slot;
+            }
+        }
+        assert false: "No slot with id " + id;
+        return null;
     }
     public Slot getSlot_x_y(int x, int y) {
         for (Slot slot : slots) {
@@ -76,5 +102,18 @@ public class InputData {
         }
         assert false: "No slot found for the given x and y coordinates";
         return null;
+    }
+
+    public static InputData readFile(String path) {
+        InputData inputData = null;
+        try {
+            String jsonString = Files.readString(Paths.get(path));
+            Gson gson = new Gson();
+            inputData = gson.fromJson(jsonString, InputData.class);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return inputData;
     }
 }

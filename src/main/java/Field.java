@@ -8,14 +8,26 @@ public class Field {
     private List<Slot> slots;
     private Map<Integer, Assignment> assignment;
 
+
+    public Field(List<Slot> slot, Map<Integer, Assignment> assignment, int MAX_HEIGHT) {
+        this.MAX_HEIGHT = MAX_HEIGHT;
+        this.slots = new ArrayList<>(slot);
+        this.assignment = assignment;
+    }
+    public Field(Field field, Map<Integer, Assignment> targetAssignment, int MAX_HEIGHT) {
+        this.MAX_HEIGHT = MAX_HEIGHT;
+        this.slots = field.getSlots();
+        this.assignment = targetAssignment;
+    }
+
+
     public List<Slot> getSlots() {
         return slots;
     }
-    public Field(List<Slot> slot, Map<Integer, Assignment> assignment, int MAX_HEIGHT) {
-        this.MAX_HEIGHT = MAX_HEIGHT;
-        this.slots = slot;
-        this.assignment = assignment;
+    private int getMaxHeight() {
+        return MAX_HEIGHT;
     }
+
     // Return a list of slots on which the container is placed
     public List<Slot> getSlot_containerId(int containerId) {
         List<Integer> slot_ids = assignment.get(containerId).getSlot_ids();
@@ -38,6 +50,27 @@ public class Field {
         }
         return null;
     }
+
+    // For each slot, determine how many and which containers are on top.
+    public Stack<Container> getContainers(int slotId, Map<Integer, Container> containers) {
+        Stack<Container> returnList = new Stack<>();
+        // loop over all assignments, where value == slotId
+        // add to return list
+        for(Assignment assignment : this.assignment.values()){
+            for(int id : assignment.getSlot_ids()) {
+                if (slotId==id) {
+                    returnList.push(containers.get(id));
+                }
+            }
+        }
+        return returnList;
+    }
+
+    public int getHeightContainer(int containerId) {
+        return getSlot_containerId(containerId).get(0).getHeightContainer(containerId);
+    }
+
+
 
     public boolean isContainerPlaced(int containerId) {
         return assignment.containsKey(containerId);
@@ -62,7 +95,7 @@ public class Field {
         return getSlot_containerId(containerId).get(0).getHeightContainer(containerId);
     }
 
-    // Eventueel nog een find available slots...
+    // todo Eventueel nog een find available slots...
 
     // Check if destinationslots don't exceed maxHeight/on the same height/long enough
     public boolean isValidContainerDestination(Container container, ArrayList<Integer>  destinationSlots) {
@@ -146,6 +179,8 @@ public class Field {
         assignment.put(container.getId(), new Assignment(container.getId(), destinationSlots_id));
     }
 
+
+
     public Slot[][] getFieldMatrix() {
         int length = 0, depth = 0;
         for(Slot slot : slots) {
@@ -154,7 +189,7 @@ public class Field {
         }
         depth++;
         length++;
-        Slot[][] matrix = new Slot[length][depth];
+        Slot[][] matrix = new Slot[depth][length];
         for(int i = 0; i< matrix.length; i++) {
             for(int j = 0; j< matrix[0].length; j++) {
                 matrix[i][j] = null;
@@ -163,7 +198,7 @@ public class Field {
         for(Slot slot : slots) {
             int x = slot.getX();
             int y = slot.getY();
-            matrix[x][y] = slot;
+            matrix[y][x] = slot;
 
         }
         return matrix;

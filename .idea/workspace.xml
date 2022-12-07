@@ -4,9 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" name="Changes" comment="Update json">
+    <list default="true" id="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" name="Changes" comment="small foault">
+      <change afterPath="$PROJECT_DIR$/WorkPlan" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/Terminal_20_10_3_2_100-HEIGHT.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/InputTarget.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/terminal_4_3.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/terminal_4_3.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Field.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/InputData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/InputData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Slot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Slot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Assignment.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Assignment.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Coordinate.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Coordinate.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Crane.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Crane.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/InputData.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/InputData.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Movement.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Movement.class" afterDir="false" />
     </list>
     <list id="b2a15bc9-0db9-455a-b857-d407b0b8ac0c" name="Changes by lucas" comment="">
       <change beforePath="$PROJECT_DIR$/src/main/java/Crane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Crane.java" afterDir="false" />
@@ -27,6 +40,27 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="LineStatusTrackerManager">
+    <file path="$PROJECT_DIR$/src/main/java/Slot.java">
+      <ranges>
+        <range start1="27" end1="27" start2="27" end2="33" changelist="b2a15bc9-0db9-455a-b857-d407b0b8ac0c" />
+        <range start1="40" end1="40" start2="46" end2="49" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
+      </ranges>
+    </file>
+    <file path="$PROJECT_DIR$/src/main/java/Field.java">
+      <ranges>
+        <range start1="10" end1="13" start2="10" end2="11" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
+        <range start1="15" end1="16" start2="13" end2="14" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
+        <range start1="18" end1="18" start2="16" end2="30" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
+        <range start1="41" end1="41" start2="53" end2="74" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
+        <range start1="44" end1="63" start2="77" end2="77" changelist="b2a15bc9-0db9-455a-b857-d407b0b8ac0c" />
+        <range start1="64" end1="65" start2="78" end2="79" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
+        <range start1="148" end1="148" start2="162" end2="164" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
+        <range start1="156" end1="157" start2="172" end2="173" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
+        <range start1="165" end1="166" start2="181" end2="182" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
+      </ranges>
+    </file>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -92,7 +126,9 @@
       <workItem from="1668712672475" duration="96000" />
       <workItem from="1669015351537" duration="21000" />
       <workItem from="1669796851257" duration="6205000" />
-      <workItem from="1670400002857" duration="8616000" />
+      <workItem from="1670400002857" duration="11258000" />
+      <workItem from="1670416556058" duration="22000" />
+      <workItem from="1670416906415" duration="6249000" />
     </task>
     <task id="LOCAL-00001" summary="InitialPush">
       <created>1666197741595</created>
@@ -150,7 +186,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670410791006</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="small foault">
+      <created>1670411091637</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1670411091637</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -175,7 +218,8 @@
     <MESSAGE value="Placing and moving container" />
     <MESSAGE value="New Json" />
     <MESSAGE value="Update json" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update json" />
+    <MESSAGE value="small foault" />
+    <option name="LAST_COMMIT_MESSAGE" value="small foault" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -184,6 +228,19 @@
           <properties class="com.google.gson.JsonSyntaxException" package="com.google.gson" />
           <option name="timeStamp" value="2" />
         </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.AssertionError" package="java.lang" />
+          <option name="timeStamp" value="6" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.IndexOutOfBoundsException" package="java.lang" />
+          <option name="timeStamp" value="13" />
+        </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
+          <line>51</line>
+          <option name="timeStamp" value="23" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

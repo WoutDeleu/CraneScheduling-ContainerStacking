@@ -38,6 +38,9 @@ public class Slot {
     }
 
     public String printStackInfo() {
+        if(stack.empty()) {
+            return "(.. , ..)";
+        }
         return "(" + stack.peek() + ", " + stack.size() + ")";
     }
 
