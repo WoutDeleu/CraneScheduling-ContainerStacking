@@ -76,25 +76,6 @@ public class Field {
         return assignment.containsKey(containerId);
     }
 
-    // For each slots, determine how many and which containers are on top.
-    public Stack<Container> getContainers(int slotId, Map<Integer, Container> containers) {
-        Stack<Container> returnList = new Stack<>();
-        // loop over all assignments, where value == slotId
-        // add to return list
-        for(Assignment assignment : this.assignment.values()){
-            for(int id : assignment.getSlot_ids()) {
-                if (slotId==id) {
-                    returnList.push(containers.get(id));
-                }
-            }
-        }
-        return returnList;
-    }
-
-    public int getHeightContainer(int containerId) {
-        return getSlot_containerId(containerId).get(0).getHeightContainer(containerId);
-    }
-
     // todo Eventueel nog een find available slots...
 
     // Check if destinationslots don't exceed maxHeight/on the same height/long enough

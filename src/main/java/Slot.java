@@ -25,6 +25,12 @@ public class Slot {
     public int getId() {
         return id;
     }
+    public int getContainerIdByHeight(int height){
+        int stackHeight = getTotalHeight();
+        int containerId=stack.get(stackHeight-height);
+
+        return containerId;
+    }
 
 
     public int getHeightContainer(int containerId) {

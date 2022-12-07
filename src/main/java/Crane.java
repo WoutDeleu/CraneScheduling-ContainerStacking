@@ -48,9 +48,9 @@ public class Crane {
 
         double x_time_component = start.getXdistance(end)/Vx;
         double y_time_component = start.getYdistance(end)/Vy;
-
-        if(x_time_component>y_time_component) trajectory.put((int)(startTime + y_time_component), new Coordinate((int)(start.getX() + Vx*y_time_component) ,end.getY(), Integer.MAX_VALUE));
-        else if(x_time_component<=y_time_component) trajectory.put((int)(startTime + x_time_component), new Coordinate(end.getX(), (int)(start.getY() + Vy*x_time_component), Integer.MAX_VALUE));
+        // Put a critical point in the trajectory
+        if(x_time_component>y_time_component) trajectory.put((int)(startTime + y_time_component), new Coordinate((start.getX() + Vx*y_time_component) ,end.getY()));
+        else if(x_time_component<=y_time_component) trajectory.put((int)(startTime + x_time_component), new Coordinate(end.getX(), (start.getY() + Vy*x_time_component)));
 
         trajectory.put(endTime, end);
     }
