@@ -61,7 +61,7 @@ public class InputData {
             int containerId = container.getId();
             List<Slot> slotsContainer = field.getSlot_containerId(containerId);
             for(Slot slot : slotsContainer) {
-                slot.addToStack(containerId);
+                slot.addToContainerStack(containerId);
             }
         }
     }

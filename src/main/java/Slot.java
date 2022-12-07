@@ -4,10 +4,17 @@ public class Slot {
     private int id;
     private int x;
     private int y;
-    Stack<Integer> stack = new Stack<>();
 
-    public void addToStack(int id) {
-        stack.push(id);
+    public Slot(Slot s) {
+        this.id = s.getId();
+        this.x = s.getX();
+        this.y = s.getY();
+    }
+
+    Stack<Integer> containerStack = new Stack<>();
+
+    public void addToContainerStack(int id) {
+        containerStack.push(id);
     }
 
     public int getX() {
@@ -19,7 +26,7 @@ public class Slot {
     }
 
     public void deleteTopStack() {
-        stack.pop();
+        containerStack.pop();
     }
 
     public int getId() {
@@ -27,31 +34,31 @@ public class Slot {
     }
     public int getContainerIdByHeight(int height){
         int stackHeight = getTotalHeight();
-        int containerId=stack.get(stackHeight-height);
+        int containerId= containerStack.get(stackHeight-height);
 
         return containerId;
     }
 
 
     public int getHeightContainer(int containerId) {
-        return stack.indexOf(containerId)+1;
+        return containerStack.indexOf(containerId)+1;
     }
     public int getTotalHeight() {
-        return stack.size();
+        return containerStack.size();
     }
-    public Stack<Integer> getStack() {
-        return stack;
+    public Stack<Integer> getContainerStack() {
+        return containerStack;
     }
 
     public String printStackInfo() {
-        if(stack.empty()) {
+        if(containerStack.empty()) {
             return "(.. , ..)";
         }
-        return "(" + stack.peek() + ", " + stack.size() + ")";
+        return "(" + containerStack.peek() + ", " + containerStack.size() + ")";
     }
 
     public int peekStack() {
-        return stack.peek();
+        return containerStack.peek();
 
     }
 }

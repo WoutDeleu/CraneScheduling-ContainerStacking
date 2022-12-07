@@ -1,8 +1,3 @@
-import com.google.gson.Gson;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 public class Main {
@@ -28,12 +23,13 @@ public class Main {
             inputTarget.formatAssignment(inputData.getContainers(), inputData.getSlots());
 
             Field targetField = new Field(inputData.getSlots(), inputTarget.getAssignmentsMap(), inputTarget.getMaxheight());
+            inputTarget.makeStacks(targetField, inputData.getContainers());
 
             findDifferences(targetField);
 
         }
         else {
-            // Format the stack so they don't exceed the target height
+            // Format the containerStack so they don't exceed the target height
         }
 
 
@@ -45,18 +41,42 @@ public class Main {
         ArrayList<Integer[]> differences_slotId_containerId = new ArrayList<>();
         for(Slot slot :  field.getSlots()) {
             Slot targetSlot = targetField.getSlot_slotId(slot.getId());
-            int minHeight = Math.min(slot.getTotalHeight(), targetSlot.getTotalHeight());
-            System.out.println(minHeight);
-            for(int i = 0; i < minHeight; i++) {
-                Stack<Integer> original = targetSlot.getStack();
-                Stack<Integer> target = targetSlot.getStack();
-                if(!original.get(i).equals(target.get(i))) {
-                    differences_slotId_containerId.add(new Integer[]{target.get(i), targetSlot.getId()});
+            if(slot.getId() == 16) {
+                System.out.println();
+            }
+            if(slot.getTotalHeight() == 0) {
+                // If a slot is empty for the original, but contains containers for the target
+                // All the target slots need to be saved in differences_slotId_containerId
+                if(targetSlot.getTotalHeight() != 0) {
+                    for(int i = 0; i < targetSlot.getTotalHeight(); i++) {
+                        int containerId = targetSlot.getContainerStack().get(i);
+                        differences_slotId_containerId.add(new Integer[]{containerId, targetSlot.getHeightContainer(containerId) ,targetSlot.getId()});
+                    }
                 }
+            }
+            else {
+                // Compare 2 stacks, and extract the differences
+                int minHeight = Math.min(slot.getTotalHeight(), targetSlot.getTotalHeight());
+                for(int i = 0; i < minHeight; i++) {
+                    Stack<Integer> original = targetSlot.getContainerStack();
+                    Stack<Integer> target = targetSlot.getContainerStack();
+                    if(!original.get(i).equals(target.get(i))) {
+                        int containerId = target.get(i);
+                        differences_slotId_containerId.add(new Integer[]{containerId, targetSlot.getHeightContainer(containerId), targetSlot.getId()});
+                    }
+                }
+                if(targetSlot.getTotalHeight() > minHeight) {
+                    for(int i = minHeight; i < slot.getTotalHeight(); i++) {
+                        int containerId = targetSlot.getContainerStack().get(i);
+                        differences_slotId_containerId.add(new Integer[]{containerId, targetSlot.getHeightContainer(containerId) ,targetSlot.getId()});
+                    }
+                }
+
             }
         }
         return differences_slotId_containerId;
     }
+
 
 
     /*****************************TESTING**************************************/

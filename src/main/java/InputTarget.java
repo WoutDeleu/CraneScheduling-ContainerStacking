@@ -58,6 +58,15 @@ public class InputTarget {
         assert false: "No container with id " + id;
         return null;
     }
+    public void makeStacks(Field targetField, List<Container> containers) {
+        for(Container container : containers) {
+            int containerId = container.getId();
+            List<Slot> slotsContainer = targetField.getSlot_containerId(containerId);
+            for(Slot slot : slotsContainer) {
+                slot.addToContainerStack(containerId);
+            }
+        }
+    }
 
     public Slot getSlotFromId(int id, List<Slot> slots) {
         for(Slot slot : slots) {

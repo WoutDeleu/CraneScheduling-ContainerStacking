@@ -11,9 +11,18 @@ public class Field {
 
     public Field(List<Slot> slot, Map<Integer, Assignment> assignment, int MAX_HEIGHT) {
         this.MAX_HEIGHT = MAX_HEIGHT;
-        this.slots = new ArrayList<>(slot);
+        this.slots = deepCopy(slot);
         this.assignment = assignment;
     }
+
+    private List<Slot> deepCopy(List<Slot> slot) {
+        List<Slot>ret_slots = new ArrayList<>();
+        for (Slot s : slot) {
+            ret_slots.add(new Slot(s));
+        }
+        return ret_slots;
+    }
+
     public Field(Field field, Map<Integer, Assignment> targetAssignment, int MAX_HEIGHT) {
         this.MAX_HEIGHT = MAX_HEIGHT;
         this.slots = field.getSlots();
@@ -128,7 +137,7 @@ public class Field {
         // one slots has the container on top, the whole container is on top.
         List<Slot> slotids = getSlot_containerId(container.getId());
         Slot slot = slotids.get(slotids.size()-1);
-        if(container.getId() == slot.getStack().peek()) {
+        if(container.getId() == slot.getContainerStack().peek()) {
             return true;
         }
         return false;
@@ -153,7 +162,7 @@ public class Field {
         // Add container to slots itself
         for(int slotId : destinationSlots_id) {
             Slot slot =  getSlot_slotId(slotId);
-            slot.addToStack(container.getId());
+            slot.addToContainerStack(container.getId());
         }
 
         // Add container to assignments
