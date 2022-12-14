@@ -1,19 +1,16 @@
 import java.util.*;
 
 public class Main {
-    private static final int MAX_HEIGHT = 4;
     private static Field field;
     private static Map<Integer,Container> containers = new HashMap<>();
 
-    private static boolean NEW_FIELD = true;
     public static void main(String[] args) {
         String fileName = "terminal22_1_100_1_10";
-//        String fileName = "terminal_4_3";
         InputData inputData = InputData.readFile("data/" + fileName+ ".json");
         inputData.formatAssignment();
 
         containers = inputData.getContainersMap();
-        field = new Field(inputData.getSlots(), inputData.getAssignmentsMap(), MAX_HEIGHT);
+        field = new Field(inputData.getSlots(), inputData.getAssignmentsMap(), inputData.getMaxHeight());
 
         inputData.makeStacks(field);
 
@@ -25,7 +22,8 @@ public class Main {
             Field targetField = new Field(inputData.getSlots(), inputTarget.getAssignmentsMap(), inputTarget.getMaxheight());
             inputTarget.makeStacks(targetField, inputData.getContainers());
 
-            findDifferences(targetField);
+            List<Difference> differences = findDifferences(targetField);
+            generateSchedule_newTargetField(differences);
 
         }
         else {
@@ -36,21 +34,53 @@ public class Main {
         visualizeField();
     }
 
+    private static void generateSchedule_newTargetField(List<Difference> differences) {
+        boolean hardStuck, changed = false;
+        int currentIndex = 0;
+        List<CraneMovement> craneMoves = new ArrayList<>();
+        // Contains the movements of the container - with coordinates of the center of the container
+        List<ContainerMovement> containerMoves = new ArrayList<>();
+        while(!differences.isEmpty()) {
+            Difference diff = differences.get(currentIndex);
+            int containerId = diff.getContainerId();
 
-    private static List<Integer[]> findDifferences(Field targetField) {
-        ArrayList<Integer[]> differences_slotId_containerId = new ArrayList<>();
+            List<Integer> destinationSlotIds = diff.getSlotIds();
+            Container container = containers.get(containerId);
+            if(field.isValidContainerDestination(container, destinationSlotIds) && field.isMovableContainer(container)) {
+                Coordinate start = field.getGrabbingPoint(containerId);
+
+                field.moveContainer(container, destinationSlotIds);
+
+                Coordinate end = field.getGrabbingPoint(containerId);
+                containerMoves.add(new ContainerMovement(start, end));
+                changed = true;
+            }
+
+            // todo -> Wout
+
+            currentIndex++;
+            if(currentIndex >= differences.size()) {
+                if(changed) changed = false;
+                else hardStuck = true;
+                currentIndex = 0;
+            }
+        }
+    }
+
+
+
+    /**************************************FIND DIFFERENCES**************************************/
+    private static List<Difference> findDifferences(Field targetField) {
+        ArrayList<Integer[]> differences = new ArrayList<>();
         for(Slot slot :  field.getSlots()) {
             Slot targetSlot = targetField.getSlot_slotId(slot.getId());
-            if(slot.getId() == 16) {
-                System.out.println();
-            }
             if(slot.getTotalHeight() == 0) {
                 // If a slot is empty for the original, but contains containers for the target
-                // All the target slots need to be saved in differences_slotId_containerId
+                // All the target slots need to be saved in differences
                 if(targetSlot.getTotalHeight() != 0) {
                     for(int i = 0; i < targetSlot.getTotalHeight(); i++) {
                         int containerId = targetSlot.getContainerStack().get(i);
-                        differences_slotId_containerId.add(new Integer[]{containerId, targetSlot.getHeightContainer(containerId) ,targetSlot.getId()});
+                        differences.add(new Integer[]{containerId,  targetSlot.getHeightContainer(containerId) ,targetSlot.getId()});
                     }
                 }
             }
@@ -62,24 +92,52 @@ public class Main {
                     Stack<Integer> target = targetSlot.getContainerStack();
                     if(!original.get(i).equals(target.get(i))) {
                         int containerId = target.get(i);
-                        differences_slotId_containerId.add(new Integer[]{containerId, targetSlot.getHeightContainer(containerId), targetSlot.getId()});
+                        differences.add(new Integer[]{containerId,  targetSlot.getHeightContainer(containerId) ,targetSlot.getId()});
                     }
                 }
                 if(targetSlot.getTotalHeight() > minHeight) {
                     for(int i = minHeight; i < slot.getTotalHeight(); i++) {
                         int containerId = targetSlot.getContainerStack().get(i);
-                        differences_slotId_containerId.add(new Integer[]{containerId, targetSlot.getHeightContainer(containerId) ,targetSlot.getId()});
+                        differences.add(new Integer[]{containerId,  targetSlot.getHeightContainer(containerId) ,targetSlot.getId()});
                     }
                 }
 
             }
         }
-        return differences_slotId_containerId;
+        return convertDifferencesToAssignments(differences);
     }
+    private static List<Difference> convertDifferencesToAssignments(ArrayList<Integer[]> differences_slotId_height_containerId) {
+        List<Difference> differences = new ArrayList<>();
+        for(Integer[] diff : differences_slotId_height_containerId) {
+            int containerId = diff[0];
+            int height = diff[1];
+            int slotId = diff[2];
+
+            // Check if assignment of this container is already filled in
+            boolean containsContainer = false;
+            for(Difference diff_alreayPresent : differences) {
+                if(diff_alreayPresent.getContainerId() == containerId) containsContainer = true;
+            }
+            // Find the other slots on which this container must be placed
+            if(!containsContainer) {
+                List<Integer> slots = new ArrayList<>();
+                slots.add(slotId);
+                for(Integer[] values : differences_slotId_height_containerId) {
+                    if(values[0] == containerId && !slots.contains(values[2])) {
+                        slots.add(values[2]);
+                    }
+                }
+                // Format to a Difference object
+                slots.sort(Comparator.comparingInt(id -> id));
+                differences.add(new Difference(height, new Assignment(containerId, slots)));
+            }
+        }
+        return differences;
+    }
+    /**************************************FIND DIFFERENCES**************************************/
 
 
-
-    /*****************************TESTING**************************************/
+    /**************************************TESTING**************************************/
     public static void visualizeField() {
         System.out.println("x ->");
         System.out.println("y |");
@@ -103,6 +161,10 @@ public class Main {
         field.placeContainer(new Container(5, 1), new ArrayList<>(Arrays.asList(3)));
         field.placeContainer(container, new ArrayList<>(Arrays.asList(3)));
         if(field.isValidContainerDestination(container, new ArrayList<>(Arrays.asList(2))) && field.isMovableContainer(container)) field.moveContainer(container, new ArrayList<Integer>(Arrays.asList(2)));
+
+        for(Container container2 : containers.values()) {
+            System.out.println(field.getGrabbingPoint(container.getId()));
+        }
     }
-    /*****************************TESTING**************************************/
+    /**************************************TESTING**************************************/
 }

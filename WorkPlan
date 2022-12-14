@@ -1,6 +1,5 @@
-Onderscheidt tussen 2 files
 -> Kranen regelen (geen colision enz)
--> Kranen to
+    -> Safe distance
 
 public void generateSchedule_newFormat(targetField) {
     targetSlot_targetContainers = findDifferences();
@@ -27,7 +26,7 @@ public void generateSchedule_newFormat(targetField) {
             currentIndex = 0;
         }
         if(hardStuck){
-            //makeRoom: move a container to a free spot, so a new container is accessible.
+            // makeRoom: move a container to a free spot, so a new container is accessible.
             makeRoom();
             targetSlot_targetContainers=findDifferences();
             hardStuck=false;

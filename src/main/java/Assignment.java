@@ -1,22 +1,24 @@
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Assignment {
     private int container_id;
     @SerializedName("slot_id")
     private int slot_id;
-    private ArrayList<Integer> slot_id_array;
+    private List<Integer> slotIds;
 
-    public Assignment(int container_id, ArrayList<Integer> slot_id) {
+    public Assignment(int container_id, List<Integer> slot_id) {
         this.container_id = container_id;
-        this.slot_id_array = slot_id;
+        this.slotIds = slot_id;
     }
 
-    public ArrayList<Integer> getSlot_ids() {
-        return slot_id_array;
+
+    public List<Integer> getSlotIds() {
+        return slotIds;
     }
-    public int getContainer_id() {
+    public int getContainerId() {
         return container_id;
     }
 
@@ -25,12 +27,13 @@ public class Assignment {
         this.container_id = container_id;
     }
 
+    // this method should only be called while formatting inputfile...
     public int getSlot_id() {
         return slot_id;
     }
 
     public void addSlot(Slot slot_x_y) {
-        if(slot_id_array == null) slot_id_array = new ArrayList<>();
-        slot_id_array.add(slot_x_y.getId());
+        if(slotIds == null) slotIds = new ArrayList<>();
+        slotIds.add(slot_x_y.getId());
     }
 }

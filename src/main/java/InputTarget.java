@@ -23,7 +23,7 @@ public class InputTarget {
     public Map<Integer, Assignment> getAssignmentsMap() {
         Map<Integer, Assignment> assign = new HashMap<>();
         for(Assignment assignment : this.assignments) {
-            assign.put(assignment.getContainer_id(), assignment);
+            assign.put(assignment.getContainerId(), assignment);
         }
         return assign;
     }
@@ -41,7 +41,7 @@ public class InputTarget {
 
     public void formatAssignment(List<Container> containers, List<Slot> slots) {
         for(Assignment assignment : assignments) {
-            int length = getContainerFromId(assignment.getContainer_id(), containers).getLength();
+            int length = getContainerFromId(assignment.getContainerId(), containers).getLength();
             Slot slot = getSlotFromId(assignment.getSlot_id(), slots);
             int y = slot.getY();
             for(int i= slot.getX(); i<length+slot.getX(); i++) {

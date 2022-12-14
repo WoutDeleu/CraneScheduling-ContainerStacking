@@ -51,7 +51,7 @@ public class InputData {
     public Map<Integer, Assignment> getAssignmentsMap() {
         Map<Integer, Assignment> assign = new HashMap<>();
         for(Assignment assignment : this.assignments) {
-            assign.put(assignment.getContainer_id(), assignment);
+            assign.put(assignment.getContainerId(), assignment);
         }
         return assign;
     }
@@ -68,7 +68,10 @@ public class InputData {
 
     public void formatAssignment() {
         for(Assignment assignment : assignments) {
-            int length = getContainerFromId(assignment.getContainer_id()).getLength();
+            if(assignment.getContainerId() == 7) {
+                System.out.println();
+            }
+            int length = getContainerFromId(assignment.getContainerId()).getLength();
             Slot slot = getSlotFromId(assignment.getSlot_id());
             int y = slot.getY();
             for(int i= slot.getX(); i<length+slot.getX(); i++) {
@@ -85,6 +88,11 @@ public class InputData {
         assert false: "No container with id " + id;
         return null;
     }
+
+    public int getMaxHeight() {
+        return maxHeight;
+    }
+
     public Slot getSlotFromId(int id) {
         for(Slot slot : this.slots) {
             if(slot.getId() == id) {
