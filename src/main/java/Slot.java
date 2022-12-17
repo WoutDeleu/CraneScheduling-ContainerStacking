@@ -39,7 +39,9 @@ public class Slot {
         return containerId;
     }
 
-
+    public boolean containsContainers() {
+        return !containerStack.isEmpty();
+    }
     public int getHeightContainer(int containerId) {
         return containerStack.indexOf(containerId)+1;
     }

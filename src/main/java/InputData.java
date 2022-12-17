@@ -68,9 +68,6 @@ public class InputData {
 
     public void formatAssignment() {
         for(Assignment assignment : assignments) {
-            if(assignment.getContainerId() == 7) {
-                System.out.println();
-            }
             int length = getContainerFromId(assignment.getContainerId()).getLength();
             Slot slot = getSlotFromId(assignment.getSlot_id());
             int y = slot.getY();

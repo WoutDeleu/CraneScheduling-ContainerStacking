@@ -4,26 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" name="Changes" comment="Small bugs in find_difference">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/Differences_between_22_1_100_1_10.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ContainerMovement.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Difference.java" afterDir="false" />
+    <list default="true" id="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" name="Changes" comment="Startup of generate_newFormat">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WorkPlan" beforeDir="false" afterPath="$PROJECT_DIR$/WorkPlan" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Assignment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Assignment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Coordinate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Coordinate.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Field.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/InputData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/InputData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/InputTarget.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/InputTarget.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Movement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/CraneMovement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Assignment.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Assignment.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Coordinate.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Coordinate.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Field.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Field.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/InputData.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/InputData.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Movement.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Slot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Slot.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +47,7 @@
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "last_opened_file_path": "/home/woutd/Documents/School/Industriele Ingenieurswetenschappen/Ma1/Sem1/Algoritmen/Project/ContainerStacking/data",
     "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
+    "project.structure.last.edited": "Problems",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "preferences.keymap"
@@ -118,7 +104,8 @@
       <workItem from="1670400002857" duration="11258000" />
       <workItem from="1670416556058" duration="22000" />
       <workItem from="1670416906415" duration="8638000" />
-      <workItem from="1671004995469" duration="13251000" />
+      <workItem from="1671004995469" duration="13360000" />
+      <workItem from="1671267777442" duration="6196000" />
     </task>
     <task id="LOCAL-00001" summary="InitialPush">
       <created>1666197741595</created>
@@ -204,7 +191,21 @@
       <option name="project" value="LOCAL" />
       <updated>1670426301794</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Startup of generate_newFormat">
+      <created>1671018302923</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1671018302923</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Startup of generate_newFormat">
+      <created>1671018350593</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1671018350593</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -233,7 +234,8 @@
     <MESSAGE value="Fully input" />
     <MESSAGE value="Changes by lucas" />
     <MESSAGE value="Small bugs in find_difference" />
-    <option name="LAST_COMMIT_MESSAGE" value="Small bugs in find_difference" />
+    <MESSAGE value="Startup of generate_newFormat" />
+    <option name="LAST_COMMIT_MESSAGE" value="Startup of generate_newFormat" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -250,29 +252,14 @@
           <properties class="java.lang.IndexOutOfBoundsException" package="java.lang" />
           <option name="timeStamp" value="13" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/Field.java</url>
-          <line>63</line>
-          <properties class="Field" method="getContainers">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="43" />
-        </line-breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.util.EmptyStackException" package="java.util" />
+          <option name="timeStamp" value="69" />
+        </breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
-          <line>106</line>
-          <option name="timeStamp" value="46" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
-          <line>21</line>
-          <option name="timeStamp" value="49" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/InputData.java</url>
-          <line>71</line>
-          <option name="timeStamp" value="51" />
+          <line>81</line>
+          <option name="timeStamp" value="72" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -280,5 +267,8 @@
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
     <select />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/ContainerStacking$Main.ic" NAME="Main Coverage Results" MODIFIED="1671272035845" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

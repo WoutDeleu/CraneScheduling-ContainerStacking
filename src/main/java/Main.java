@@ -6,6 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
         String fileName = "terminal22_1_100_1_10";
+//        String fileName = "5t/TerminalB_20_10_3_2_160";
         InputData inputData = InputData.readFile("data/" + fileName+ ".json");
         inputData.formatAssignment();
 
@@ -16,6 +17,8 @@ public class Main {
 
         if(inputData.getTargetHeight() == 0) {
             // Reformat stacks equal to the target field
+//            String target = "5t/targetTerminalB_20_10_3_2_160";
+//            InputTarget inputTarget = InputTarget.readFile("data/" + target + ".json");
             InputTarget inputTarget = InputTarget.readFile("data/" + fileName + "target.json");
             inputTarget.formatAssignment(inputData.getContainers(), inputData.getSlots());
 
@@ -24,22 +27,26 @@ public class Main {
 
             List<Difference> differences = findDifferences(targetField);
             generateSchedule_newTargetField(differences);
-
+            assert findDifferences(targetField).isEmpty(): "There are still differences between targetfield and own field";
         }
         else {
             // Format the containerStack so they don't exceed the target height
         }
 
 
-        visualizeField();
+//        visualizeField();
     }
 
     private static void generateSchedule_newTargetField(List<Difference> differences) {
+//        visualizeField();
         boolean hardStuck, changed = false;
         int currentIndex = 0;
         List<CraneMovement> craneMoves = new ArrayList<>();
         // Contains the movements of the container - with coordinates of the center of the container
         List<ContainerMovement> containerMoves = new ArrayList<>();
+        // Stack containing all the indexes which are changed, so they can be removed from the differences
+        // Stack -> Reverse order -> Easier to remove
+        Stack<Integer> differencesExecuted = new Stack<>();
         while(!differences.isEmpty()) {
             Difference diff = differences.get(currentIndex);
             int containerId = diff.getContainerId();
@@ -52,6 +59,8 @@ public class Main {
                 field.moveContainer(container, destinationSlotIds);
 
                 Coordinate end = field.getGrabbingPoint(containerId);
+
+                differencesExecuted.push(currentIndex);
                 containerMoves.add(new ContainerMovement(start, end));
                 changed = true;
             }
@@ -60,11 +69,24 @@ public class Main {
 
             currentIndex++;
             if(currentIndex >= differences.size()) {
-                if(changed) changed = false;
-                else hardStuck = true;
+                if(changed) {
+                    changed = false;
+                    assert !differencesExecuted.isEmpty(): " There has been a change, but the executed changes are empty.";
+                    while(!differencesExecuted.isEmpty()) {
+                        // De tussenvariabele index is om de een of andere reden nodig... Het werkt niet in 1 lijn
+                        int index = differencesExecuted.pop();
+                        differences.remove(index);
+                    }
+                }
+                else {
+                    hardStuck = true;
+                    System.out.println("No containers could be moved");
+                    break;
+                }
                 currentIndex = 0;
             }
         }
+        System.out.println("All containers are succesfully moved");
     }
 
 
@@ -73,6 +95,9 @@ public class Main {
     private static List<Difference> findDifferences(Field targetField) {
         ArrayList<Integer[]> differences = new ArrayList<>();
         for(Slot slot :  field.getSlots()) {
+            if(slot.getId() ==  16) {
+                System.out.println();
+            }
             Slot targetSlot = targetField.getSlot_slotId(slot.getId());
             if(slot.getTotalHeight() == 0) {
                 // If a slot is empty for the original, but contains containers for the target
@@ -96,7 +121,7 @@ public class Main {
                     }
                 }
                 if(targetSlot.getTotalHeight() > minHeight) {
-                    for(int i = minHeight; i < slot.getTotalHeight(); i++) {
+                    for(int i = minHeight; i < targetSlot.getTotalHeight(); i++) {
                         int containerId = targetSlot.getContainerStack().get(i);
                         differences.add(new Integer[]{containerId,  targetSlot.getHeightContainer(containerId) ,targetSlot.getId()});
                     }
