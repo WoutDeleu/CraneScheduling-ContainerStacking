@@ -1,9 +1,23 @@
 public class ContainerMovement {
-    Coordinate start;
-    Coordinate end;
+    private int containerId;
+    private Coordinate start;
+    private Coordinate end;
 
-    public ContainerMovement(Coordinate start, Coordinate end) {
+    public ContainerMovement(int containerId, Coordinate start, Coordinate end) {
+        this.containerId = containerId;
         this.start = start;
         this.end = end;
+    }
+
+    public Coordinate getStart() {
+        return start;
+    }
+
+    public Coordinate getEnd() {
+        return end;
+    }
+
+    public int getContainerId() {
+        return containerId;
     }
 }

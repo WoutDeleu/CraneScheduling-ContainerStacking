@@ -4,10 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class InputTarget {
     @SerializedName("maxHeight")
@@ -27,7 +24,6 @@ public class InputTarget {
         }
         return assign;
     }
-
     public Slot getSlot_x_y(int x, int y, List<Slot> slots) {
         for (Slot slot : slots) {
             if(slot.getX() == x && slot.getY() == y) {
@@ -36,36 +32,6 @@ public class InputTarget {
         }
         assert false: "No slot found for the given x and y coordinates";
         return null;
-    }
-
-
-    public void formatAssignment(List<Container> containers, List<Slot> slots) {
-        for(Assignment assignment : assignments) {
-            int length = getContainerFromId(assignment.getContainerId(), containers).getLength();
-            Slot slot = getSlotFromId(assignment.getSlot_id(), slots);
-            int y = slot.getY();
-            for(int i= slot.getX(); i<length+slot.getX(); i++) {
-                assignment.addSlot(getSlot_x_y(i, y, slots));
-            }
-        }
-    }
-    public Container getContainerFromId(int id, List<Container> containers) {
-        for(Container container : containers) {
-            if(container.getId() == id) {
-                return container;
-            }
-        }
-        assert false: "No container with id " + id;
-        return null;
-    }
-    public void makeStacks(Field targetField, List<Container> containers) {
-        for(Container container : containers) {
-            int containerId = container.getId();
-            List<Slot> slotsContainer = targetField.getSlot_containerId(containerId);
-            for(Slot slot : slotsContainer) {
-                slot.addToContainerStack(containerId);
-            }
-        }
     }
 
     public Slot getSlotFromId(int id, List<Slot> slots) {
@@ -77,7 +43,51 @@ public class InputTarget {
         assert false: "No slot with id " + id;
         return null;
     }
+    public Container getContainerFromId(int id, List<Container> containers) {
+        for(Container container : containers) {
+            if(container.getId() == id) {
+                return container;
+            }
+        }
+        assert false: "No container with id " + id;
+        return null;
+    }
+    public void makeStacks(Field targetField, List<Container> containers) {
+        Queue<Container> containerQ = new LinkedList<>(containers);
+        while(!containerQ.isEmpty()) {
+            Container container = containerQ.poll();
+            List<Slot> slotsContainer = targetField.getSlot_containerId(container.getId());
+            Slot firstSlot = slotsContainer.get(0);
 
+            if (targetField.isSameHeight(firstSlot.getTotalHeight(), slotListToId(slotsContainer), container.getId()) && targetField.canContainerSnap(firstSlot, slotListToId(slotsContainer), container.getId())) {
+                for (Slot slot : slotsContainer) {
+                    slot.addToContainerStack(container.getId());
+                }
+            }
+            else {
+                containerQ.add(container);
+            }
+        }
+    }
+
+    public void formatAssignment(List<Container> containers, List<Slot> slots) {
+        for(Assignment assignment : assignments) {
+            int length = getContainerFromId(assignment.getContainerId(), containers).getLength();
+            Slot slot = getSlotFromId(assignment.getSlot_id(), slots);
+            int y = slot.getY();
+            for(int i= slot.getX(); i<length+slot.getX(); i++) {
+                assignment.addSlot(getSlot_x_y(i, y, slots));
+            }
+        }
+    }
+
+    public static List<Integer> slotListToId(List<Slot> slotsContainer) {
+        List<Integer> result = new ArrayList<Integer>();
+        for(Slot slot : slotsContainer) {
+            result.add(slot.getId());
+        }
+        return result;
+    }
     public static InputTarget readFile(String path) {
         InputTarget inputData = null;
         try {

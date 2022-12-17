@@ -3,6 +3,7 @@ import java.util.List;
 
 public class Main {
     private static Field field;
+    private static List<Crane> cranes;
     private static Map<Integer,Container> containers = new HashMap<>();
 
     public static void main(String[] args) {
@@ -11,6 +12,7 @@ public class Main {
         InputData inputData = InputData.readFile("data/" + inputFiles[choice] + ".json");
         inputData.formatAssignment();
 
+        cranes = inputData.getCranes();
         containers = inputData.getContainersMap();
         field = new Field(inputData.getSlots(), inputData.getAssignmentsMap(), inputData.getMaxHeight());
 
@@ -35,8 +37,22 @@ public class Main {
             System.out.println("Reformat so field doesn't exceed the target height");
             containerMovements = generateContainerMovements(inputData.getTargetHeight());
         }
-        // TODO
-//        addCranesToMovement(containerMovements);
+        List<FullMovement> schedule = addCranesToMovement(containerMovements);
+    }
+
+    private static List<FullMovement> addCranesToMovement(List<ContainerMovement> containerMovements) {
+        List<FullMovement> schedule = new ArrayList<>();
+        int timer = 0;
+        for (ContainerMovement containerMovement : containerMovements) {
+            // Get the mov
+            FullMovement moveToContainer = new FullMovement();
+            moveToContainer.setStart(containerMovement.getStart());
+            moveToContainer.setContainerId(-1);
+            moveToContainer.setPickupTime(timer);
+
+        }
+
+        return schedule;
     }
 
     /**************************************************MAX HEIGHT**************************************************/
@@ -71,14 +87,13 @@ public class Main {
     /**************************************************TARGET FIELD**************************************************/
     // Used when creating new field based on target field
     private static List<ContainerMovement> generateContainerMovements(List<Difference> differences) {
-       /* boolean stuck = false, changed = false;*/
         int currentIndex = 0;
         // Contains the movements of the container - with coordinates of the center of the container
         List<ContainerMovement> containerMoves = new ArrayList<>();
         // Stack containing all the indexes which are changed, so they can be removed from the differences
         // Stack -> Reverse order -> Easier to remove
         Stack<Integer> executed = new Stack<>();
-        while(!differences.isEmpty()) {
+        while (!differences.isEmpty()) {
             Difference diff = differences.get(currentIndex);
             int containerId = diff.getContainerId();
 
@@ -86,38 +101,18 @@ public class Main {
             Container container = containers.get(containerId);
             // Try and place container to correct destination
 
-            if(field.isValidContainerDestination(container, destinationSlotIds) && field.isMovableContainer(container)) {
-                if(field.containerHasCorrectHeight(destinationSlotIds, diff.getHeight(), containerId)) {
+            if (field.isValidContainerDestination(container, destinationSlotIds) && field.isMovableContainer(container)) {
+                if (field.containerHasCorrectHeight(destinationSlotIds, diff.getHeight(), containerId)) {
                     moveContainerMovement(container, destinationSlotIds, containerMoves);
                     executed.push(currentIndex);
-//                    changed = true;
                 }
             }
             currentIndex++;
 
-            if(currentIndex >= differences.size()) {
+            if (currentIndex >= differences.size()) {
                 cleanDifferences(differences, executed);
                 currentIndex = 0;
             }
- /*           if(currentIndex >= differences.size()) {
-                if(changed) {
-                    changed = false;
-                    assert !executed.isEmpty(): " There has been a change, but the executed changes are empty.";
-                    cleanDifferences(differences, executed);
-                }
-                // Nothing has changed in a full iteration, so the program is stuck
-                else {
-                    // TODO
-                    stuck = true;
-                    System.out.println("No containers could be moved");
-                }
-                currentIndex = 0;
-            }
-            if(stuck) {
-                // TODO
-                stuck = false;
-                break;
-            }*/
         }
         System.out.println("All containers are succesfully moved");
         return containerMoves;
@@ -134,7 +129,7 @@ public class Main {
         Coordinate start = field.getGrabbingPoint(container.getId());
         field.moveContainer(container, destinationSlotIds);
         Coordinate end = field.getGrabbingPoint(container.getId());
-        containerMoves.add(new ContainerMovement(start, end));
+        containerMoves.add(new ContainerMovement(container.getId(), start, end));
     }
     /**************************************************TARGET FIELD*************************************************/
 
@@ -183,6 +178,9 @@ public class Main {
             int height = diff[1];
             int slotId = diff[2];
 
+            if(containerId == 88) {
+                System.out.println();
+            }
             // Check if assignment of this container is already filled in
             boolean containsContainer = false;
             for(Difference diff_alreayPresent : differences) {

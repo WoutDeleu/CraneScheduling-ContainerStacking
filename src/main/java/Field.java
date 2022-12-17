@@ -114,7 +114,7 @@ public class Field {
             }
             if (slotsAreSequential(possibleDestinations)) {
                 if(isValidContainerDestination(container, possibleDestinations)) {
-                    availableSlots = Util.addToArray(availableSlots, possibleDestinations);
+                    availableSlots = Util.addToArray(availableSlots, new ArrayList<>(possibleDestinations));
                 }
             }
             possibleDestinations.clear();
@@ -159,7 +159,7 @@ public class Field {
         }
 
         // Check if slots contain current container
-        if(!slotsContainCurrentContainer(container, destinationSlotIds))
+        if(slotsContainCurrentContainer(container, destinationSlotIds)) return false;
 
         // Check if corners container can snap
         if(!canContainerSnap(firstSlot, destinationSlotIds, container.getId())) return false;
@@ -178,7 +178,7 @@ public class Field {
         return false;
     }
 
-    private boolean canContainerSnap(Slot firstSlot, List<Integer> destinationSlotIds, int id) {
+    public boolean canContainerSnap(Slot firstSlot, List<Integer> destinationSlotIds, int id) {
         if(firstSlot.isStackEmpty()) {
             for(int slotId : destinationSlotIds) {
                 Slot slot = getSlot_slotId(slotId);
@@ -232,7 +232,6 @@ public class Field {
         System.out.println("Container " + container.getId()+" cannot be moved");
         return false;
     }
-
 
     public boolean containerHasCorrectHeight(List<Integer> destinationSlotIds, int requiredHeight, int containerId) {
         Slot slot = getSlot_slotId(destinationSlotIds.get(0));

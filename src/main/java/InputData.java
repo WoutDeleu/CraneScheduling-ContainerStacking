@@ -4,10 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class InputData {
     @SerializedName("length")
@@ -22,6 +19,7 @@ public class InputData {
 
     @SerializedName("slots")
     private List<Slot> slots = new ArrayList<>();
+
     @SerializedName("cranes")
     private List<Crane> cranes = new ArrayList<>();
     @SerializedName("assignments")
@@ -30,7 +28,9 @@ public class InputData {
     private List<Container> containers = new ArrayList<>();
 
 
-
+    public List<Crane> getCranes() {
+        return cranes;
+    }
     public List<Slot> getSlots() {
         return slots;
     }
@@ -57,14 +57,30 @@ public class InputData {
     }
 
     public void makeStacks(Field field) {
-        for(Container container : containers) {
-            int containerId = container.getId();
-            List<Slot> slotsContainer = field.getSlot_containerId(containerId);
-            for(Slot slot : slotsContainer) {
-                slot.addToContainerStack(containerId);
+        Queue<Container> containerQ = new LinkedList<>(containers);
+        while(!containerQ.isEmpty()) {
+            Container container = containerQ.poll();
+            List<Slot> slotsContainer = field.getSlot_containerId(container.getId());
+            Slot firstSlot = slotsContainer.get(0);
+
+            if (field.isSameHeight(firstSlot.getTotalHeight(), slotListToId(slotsContainer), container.getId()) && field.canContainerSnap(firstSlot, slotListToId(slotsContainer), container.getId())) {
+                for (Slot slot : slotsContainer) {
+                    slot.addToContainerStack(container.getId());
+                }
+            }
+            else {
+                containerQ.add(container);
             }
         }
     }
+    private List<Integer> slotListToId(List<Slot> slotsContainer) {
+        List<Integer> result = new ArrayList<Integer>();
+        for(Slot slot : slotsContainer) {
+            result.add(slot.getId());
+        }
+        return result;
+    }
+
 
     public void formatAssignment() {
         for(Assignment assignment : assignments) {
