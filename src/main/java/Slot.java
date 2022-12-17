@@ -59,6 +59,19 @@ public class Slot {
         }
         return "(" + containerStack.peek() + ", " + containerStack.size() + ")";
     }
+    public String printStackContent() {
+        StringBuilder sb = new StringBuilder();
+        if(containerStack.empty()) {
+            return "(...)";
+        }
+        sb.append("( ");
+        for(Integer i : containerStack){
+            sb.append(i.toString());
+            sb.append(" , ");
+        }
+        sb.append(" )");
+        return sb.toString();
+    }
 
     public int peekStack() {
         return containerStack.peek();

@@ -10,14 +10,32 @@ public class GUI {
     private static Field field;
     private static Map<Integer,Container> containers = new HashMap<>();
 
+    private static List<Difference> differences = new ArrayList<>();
+    private static boolean stuck = false, changed = false;
+    private static int currentIndex = 0;
+    private static List<CraneMovement> craneMoves = new ArrayList<>();
+    // Contains the movements of the container - with coordinates of the center of the container
+    private static List<ContainerMovement> containerMoves = new ArrayList<>();
+    // Stack containing all the indexes which are changed, so they can be removed from the differences
+    // Stack -> Reverse order -> Easier to remove
+    private static Stack<Integer> executed = new Stack<>();
+
     public static void main(String[] args) {
-        JScrollPane scrollPane = new JScrollPane();
+        JScrollPane scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        JScrollBar bar = scrollPane.getVerticalScrollBar();
+        bar.setPreferredSize(new Dimension(40, 0));
         JFrame frame = new JFrame();
         JButton showField = new JButton("Show current state of the field");
+        JButton oneMovement = new JButton("Move one container");
+        JButton wholeAlgorithm = new JButton("Let whole algorithm run");
         JPanel panel = new JPanel(new GridLayout(10, 1, 100, 5));
-        panel.setPreferredSize(new Dimension(100,100));
+        panel.setPreferredSize(new Dimension(1280,700));
         panel.setBackground(Color.lightGray);
 
+        panel.add(oneMovement);
+        oneMovement.setEnabled(true);
+        panel.add(wholeAlgorithm);
+        wholeAlgorithm.setEnabled(true);
         panel.add(showField);
         showField.setEnabled(true);
         panel.add(scrollPane);
@@ -34,14 +52,27 @@ public class GUI {
         showField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //JList<String> list = visualizeField();
-                //scrollPane.setViewportView(list);
+                JTable table = visualizeField();
+                scrollPane.setViewportView(table);
+                scrollPane.setSize(1280, 300);
+            }
+        });
+        oneMovement.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                generateSchedule_newTargetField_singleStep(differences);
             }
         });
 
+        wholeAlgorithm.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                generateSchedule_newTargetField(differences);
+            }
+        });
 
-//        String fileName = "terminal22_1_100_1_10";
-//        String fileName = "1t/targetTerminalA_20_10_3_2_100";
+        //String fileName = "terminal22_1_100_1_10";
+        //String fileName = "1t/targetTerminalA_20_10_3_2_100";
         String fileName = "6t/Terminal_10_10_3_1_100";
         InputData inputData = InputData.readFile("data/" + fileName+ ".json");
         inputData.formatAssignment();
@@ -53,7 +84,7 @@ public class GUI {
 
         if(inputData.getTargetHeight() == 0) {
             // Reformat stacks equal to the target field
-//            String target = "1t/TerminalA_20_10_3_2_100";
+            //String target = "1t/TerminalA_20_10_3_2_100";
             String target = "6t/targetTerminal_10_10_3_1_100";
             InputTarget inputTarget = InputTarget.readFile("data/" + target + ".json");
 //            InputTarget inputTarget = InputTarget.readFile("data/" + fileName + "target.json");
@@ -62,27 +93,21 @@ public class GUI {
             Field targetField = new Field(inputData.getSlots(), inputTarget.getAssignmentsMap(), inputTarget.getMaxheight());
             inputTarget.makeStacks(targetField, inputData.getContainers());
 
-            List<Difference> differences = findDifferences(targetField);
-            generateSchedule_newTargetField(differences);
+            differences = findDifferences(targetField);
+            //generateSchedule_newTargetField(differences);
             assert findDifferences(targetField).isEmpty(): "There are still differences between targetfield and own field";
         }
         else {
             // Format the containerStack so they don't exceed the target height
             // todo
         }
+
     }
 
 
     /**************************************************TARGET FIELD*************************************************/
     private static void generateSchedule_newTargetField(List<Difference> differences) {
-        boolean stuck = false, changed = false;
-        int currentIndex = 0;
-        List<CraneMovement> craneMoves = new ArrayList<>();
-        // Contains the movements of the container - with coordinates of the center of the container
-        List<ContainerMovement> containerMoves = new ArrayList<>();
-        // Stack containing all the indexes which are changed, so they can be removed from the differences
-        // Stack -> Reverse order -> Easier to remove
-        Stack<Integer> executed = new Stack<>();
+
         while(!differences.isEmpty()) {
             Difference diff = differences.get(currentIndex);
             int containerId = diff.getContainerId();
@@ -121,6 +146,47 @@ public class GUI {
         System.out.println("All containers are succesfully moved");
     }
 
+
+    private static void generateSchedule_newTargetField_singleStep(List<Difference> differences) {
+
+        while(!differences.isEmpty()) {
+            Difference diff = differences.get(currentIndex);
+            int containerId = diff.getContainerId();
+
+            List<Integer> destinationSlotIds = diff.getSlotIds();
+            Container container = containers.get(containerId);
+            // Try and place container to correct destination
+
+            if(field.isValidContainerDestination(container, destinationSlotIds) && field.isMovableContainer(container)) {
+                if(field.containerHasCorrectHeight(destinationSlotIds, diff.getHeight(), containerId)) {
+                    moveContainerMovement(containerId, container, destinationSlotIds, containerMoves);
+                    executed.push(currentIndex);
+                    changed = true;
+                }
+            }
+            currentIndex++;
+
+            if(currentIndex >= differences.size()) {
+                if(changed) {
+                    changed = false;
+                    assert !executed.isEmpty(): " There has been a change, but the executed changes are empty.";
+                    cleanDifferences(differences, executed);
+                }
+                // Nothing has changed in a full iteration, so the program is stuck
+                else {
+                    // todo
+                    stuck = true;
+                    System.out.println("No containers could be moved");
+                }
+                currentIndex = 0;
+            }
+            if(stuck) {
+                stuck = false;
+            }
+            break;
+        }
+        System.out.println("All containers are succesfully moved");
+    }
     private static void cleanDifferences(List<Difference> differences, Stack<Integer> executed) {
         while(!executed.isEmpty()) {
             // De tussenvariabele index is om de een of andere reden nodig... Het werkt niet in 1 lijn
@@ -209,20 +275,23 @@ public class GUI {
 
 
     /**************************************TESTING**************************************/
-    public static void visualizeField() {
-        System.out.println("x ->");
-        System.out.println("y |");
-        System.out.println();
+    public static JTable visualizeField() {
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("slot id");
+        model.addColumn("Stack of the slot");
         Slot[][] fieldMatrix = field.getFieldMatrix();
-        for(int i = 0 ; i < fieldMatrix.length; i++) {
-            for(int j = 0 ; j < fieldMatrix[i].length; j++) {
-                if(fieldMatrix[i][j] != null) {
-                    System.out.print(fieldMatrix[i][j].printStackInfo() + "\t");
-                }
-                else System.out.print("....\t" );
+        for (int i = 0; i < fieldMatrix.length; i++) {
+            for (int j = 0; j < fieldMatrix[0].length; j++){
+                String slotid;
+                String containerStack;
+                Slot currentSlot = fieldMatrix[i][j];
+                slotid = Integer.toString(currentSlot.getId());
+                containerStack = currentSlot.printStackContent();
+                model.insertRow(model.getRowCount(),new Object[]{slotid, containerStack});
             }
-            System.out.println();
         }
+        JTable result = new JTable(model);
+        return result;
     }
     private static void testBasicFunctionality() {
         ArrayList<Integer> list = new ArrayList<>(1);
