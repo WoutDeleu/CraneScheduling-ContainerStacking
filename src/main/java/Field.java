@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class Field {
-    private final int MAX_HEIGHT;
+    private int MAX_HEIGHT;
     private List<Slot> slots;
     private Map<Integer, Assignment> assignments; // key = containerId
 
@@ -21,6 +21,9 @@ public class Field {
     }
 
 
+    public void setMAX_HEIGHT(int targetHeight) {
+        this.MAX_HEIGHT = targetHeight;
+    }
 
     public List<Slot> getSlots() {
         return slots;
@@ -118,6 +121,17 @@ public class Field {
         }
         assert availableSlots.length != 0 : "No slots available...";
         return availableSlots;
+    }
+
+
+    public List<Integer> findContainersExceedingHeight(int targetHeight) {
+        List<Integer> containersToMove = new ArrayList<>();
+        for(Slot slot : slots) {
+            if(targetHeight < slot.getTotalHeight()) {
+                slot.addContainersExceedingHeight(targetHeight, containersToMove);
+            }
+        }
+        return containersToMove;
     }
 
     /**************************************CHECK MOVABLE**************************************/

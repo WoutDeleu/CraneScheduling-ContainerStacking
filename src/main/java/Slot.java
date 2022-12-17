@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Stack;
 
 public class Slot {
@@ -66,5 +67,11 @@ public class Slot {
 
     public boolean containsContainer(int containerId) {
         return containerStack.contains(containerId);
+    }
+
+    public void addContainersExceedingHeight(int targetHeight, List<Integer> containersToMove) {
+        for(int containerId : containerStack) {
+            if(getHeightContainer(containerId) > targetHeight) containersToMove.add(containerId);
+        }
     }
 }

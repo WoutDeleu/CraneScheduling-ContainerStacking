@@ -1,19 +1,14 @@
-import java.awt.*;
 import java.util.*;
 import java.util.List;
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 
 public class Main {
     private static Field field;
     private static Map<Integer,Container> containers = new HashMap<>();
 
     public static void main(String[] args) {
-
-//        String fileName = "terminal22_1_100_1_10";
-//        String fileName = "1t/targetTerminalA_20_10_3_2_100";
-        String fileName = "6t/Terminal_10_10_3_1_100";
-        InputData inputData = InputData.readFile("data/" + fileName+ ".json");
+        int choice = chooseInputFile();
+        System.out.println("inputFile: " + inputFiles[choice]);
+        InputData inputData = InputData.readFile("data/" + inputFiles[choice] + ".json");
         inputData.formatAssignment();
 
         containers = inputData.getContainersMap();
@@ -21,33 +16,63 @@ public class Main {
 
         inputData.makeStacks(field);
 
+        List<ContainerMovement> containerMovements;
         if(inputData.getTargetHeight() == 0) {
-            // Reformat stacks equal to the target field
-//            String target = "1t/TerminalA_20_10_3_2_100";
-            String target = "6t/targetTerminal_10_10_3_1_100";
-            InputTarget inputTarget = InputTarget.readFile("data/" + target + ".json");
-//            InputTarget inputTarget = InputTarget.readFile("data/" + fileName + "target.json");
+            String targetFile = targetFiles[choice];
+            System.out.println("Reformat to target field " + targetFile);
+            InputTarget inputTarget = InputTarget.readFile("data/" + targetFile + ".json");
             inputTarget.formatAssignment(inputData.getContainers(), inputData.getSlots());
 
             Field targetField = new Field(inputData.getSlots(), inputTarget.getAssignmentsMap(), inputTarget.getMaxheight());
             inputTarget.makeStacks(targetField, inputData.getContainers());
 
             List<Difference> differences = findDifferences(targetField);
-            generateSchedule_newTargetField(differences);
+            containerMovements = generateContainerMovements(differences);
             assert findDifferences(targetField).isEmpty(): "There are still differences between targetfield and own field";
         }
         else {
-            // Format the containerStack so they don't exceed the target height
-            // todo
+            // Format the container stack, so they don't exceed the target height
+            System.out.println("Reformat so field doesn't exceed the target height");
+            containerMovements = generateContainerMovements(inputData.getTargetHeight());
         }
+        // TODO
+//        addCranesToMovement(containerMovements);
     }
 
-
-    /**************************************************TARGET FIELD*************************************************/
-    private static void generateSchedule_newTargetField(List<Difference> differences) {
-        boolean stuck = false, changed = false;
+    /**************************************************MAX HEIGHT**************************************************/
+    public static List<ContainerMovement> generateContainerMovements(int targetHeight) {
+        List<ContainerMovement> containerMoves = new ArrayList<>();
+        field.setMAX_HEIGHT(targetHeight);
         int currentIndex = 0;
-        List<CraneMovement> craneMoves = new ArrayList<>();
+
+        List<Integer> containersToMove = field.findContainersExceedingHeight(targetHeight);
+        Stack<Integer> executed = new Stack<>();
+        while(!containersToMove.isEmpty()) {
+            int containerId = containersToMove.get(currentIndex);
+            Container container = containers.get(containerId);
+
+            List<Integer>[] possibleDestinations = field.findAvailableSlots(container);
+
+            moveContainerMovement(container, possibleDestinations[0], containerMoves);
+            executed.push(currentIndex);
+            currentIndex++;
+
+            if(currentIndex >= containersToMove.size()) {
+                cleanDifferences(containersToMove, executed);
+                currentIndex = 0;
+            }
+        }
+        return containerMoves;
+    }
+    /**************************************************MAX HEIGHT**************************************************/
+
+
+
+    /**************************************************TARGET FIELD**************************************************/
+    // Used when creating new field based on target field
+    private static List<ContainerMovement> generateContainerMovements(List<Difference> differences) {
+       /* boolean stuck = false, changed = false;*/
+        int currentIndex = 0;
         // Contains the movements of the container - with coordinates of the center of the container
         List<ContainerMovement> containerMoves = new ArrayList<>();
         // Stack containing all the indexes which are changed, so they can be removed from the differences
@@ -63,14 +88,18 @@ public class Main {
 
             if(field.isValidContainerDestination(container, destinationSlotIds) && field.isMovableContainer(container)) {
                 if(field.containerHasCorrectHeight(destinationSlotIds, diff.getHeight(), containerId)) {
-                    moveContainerMovement(containerId, container, destinationSlotIds, containerMoves);
+                    moveContainerMovement(container, destinationSlotIds, containerMoves);
                     executed.push(currentIndex);
-                    changed = true;
+//                    changed = true;
                 }
             }
             currentIndex++;
 
             if(currentIndex >= differences.size()) {
+                cleanDifferences(differences, executed);
+                currentIndex = 0;
+            }
+ /*           if(currentIndex >= differences.size()) {
                 if(changed) {
                     changed = false;
                     assert !executed.isEmpty(): " There has been a change, but the executed changes are empty.";
@@ -85,14 +114,15 @@ public class Main {
                 currentIndex = 0;
             }
             if(stuck) {
+                // TODO
                 stuck = false;
                 break;
-            }
+            }*/
         }
         System.out.println("All containers are succesfully moved");
+        return containerMoves;
     }
-
-    private static void cleanDifferences(List<Difference> differences, Stack<Integer> executed) {
+    private static <T> void cleanDifferences(List<T> differences, Stack<Integer> executed) {
         while(!executed.isEmpty()) {
             // De tussenvariabele index is om de een of andere reden nodig... Het werkt niet in 1 lijn
             int index = executed.pop();
@@ -100,15 +130,16 @@ public class Main {
         }
     }
 
-    private static void moveContainerMovement(int containerId, Container container, List<Integer> destinationSlotIds, List<ContainerMovement> containerMoves) {
-        Coordinate start = field.getGrabbingPoint(containerId);
+    private static void moveContainerMovement(Container container, List<Integer> destinationSlotIds, List<ContainerMovement> containerMoves) {
+        Coordinate start = field.getGrabbingPoint(container.getId());
         field.moveContainer(container, destinationSlotIds);
-        Coordinate end = field.getGrabbingPoint(containerId);
+        Coordinate end = field.getGrabbingPoint(container.getId());
         containerMoves.add(new ContainerMovement(start, end));
     }
     /**************************************************TARGET FIELD*************************************************/
 
-    /**************************************FIND DIFFERENCES**************************************/
+
+    /*************************************************FIND DIFFERENCES*************************************************/
     private static List<Difference> findDifferences(Field targetField) {
         ArrayList<Integer[]> differences = new ArrayList<>();
         for(Slot slot :  field.getSlots()) {
@@ -127,11 +158,11 @@ public class Main {
                 // Compare 2 stacks, and extract the differences
                 int minHeight = Math.min(slot.getTotalHeight(), targetSlot.getTotalHeight());
                 for(int i = 0; i < minHeight; i++) {
-                    Stack<Integer> original = targetSlot.getContainerStack();
+                    Stack<Integer> original = slot.getContainerStack();
                     Stack<Integer> target = targetSlot.getContainerStack();
                     if(!original.get(i).equals(target.get(i))) {
                         int containerId = target.get(i);
-                        differences.add(new Integer[]{containerId,  targetSlot.getHeightContainer(containerId) ,targetSlot.getId()});
+                        differences.add(new Integer[]{containerId,  targetSlot.getHeightContainer(containerId), targetSlot.getId()});
                     }
                 }
                 if(targetSlot.getTotalHeight() > minHeight) {
@@ -173,7 +204,7 @@ public class Main {
         }
         return differences;
     }
-    /**************************************FIND DIFFERENCES**************************************/
+    /*************************************************FIND DIFFERENCES*************************************************/
 
 
     /**************************************TESTING**************************************/
@@ -205,5 +236,23 @@ public class Main {
             System.out.println(field.getGrabbingPoint(container.getId()));
         }
     }
-    /**************************************TESTING**************************************/
+    /*************************************************TESTING*************************************************/
+
+
+
+    /*************************************************INPUT*************************************************/
+    private static String[] inputFiles = new String[]{"terminal22_1_100_1_10", "Terminal_20_10_3_2_100-HEIGHT", "1t/TerminalA_20_10_3_2_100", "2mh/MH2Terminal_20_10_3_2_100","3t/TerminalA_20_10_3_2_160", "4mh/MH2Terminal_20_10_3_2_160", "5t/TerminalB_20_10_3_2_160" , "6t/Terminal_10_10_3_1_100"};
+    private static String[] targetFiles = new String[]{"terminal22_1_100_1_10target", null, "1t/targetTerminalA_20_10_3_2_100", null, "3t/targetTerminalA_20_10_3_2_160", null, "5t/targetTerminalB_20_10_3_2_160" , "6t/targetTerminal_10_10_3_1_100"};
+    private static int chooseInputFile() {
+        for(int i=0; i<inputFiles.length; i++) {
+            System.out.print(i + ": ");
+            System.out.println(inputFiles[i]);
+        }
+        System.out.println("Select the input file");
+        Scanner sc = new Scanner(System.in);
+        int choice = sc.nextInt();
+        System.out.println();
+        return choice;
+    }
+    /*************************************************INPUT*************************************************/
 }
