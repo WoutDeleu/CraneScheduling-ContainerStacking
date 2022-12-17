@@ -1,39 +1,15 @@
--> Kranen regelen (geen colision enz)
-    -> Safe distance
+- Cranes afwerken
+        - Debuggen
+        - Collision van kranen
+        - Kranen tegelijk
 
-public void generateSchedule_newFormat(targetField) {
-    targetSlot_targetContainers = findDifferences();
-    boolean changed = false;      //not risk getting into an infinite loop
-    int currentIndex = 0;
-    List moves = new ArrayList();
-    while(!targetSlot_targetContainers.isEmpty()) {
-        currentContainer = targetSlot_targetContainers.get(currentIndex);
-        try {
-            moves.add(move_current_container_to_target());
-        }
-        if(succesfull) {
-            changed = true;
-            delete_difference;
-        }
-        currentIndex++;
-        if(currentIndex == targetSlot_targetContainers.size()) {
-            if(changed) {
-                changed = false;
-            }
-            else {
-                hardStuck = true;
-            }
-            currentIndex = 0;
-        }
-        if(hardStuck){
-            // makeRoom: move a container to a free spot, so a new container is accessible.
-            makeRoom();
-            targetSlot_targetContainers=findDifferences();
-            hardStuck=false;
-        }
-    }
-    addCranes(moves);
-}
-public void generateSchedule_newMaxHeight() {
+- Format Output
+        - Schrijven naar file
+        - Jar maken
 
-}
+-GUI wekende krijgen - demo??
+
+
+Lucas
+    - fix de todo (Main - 131)
+    - bepaal de possible destination met de laagste afstand tss (destination - currentContainerLocation)

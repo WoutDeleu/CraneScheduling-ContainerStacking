@@ -3,9 +3,9 @@ public class CraneMovement {
     Coordinate start;
     Coordinate end;
 
-    public CraneMovement(Crane crane, Coordinate start, Coordinate end) {
+    public CraneMovement(Crane crane, Coordinate end) {
         this.crane = crane;
-        this.start = start;
+        this.start = crane.getLocation();
         this.end = end;
     }
 

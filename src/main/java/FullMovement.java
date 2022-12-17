@@ -1,8 +1,8 @@
 public class FullMovement {
     public int craneId;
     public int containerId;
-    public int pickupTime;
-    public int endTime;
+    public double pickupTime;
+    public double endTime;
     public double pickupPosX;
     public double pickupPosY;
     public double endPosX;
@@ -11,6 +11,7 @@ public class FullMovement {
     public FullMovement() {}
     public FullMovement(int craneId, int containerId, int pickupTime, int endTime, double pickupPosX, double pickupPosY, double endPosX, double endPosY) {
         this.craneId = craneId;
+        // containerId = -1 represents movement without container
         this.containerId = containerId;
         this.pickupTime = pickupTime;
         this.endTime = endTime;
@@ -19,11 +20,14 @@ public class FullMovement {
         this.endPosX = endPosX;
         this.endPosY = endPosY;
     }
-    public void setStart(Coordinate coordinate) {
+    public void setStartLocation(Coordinate coordinate) {
         pickupPosX = (coordinate.getX());
         pickupPosY = (coordinate.getY());
     }
-
+    public void setEndLocation(Coordinate coordinate) {
+        endPosX = (coordinate.getX());
+        endPosX = (coordinate.getY());
+    }
 
     public int getCraneId() {
         return craneId;
@@ -41,19 +45,19 @@ public class FullMovement {
         this.containerId = containerId;
     }
 
-    public int getPickupTime() {
+    public double getPickupTime() {
         return pickupTime;
     }
 
-    public void setPickupTime(int pickupTime) {
+    public void setPickupTime(double pickupTime) {
         this.pickupTime = pickupTime;
     }
 
-    public int getEndTime() {
+    public double getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(int endTime) {
+    public void setEndTime(double endTime) {
         this.endTime = endTime;
     }
 

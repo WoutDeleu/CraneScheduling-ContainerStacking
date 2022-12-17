@@ -8,21 +8,21 @@ public class Crane {
     @SerializedName("y")
     private double y;
     @SerializedName("ymin")
-    private int ymin;
+    private double ymin;
     @SerializedName("ymax")
-    private int ymax;
+    private double ymax;
     @SerializedName("id")
     private int id;
     @SerializedName("xmax")
-    private int xmax;
+    private double xmax;
     @SerializedName("xmin")
-    private int xmin;
+    private double xmin;
     @SerializedName("xspeed")
-    private int Vx; // Velocity in X-direction
+    private double Vx; // Velocity in X-direction
     @SerializedName("yspeed")
-    private int Vy; // Velocity in Y-direction
+    private double Vy; // Velocity in Y-direction
 
-    Map<Integer, Coordinate> trajectory;
+    Map<Double, Coordinate> trajectory;
 
     public Crane(int vx, int vy) {
         Vx = vx;
@@ -30,27 +30,46 @@ public class Crane {
         trajectory = new HashMap<>();
     }
 
-    public int getVx() {
+    public int getId() {
+        return id;
+    }
+
+    public Coordinate getLocation() {
+        return new Coordinate(x, y);
+    }
+    public double getVx() {
         return Vx;
     }
 
-    public int getVy() {
+    public double getVy() {
         return Vy;
     }
 
-    public Map<Integer, Coordinate> getTrajectory() {
+    public Map<Double, Coordinate> getTrajectory() {
         return trajectory;
     }
 
 
-    public void addToTrajectory(Coordinate start, Coordinate end, int startTime, int endTime) {
+    public void addToTrajectory(Coordinate start, Coordinate end, Double startTime, Double endTime) {
         trajectory.put(startTime, start);
 
         double x_time_component = start.getXdistance(end)/Vx;
         double y_time_component = start.getYdistance(end)/Vy;
         // Put a critical point in the trajectory
-        if(x_time_component>y_time_component) trajectory.put((int)(startTime + y_time_component), new Coordinate((start.getX() + Vx*y_time_component) ,end.getY()));
-        else if(x_time_component<=y_time_component) trajectory.put((int)(startTime + x_time_component), new Coordinate(end.getX(), (start.getY() + Vy*x_time_component)));
+        if(x_time_component>y_time_component) trajectory.put((startTime + y_time_component), new Coordinate((start.getX() + Vx*y_time_component) ,end.getY()));
+        else if(x_time_component<=y_time_component) trajectory.put((startTime + x_time_component), new Coordinate(end.getX(), (start.getY() + Vy*x_time_component)));
+
+        trajectory.put(endTime, end);
+    }
+    public void addToTrajectory(Coordinate end, double startTime, double endTime) {
+        Coordinate start = new Coordinate(x, y);
+        trajectory.put(startTime, start);
+
+        double x_time_component = start.getXdistance(end)/Vx;
+        double y_time_component = start.getYdistance(end)/Vy;
+        // Put a critical point in the trajectory
+        if(x_time_component>y_time_component) trajectory.put(startTime + y_time_component, new Coordinate((start.getX() + Vx*y_time_component) ,end.getY()));
+        else if(x_time_component<=y_time_component) trajectory.put(startTime + x_time_component, new Coordinate(end.getX(), (start.getY() + Vy*x_time_component)));
 
         trajectory.put(endTime, end);
     }
@@ -85,5 +104,14 @@ public class Crane {
             }
         }
         return true;
+    }
+
+    public boolean inRange(Coordinate start) {
+        return xmin <= start.getX() && start.getX() <= xmax && ymin <= start.getY() && start.getY() <= ymax;
+    }
+
+    public void updateLocation(Coordinate containerLocation) {
+        x = containerLocation.getX();
+        y = containerLocation.getY();
     }
 }

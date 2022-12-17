@@ -40,20 +40,80 @@ public class Main {
         List<FullMovement> schedule = addCranesToMovement(containerMovements);
     }
 
+
+    /**************************************************CRANES**************************************************/
     private static List<FullMovement> addCranesToMovement(List<ContainerMovement> containerMovements) {
         List<FullMovement> schedule = new ArrayList<>();
-        int timer = 0;
+        double timer = 0;
         for (ContainerMovement containerMovement : containerMovements) {
-            // Get the mov
-            FullMovement moveToContainer = new FullMovement();
-            moveToContainer.setStart(containerMovement.getStart());
-            moveToContainer.setContainerId(-1);
-            moveToContainer.setPickupTime(timer);
+            Coordinate containerStartLocation = containerMovement.getStart();
+            Coordinate containerDestination = containerMovement.getEnd();
 
+            // Get the movement from the startingposition from the crane to the container position
+            Crane crane = findBestCrane(containerMovement);
+            FullMovement moveToContainer = moveCrane(crane, -1, timer, containerStartLocation);
+            timer = updateTimer(timer, crane, containerStartLocation);
+            schedule.add(moveToContainer);
+            crane.updateLocation(containerStartLocation);
+
+            // Move the container
+            FullMovement movingContainer = moveCrane(crane, containerMovement.getContainerId(), timer, containerDestination);
+            timer = updateTimer(timer, crane, containerDestination);
+            schedule.add(movingContainer);
+            crane.updateLocation(containerDestination);
         }
 
         return schedule;
     }
+
+    private static FullMovement moveCrane(Crane crane, int containerId, double timer, Coordinate destination) {
+        FullMovement moveingContainer = new FullMovement();
+        moveingContainer.setContainerId(containerId);
+        moveingContainer.setCraneId(crane.getId());
+        moveingContainer.setStartLocation(crane.getLocation());
+        moveingContainer.setPickupTime(timer);
+        moveingContainer.setEndTime(timer+ (new CraneMovement(crane, destination)).travelTime());
+        moveingContainer.setEndLocation(destination);
+        crane.addToTrajectory(destination, timer, timer + (new CraneMovement(crane, destination)).travelTime());
+        return moveingContainer;
+    }
+
+    public static Crane findBestCrane(ContainerMovement containerMovement) {
+        Crane selectedCrane;
+        List<Crane> cranedidates = new ArrayList<>();
+        boolean fullRangeFound = false;
+        for(Crane crane : cranes) {
+            if(crane.inRange(containerMovement.getStart())) {
+                if(crane.inRange(containerMovement.getEnd())) {
+                    if(!fullRangeFound) cranedidates.clear();
+                    cranedidates.add(crane);
+                }
+                else if(!fullRangeFound) {
+                    cranedidates.add(crane);
+                }
+            }
+        }
+        if(cranedidates.size() > 1) {
+            double travelTime = Double.POSITIVE_INFINITY;
+            Coordinate start = containerMovement.getStart();
+            selectedCrane = cranedidates.get(0);
+            for(Crane crane : cranedidates) {
+                Coordinate craneCoord = crane.getLocation();
+                double currentTravelTime = (new CraneMovement(crane, start)).travelTime();
+                if(currentTravelTime < travelTime) {
+                    selectedCrane = crane;
+                    travelTime = currentTravelTime;
+                }
+            }
+            return selectedCrane;
+        }
+        else return cranedidates.get(0);
+    }
+    private static double updateTimer(double timer, Crane crane, Coordinate destination) {
+        return timer + (new CraneMovement(crane, destination)).travelTime();
+    }
+    /**************************************************CRANES**************************************************/
+
 
     /**************************************************MAX HEIGHT**************************************************/
     public static List<ContainerMovement> generateContainerMovements(int targetHeight) {
@@ -68,6 +128,7 @@ public class Main {
             Container container = containers.get(containerId);
 
             List<Integer>[] possibleDestinations = field.findAvailableSlots(container);
+            // todo: bepaal de possible destination met de laagste afstand tss (destination - currentContainerLocation)
 
             moveContainerMovement(container, possibleDestinations[0], containerMoves);
             executed.push(currentIndex);
@@ -124,7 +185,6 @@ public class Main {
             differences.remove(index);
         }
     }
-
     private static void moveContainerMovement(Container container, List<Integer> destinationSlotIds, List<ContainerMovement> containerMoves) {
         Coordinate start = field.getGrabbingPoint(container.getId());
         field.moveContainer(container, destinationSlotIds);
