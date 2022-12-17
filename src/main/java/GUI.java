@@ -1,14 +1,44 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-public class Main {
+public class GUI {
     private static Field field;
     private static Map<Integer,Container> containers = new HashMap<>();
 
     public static void main(String[] args) {
+        JScrollPane scrollPane = new JScrollPane();
+        JFrame frame = new JFrame();
+        JButton showField = new JButton("Show current state of the field");
+        JPanel panel = new JPanel(new GridLayout(10, 1, 100, 5));
+        panel.setPreferredSize(new Dimension(100,100));
+        panel.setBackground(Color.lightGray);
+
+        panel.add(showField);
+        showField.setEnabled(true);
+        panel.add(scrollPane);
+
+
+        frame.setTitle("Field");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
+        frame.setResizable(true);
+        frame.setSize(1280,700);
+        frame.setLocationRelativeTo(null);
+        frame.add(panel);
+        frame.setVisible(true);
+        showField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //JList<String> list = visualizeField();
+                //scrollPane.setViewportView(list);
+            }
+        });
+
 
 //        String fileName = "terminal22_1_100_1_10";
 //        String fileName = "1t/targetTerminalA_20_10_3_2_100";
@@ -78,7 +108,7 @@ public class Main {
                 }
                 // Nothing has changed in a full iteration, so the program is stuck
                 else {
-                    // TODO
+                    // todo
                     stuck = true;
                     System.out.println("No containers could be moved");
                 }
@@ -86,7 +116,6 @@ public class Main {
             }
             if(stuck) {
                 stuck = false;
-                break;
             }
         }
         System.out.println("All containers are succesfully moved");
@@ -112,6 +141,9 @@ public class Main {
     private static List<Difference> findDifferences(Field targetField) {
         ArrayList<Integer[]> differences = new ArrayList<>();
         for(Slot slot :  field.getSlots()) {
+            if(slot.getId() ==  16) {
+                System.out.println();
+            }
             Slot targetSlot = targetField.getSlot_slotId(slot.getId());
             if(slot.getTotalHeight() == 0) {
                 // If a slot is empty for the original, but contains containers for the target
