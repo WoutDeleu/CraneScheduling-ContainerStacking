@@ -2,6 +2,7 @@
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+.idea/workspace.xml
 
 ### Eclipse ###
 .apt_generated
@@ -30,3 +31,8 @@ bin/
 /target/classes/InputTarget.class
 /target/classes/Difference.class
 /target/classes/ContainerMovement.class
+/target/classes/FullMovement.class
+/target/classes/GUI.class
+/target/classes/GUI$3.class
+/target/classes/GUI$2.class
+/target/classes/GUI$1.class

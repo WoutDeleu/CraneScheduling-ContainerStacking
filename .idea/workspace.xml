@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" name="Changes" comment="Begin van de cranes + workplan">
+    <list default="true" id="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" name="Changes" comment="Checkpoint - In the middle of adding crane">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WorkPlan" beforeDir="false" afterPath="$PROJECT_DIR$/WorkPlan" afterDir="false" />
@@ -127,7 +127,7 @@
       <workItem from="1671004995469" duration="13360000" />
       <workItem from="1671267777442" duration="16465000" />
       <workItem from="1671288007085" duration="4677000" />
-      <workItem from="1671351003929" duration="28402000" />
+      <workItem from="1671351003929" duration="28788000" />
     </task>
     <task id="LOCAL-00001" summary="InitialPush">
       <created>1666197741595</created>
@@ -255,7 +255,14 @@
       <option name="project" value="LOCAL" />
       <updated>1671312193960</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Checkpoint - In the middle of adding crane">
+      <created>1671398829054</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1671398829054</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -301,7 +308,8 @@
     <MESSAGE value="Checkpoint - split to other branch" />
     <MESSAGE value="Solution zonder Crane..." />
     <MESSAGE value="Begin van de cranes + workplan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Begin van de cranes + workplan" />
+    <MESSAGE value="Checkpoint - In the middle of adding crane" />
+    <option name="LAST_COMMIT_MESSAGE" value="Checkpoint - In the middle of adding crane" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -324,7 +332,7 @@
         </breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
-          <line>335</line>
+          <line>336</line>
           <option name="timeStamp" value="92" />
         </line-breakpoint>
       </breakpoints>
