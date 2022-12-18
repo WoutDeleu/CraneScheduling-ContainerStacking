@@ -1,4 +1,4 @@
-/*
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -105,9 +105,7 @@ public class GUI {
 
     }
 
-
-    */
-/**************************************************TARGET FIELD*************************************************//*
+/**************************************************TARGET FIELD*************************************************/
 
     private static void generateSchedule_newTargetField(List<Difference> differences) {
 
@@ -202,14 +200,14 @@ public class GUI {
         Coordinate start = field.getGrabbingPoint(containerId);
         field.moveContainer(container, destinationSlotIds);
         Coordinate end = field.getGrabbingPoint(containerId);
-        containerMoves.add(new ContainerMovement(start, end));
+//        containerMoves.add(new ContainerMovement(start, end));
     }
-    */
-/**************************************************TARGET FIELD*************************************************//*
+
+/**************************************************TARGET FIELD*************************************************/
 
 
-    */
-/**************************************FIND DIFFERENCES**************************************//*
+
+/**************************************FIND DIFFERENCES**************************************/
 
     private static List<Difference> findDifferences(Field targetField) {
         ArrayList<Integer[]> differences = new ArrayList<>();
@@ -278,13 +276,13 @@ public class GUI {
         }
         return differences;
     }
-    */
+
 /**************************************FIND DIFFERENCES**************************************//*
 
 
 
-    */
-/**************************************TESTING**************************************//*
+
+/**************************************TESTING**************************************/
 
     public static JTable visualizeField() {
         DefaultTableModel model = new DefaultTableModel();
@@ -317,12 +315,11 @@ public class GUI {
             System.out.println(field.getGrabbingPoint(container.getId()));
         }
     }
-    */
-/**************************************TESTING**************************************//*
+/**************************************TESTING**************************************/
 
 
-    */
-/*************************************************INPUT*************************************************//*
+
+/*************************************************INPUT*************************************************/
 
     private static String[] inputFiles = new String[]{"terminal22_1_100_1_10", "Terminal_20_10_3_2_100-HEIGHT", "1t/TerminalA_20_10_3_2_100", "2mh/MH2Terminal_20_10_3_2_100","3t/TerminalA_20_10_3_2_160", "4mh/MH2Terminal_20_10_3_2_160", "5t/TerminalB_20_10_3_2_160" , "6t/Terminal_10_10_3_1_100"};
     private static String[] targetFiles = new String[]{"terminal22_1_100_1_10target", null, "1t/targetTerminalA_20_10_3_2_100", null, "3t/targetTerminalA_20_10_3_2_160", null, "5t/targetTerminalB_20_10_3_2_160" , "6t/targetTerminal_10_10_3_1_100"};
@@ -337,8 +334,7 @@ public class GUI {
         System.out.println();
         return choice;
     }
-    */
-/*************************************************INPUT*************************************************//*
+
+/*************************************************INPUT*************************************************/
 
 }
-*/

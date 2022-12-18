@@ -1,16 +1,19 @@
 - Cranes afwerken
-        - Implementeren Wannes - Fout in empty movevement
+        - Afwerken (Trajectory)
         - Debuggen
         - Collision van kranen
         - Kranen tegelijk
+
+CODE OPRUIMEN
 
 - Format Output
         - Schrijven naar file
         - Jar maken
 
--GUI wekende krijgen - demo??
+- GUI wekende krijgen - demo??
 
 
 Lucas
     - fix de todo (Main - 131)
     - bepaal de possible destination met de laagste afstand tss (destination - currentContainerLocation)
+    - Niet op container die moet verplaatst worden

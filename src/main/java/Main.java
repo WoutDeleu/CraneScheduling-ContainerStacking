@@ -4,6 +4,7 @@ import java.util.List;
 public class Main {
     private static Field field;
     private static List<Crane> cranes;
+    private static final int SAFE_DISTANCE = 1;
     private static Map<Integer,Container> containers = new HashMap<>();
 
     public static void main(String[] args) {
@@ -44,38 +45,134 @@ public class Main {
     /**************************************************CRANES**************************************************/
     private static List<FullMovement> addCranesToMovement(List<ContainerMovement> containerMovements) {
         List<FullMovement> schedule = new ArrayList<>();
+        // Contains times when cranes have finished their tasks
+        Map<Integer, Double> craneTimeLocks = new HashMap<>(); // key = craneId, value = timestamp
         double timer = 0;
         for (ContainerMovement containerMovement : containerMovements) {
             Coordinate containerStartLocation = containerMovement.getStart();
             Coordinate containerDestination = containerMovement.getEnd();
 
-            // Get the movement from the startingposition from the crane to the container position
+            // Select best Crane
             Crane crane = findBestCrane(containerMovement);
-            FullMovement moveToContainer = moveCrane(crane, -1, timer, containerStartLocation);
-            timer = updateTimer(timer, crane, containerStartLocation);
-            schedule.add(moveToContainer);
+
+            CraneMovement moveToContainer = new CraneMovement(crane, containerStartLocation, timer);
+            CraneMovement movingContainer = new CraneMovement(crane, containerStartLocation, containerDestination, timer + moveToContainer.travelTime());
+
+            List<Crane> collisionCranes = detectCollision(moveToContainer, movingContainer);
+            // Loop over cranes that give issues
+            for(Crane dangerousCrane : collisionCranes) {
+                // Wait for crane to finish, and update the timer
+                if(dangerousCrane.isInUse()) {
+                    int id = dangerousCrane.getId();
+                    timer = craneTimeLocks.get(id)+1;
+                    executeEvents(timer, craneTimeLocks);
+                }
+
+                // Move crane out of the way
+                FullMovement moveCraneOutWay = dangerousCrane.moveToSaveDistance(timer, moveToContainer, movingContainer);
+                // todo what if collision hiero...
+
+                if(moveCraneOutWay == null) {
+                    // todo: pass container on
+                }
+                // todo: hieral toevoegen?
+                timer = addToSchedule(moveCraneOutWay, schedule, craneTimeLocks);
+            }
+            // todo effectieve move naar container
+
+            // todo effectieve movement
+
+            // todo Wachten tot huidige container geplaatst is
+/*            // Move crane to container starting location
+            CraneMovement moveToContainer = new CraneMovement(crane, containerStartLocation, timer);
+            crane.addToTrajectory(moveToContainer);
             crane.updateLocation(containerStartLocation);
 
-            // Move the container
-            FullMovement movingContainer = moveCrane(crane, containerMovement.getContainerId(), timer, containerDestination);
-            timer = updateTimer(timer, crane, containerDestination);
-            schedule.add(movingContainer);
-            crane.updateLocation(containerDestination);
-        }
+            // Prevent collisions
+            // todo
 
+            if(crane.inRange(containerDestination)) {
+                // Move the container
+                CraneMovement craneMovingContainer = new CraneMovement(crane, containerDestination, timer);
+                FullMovement movingContainer = moveCrane(craneMovingContainer, containerMovement.getContainerId(), timer);
+                schedule.add(movingContainer);
+                crane.addToTrajectory(moveToContainer);
+                crane.updateLocation(containerDestination);
+
+                // Prevent collisions
+                // todo
+            }
+            else {
+                // Pass on container to another crane
+                // todo
+
+                // Prevent collisions
+                // todo
+            }*/
+        }
         return schedule;
     }
 
-    private static FullMovement moveCrane(Crane crane, int containerId, double timer, Coordinate destination) {
-        FullMovement moveingContainer = new FullMovement();
-        moveingContainer.setContainerId(containerId);
-        moveingContainer.setCraneId(crane.getId());
-        moveingContainer.setStartLocation(crane.getLocation());
-        moveingContainer.setPickupTime(timer);
-        moveingContainer.setEndTime(timer+ (new CraneMovement(crane, destination)).travelTime());
-        moveingContainer.setEndLocation(destination);
-        crane.addToTrajectory(destination, timer, timer + (new CraneMovement(crane, destination)).travelTime());
-        return moveingContainer;
+    private static double addToSchedule(FullMovement fullMovement, List<FullMovement> schedule, Map<Integer, Double> craneTimeLocks) {
+        Crane crane = getCraneWithId(fullMovement.getCraneId());
+        crane.setInUse();
+        crane.addToTrajectory(fullMovement);
+        craneTimeLocks.put(crane.getId(), fullMovement.getEndTime());
+        schedule.add(fullMovement);
+        return updateTimeStamp(craneTimeLocks);
+    }
+
+    // Update to the next time slot which has an event
+    private static double updateTimeStamp(Map<Integer, Double> craneTimeLocks) {
+        ArrayList<Double> timestamps = new ArrayList<>();
+        timestamps.addAll(craneTimeLocks.values());
+        double newTimer = Util.getSmallestValue(timestamps) + 1;
+        executeEvents(newTimer, craneTimeLocks);
+        return newTimer;
+    }
+
+    private static void executeEvents(double newTimer, Map<Integer, Double> craneTimeLocks) {
+        ArrayList<Integer> toRemove = new ArrayList<>();
+        for(double time : craneTimeLocks.values()) {
+            if(time <= newTimer) {
+                List<Integer> cranes = Util.getValueFromMap(craneTimeLocks, time);
+                for(int craneId : cranes) {
+                    if(!toRemove.contains(craneId)) {
+                        Crane crane = getCraneWithId(craneId);
+                        crane.setNotInUse();
+                        toRemove.add(craneId);
+                    }
+                }
+            }
+        }
+        for(int i : toRemove) {
+            craneTimeLocks.remove(i);
+        }
+    }
+
+    private static Crane getCraneWithId(int craneId) {
+        for(Crane crane : cranes) {
+            if(crane.getId() == craneId) return crane;
+        }
+        assert false: "No crane found for id " + craneId + ".";
+        return null;
+    }
+
+    private static List<Crane> detectCollision(CraneMovement moveToContainer, CraneMovement movingContainer) {
+        List<Crane> collisions = new ArrayList<>();
+        for(Crane otherCrane : cranes) {
+            if(moveToContainer.colides(SAFE_DISTANCE, otherCrane) || movingContainer.colides(SAFE_DISTANCE, otherCrane)) {
+                collisions.add(otherCrane);
+            }
+        }
+        return collisions;
+    }
+
+    private static FullMovement moveCrane(CraneMovement movement, int containerId, double timer) {
+        FullMovement movingContainer = new FullMovement(movement.getCraneId(), containerId, timer, timer+ movement.travelTime());
+        movingContainer.setStartLocation(movement.getStartPoint());
+        movingContainer.setEndLocation(movement.getEndPoint());
+        return movingContainer;
     }
 
     public static Crane findBestCrane(ContainerMovement containerMovement) {
@@ -83,7 +180,7 @@ public class Main {
         List<Crane> cranedidates = new ArrayList<>();
         boolean fullRangeFound = false;
         for(Crane crane : cranes) {
-            if(crane.inRange(containerMovement.getStart())) {
+            if(crane.inRange(containerMovement.getStart()) && !crane.isInUse()) {
                 if(crane.inRange(containerMovement.getEnd())) {
                     if(!fullRangeFound) cranedidates.clear();
                     cranedidates.add(crane);
@@ -99,7 +196,7 @@ public class Main {
             selectedCrane = cranedidates.get(0);
             for(Crane crane : cranedidates) {
                 Coordinate craneCoord = crane.getLocation();
-                double currentTravelTime = (new CraneMovement(crane, start)).travelTime();
+                double currentTravelTime =  crane.travelTime(start);
                 if(currentTravelTime < travelTime) {
                     selectedCrane = crane;
                     travelTime = currentTravelTime;
@@ -109,9 +206,7 @@ public class Main {
         }
         else return cranedidates.get(0);
     }
-    private static double updateTimer(double timer, Crane crane, Coordinate destination) {
-        return timer + (new CraneMovement(crane, destination)).travelTime();
-    }
+
     /**************************************************CRANES**************************************************/
 
 
@@ -135,7 +230,7 @@ public class Main {
             currentIndex++;
 
             if(currentIndex >= containersToMove.size()) {
-                cleanDifferences(containersToMove, executed);
+                cleanUpDifferences(containersToMove, executed);
                 currentIndex = 0;
             }
         }
@@ -171,14 +266,14 @@ public class Main {
             currentIndex++;
 
             if (currentIndex >= differences.size()) {
-                cleanDifferences(differences, executed);
+                cleanUpDifferences(differences, executed);
                 currentIndex = 0;
             }
         }
         System.out.println("All containers are succesfully moved");
         return containerMoves;
     }
-    private static <T> void cleanDifferences(List<T> differences, Stack<Integer> executed) {
+    private static <T> void cleanUpDifferences(List<T> differences, Stack<Integer> executed) {
         while(!executed.isEmpty()) {
             // De tussenvariabele index is om de een of andere reden nodig... Het werkt niet in 1 lijn
             int index = executed.pop();
@@ -298,7 +393,7 @@ public class Main {
 
 
 
-    /*************************************************INPUT*************************************************/
+    /*************************************************I/O*************************************************/
     private static String[] inputFiles = new String[]{"terminal22_1_100_1_10", "Terminal_20_10_3_2_100-HEIGHT", "1t/TerminalA_20_10_3_2_100", "2mh/MH2Terminal_20_10_3_2_100","3t/TerminalA_20_10_3_2_160", "4mh/MH2Terminal_20_10_3_2_160", "5t/TerminalB_20_10_3_2_160" , "6t/Terminal_10_10_3_1_100"};
     private static String[] targetFiles = new String[]{"terminal22_1_100_1_10target", null, "1t/targetTerminalA_20_10_3_2_100", null, "3t/targetTerminalA_20_10_3_2_160", null, "5t/targetTerminalB_20_10_3_2_160" , "6t/targetTerminal_10_10_3_1_100"};
     private static int chooseInputFile() {
@@ -312,5 +407,5 @@ public class Main {
         System.out.println();
         return choice;
     }
-    /*************************************************INPUT*************************************************/
+    /*************************************************I/O*************************************************/
 }

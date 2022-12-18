@@ -9,20 +9,8 @@ public class Difference {
         this.height = height;
     }
 
-    public Assignment getAssignment() {
-        return assignment;
-    }
-
-    public void setAssignment(Assignment assignment) {
-        this.assignment = assignment;
-    }
-
     public int getHeight() {
         return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
     }
 
     public int getContainerId() { return assignment.getContainerId(); }

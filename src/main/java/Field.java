@@ -20,7 +20,6 @@ public class Field {
         return ret_slots;
     }
 
-
     public void setMAX_HEIGHT(int targetHeight) {
         this.MAX_HEIGHT = targetHeight;
     }
@@ -29,9 +28,6 @@ public class Field {
         return slots;
     }
 
-    public boolean isContainerPlaced(int containerId) {
-        return assignments.containsKey(containerId);
-    }
 
 
     // Return a list of slots on which the container is placed
@@ -72,37 +68,7 @@ public class Field {
         return returnList;
     }
 
-    public int getHeightContainer(int containerId) {
-        return getSlot_containerId(containerId).get(0).getHeightContainer(containerId);
-    }
 
-/*    //as soon as it finds a free space, return this free space
-    public List<Slot> findAvailableSlots(Container container){
-        List<Integer> slotHeights = new ArrayList<>();
-        boolean sameHeight = true;
-        for (int i = 0; i< slots.size(); i++){
-            List<Slot> availableSlots = new ArrayList<>();
-            for (int j = 0; i < container.getLength(); j++) {
-                if (!(slots.get(i+j).getContainerStack().contains(container.getId()))) {
-                    availableSlots.add(slots.get(i + j));
-                }
-            }
-            for (Slot s : availableSlots){
-                slotHeights.add(s.getTotalHeight());
-            }
-            //check if heights in currentslots are the same
-            for (int k : slotHeights){
-               if (!(k==slotHeights.get(0))){
-                   sameHeight =false;
-                   break;
-               }
-            }
-            // if they are all the same height, return currentslots. else, move on to next slot in field
-            if (sameHeight) return availableSlots;
-
-        }
-        return null;
-    }*/
     // Find fittintg slots to move a container to
     public List<Integer>[] findAvailableSlots(Container container) {
         int length = container.getLength();
@@ -122,7 +88,6 @@ public class Field {
         assert availableSlots.length != 0 : "No slots available...";
         return availableSlots;
     }
-
 
     public List<Integer> findContainersExceedingHeight(int targetHeight) {
         List<Integer> containersToMove = new ArrayList<>();

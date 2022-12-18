@@ -4,13 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" name="Changes" comment="Solution zonder Crane...">
+    <list default="true" id="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" name="Changes" comment="Begin van de cranes + workplan">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WorkPlan" beforeDir="false" afterPath="$PROJECT_DIR$/WorkPlan" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Crane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Crane.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/CraneMovement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/CraneMovement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Difference.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Difference.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Field.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/FullMovement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/FullMovement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Util.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Crane.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Crane.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Field.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Field.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/InputData.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/InputData.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Util.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Util.class" afterDir="false" />
     </list>
     <list id="b363ba78-062e-4681-9841-d4b316555293" name="Changes by lucas" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -117,6 +127,7 @@
       <workItem from="1671004995469" duration="13360000" />
       <workItem from="1671267777442" duration="16465000" />
       <workItem from="1671288007085" duration="4677000" />
+      <workItem from="1671351003929" duration="28402000" />
     </task>
     <task id="LOCAL-00001" summary="InitialPush">
       <created>1666197741595</created>
@@ -230,7 +241,21 @@
       <option name="project" value="LOCAL" />
       <updated>1671306015321</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Begin van de cranes + workplan">
+      <created>1671311582502</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1671311582502</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Begin van de cranes + workplan">
+      <created>1671312193960</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1671312193960</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -247,7 +272,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/gui" />
+                        <option value="origin/master" />
                       </list>
                     </value>
                   </entry>
@@ -275,7 +300,8 @@
     <MESSAGE value="First good results" />
     <MESSAGE value="Checkpoint - split to other branch" />
     <MESSAGE value="Solution zonder Crane..." />
-    <option name="LAST_COMMIT_MESSAGE" value="Solution zonder Crane..." />
+    <MESSAGE value="Begin van de cranes + workplan" />
+    <option name="LAST_COMMIT_MESSAGE" value="Begin van de cranes + workplan" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -298,7 +324,7 @@
         </breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
-          <line>241</line>
+          <line>335</line>
           <option name="timeStamp" value="92" />
         </line-breakpoint>
       </breakpoints>
