@@ -345,7 +345,7 @@ public class Main {
             int containerId = containersToMove.get(currentIndex);
             Container container = containers.get(containerId);
 
-            List<Integer> destinationSlots = field.findAvailableSlots(container);
+            List<Integer> destinationSlots = field.findAvailableSlots(container, containersToMove);
 
             moveContainerMovement(container, destinationSlots, containerMoves);
             executed.push(currentIndex);
