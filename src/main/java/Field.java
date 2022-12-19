@@ -70,7 +70,7 @@ public class Field {
 
 
     // Find fittintg slots to move a container to
-    public List<Integer> findAvailableSlots(Container container) {
+    public List<Integer> findAvailableSlots(Container container, List<Integer> containersToMove) {
         int length = container.getLength();
         List<Integer>[] availableSlots = new List[0];
         List<Integer> possibleDestinations = new ArrayList<>();
@@ -87,8 +87,52 @@ public class Field {
         }
         assert availableSlots.length != 0 : "No slots available...";
 
-        // todo  hier een locica , best in een aparte functie die den besten deruit haalt
-        return availableSlots[0];
+        // todo  hier een logica , best in een aparte functie die den besten deruit haalt
+        // Check if there aren't any slots with containers who still have to be moved
+
+        for (int i = 0; i < availableSlots.length; i++) {
+            List<Integer> currentSlotSet = availableSlots[i];
+            for (int j = 0; j <currentSlotSet.size(); j++) {
+                Slot slot =  getSlot_slotId(currentSlotSet.get(j));
+                for (int k = 0; k <containersToMove.size(); k++) {
+                    //delete the list with containers to move
+                    if (slot.containsContainer(containersToMove.get(k))){
+                        for (int l = i; l < availableSlots.length-1; l++) {
+                            availableSlots[l] = availableSlots[l+1];
+                        }
+                    }
+                }
+            }
+        }
+        //calculate distances, the returned list contains on index i the distance from the container to the slots on availableSLots[i]
+        //then, we look up the minimum value, and finally we return availableSlots[minIndex]
+        double[] destinationLenghts = calculateDistances(availableSlots, container);
+        double min = destinationLenghts[0];
+        int minindex = 0;
+        for (int i = 0; i < destinationLenghts.length; i++) {
+            if(destinationLenghts[i] < min) {
+                minindex = i;
+                min = destinationLenghts[i];
+            }
+        }
+
+        return availableSlots[minindex];
+    }
+
+    private double[] calculateDistances(List<Integer>[] availableSlots, Container container) {
+        double[] lengths = new double[availableSlots.length];
+        Assignment assignment = assignments.get(container.getId());
+        List<Integer> container_slot_ids = assignment.getSlotIds();
+        int middle_containerslot_id = container_slot_ids.get((container_slot_ids.size()/2) + (container_slot_ids.size() % 2));
+        Slot middle_containerSlot = getSlot_slotId(middle_containerslot_id);
+
+        for (int i = 0; i < availableSlots.length; i++) {
+            List<Integer> currentSlotSet = availableSlots[i];
+            Slot middleSlot = getSlot_slotId(currentSlotSet.get((currentSlotSet.size()/2) + (currentSlotSet.size() % 2)));
+            double xcoordinateAvailable = middleSlot.getX();
+            lengths[i] = Math.abs(xcoordinateAvailable - middle_containerSlot.getX());
+        }
+        return lengths;
     }
 
     public List<Integer> findContainersExceedingHeight(int targetHeight) {
