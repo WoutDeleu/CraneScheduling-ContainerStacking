@@ -184,12 +184,12 @@ public class Field {
         double[] lengths = new double[availableSlots.length];
         Assignment assignment = assignments.get(container.getId());
         List<Integer> container_slot_ids = assignment.getSlotIds();
-        int middle_containerslot_id = container_slot_ids.get((container_slot_ids.size()/2) + (container_slot_ids.size() % 2));
+        int middle_containerslot_id = container_slot_ids.get(0);
         Slot middle_containerSlot = getSlot_slotId(middle_containerslot_id);
 
         for (int i = 0; i < availableSlots.length; i++) {
             List<Integer> currentSlotSet = availableSlots[i];
-            Slot middleSlot = getSlot_slotId(currentSlotSet.get((currentSlotSet.size()/2) + (currentSlotSet.size() % 2)));
+            Slot middleSlot = getSlot_slotId(currentSlotSet.get(0));
             double xcoordinateAvailable = middleSlot.getX();
             lengths[i] = Math.abs(xcoordinateAvailable - middle_containerSlot.getX());
         }
