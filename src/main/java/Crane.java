@@ -22,7 +22,7 @@ public class Crane {
     private double Vx; // Velocity in X-direction
     @SerializedName("yspeed")
     private double Vy; // Velocity in Y-direction
-    List<CraneMovement> trajectory;
+    List<CraneMovement> trajectory = new ArrayList<>();
 
     public List<CraneMovement> getTrajectory() {
         return trajectory;
@@ -83,6 +83,9 @@ public class Crane {
         CraneMovement craneMovement = new CraneMovement(this, movement.getStartPoint(), movement.getEndPoint(), movement.getPickupTime());
         trajectory.add(craneMovement);
     }
+    public void addToTrajectory(CraneMovement movement) {
+        trajectory.add(movement);
+    }
 
     public boolean inRange(Coordinate start) {
         return xmin <= start.getX() && start.getX() <= xmax && ymin <= start.getY() && start.getY() <= ymax;
@@ -93,22 +96,34 @@ public class Crane {
         y = containerLocation.getY();
     }
 
-    public FullMovement moveToSaveDistance(double timer, CraneMovement move1, CraneMovement move2) {
+    public CraneMovement moveToSaveDistance(double timer, CraneMovement move1, CraneMovement move2) {
         double maxMovement = Math.max(Math.max(move1.getStartPoint().getX(), move2.getStartPoint().getX()), Math.max(move1.getEndPoint().getX(), move2.getEndPoint().getX()));
         double minMovement = Math.min(Math.max(move1.getStartPoint().getX(), move2.getStartPoint().getX()), Math.max(move1.getEndPoint().getX(), move2.getEndPoint().getX()));
         if (xmax >= maxMovement + 1) {
             Coordinate destination = new Coordinate(maxMovement+1, y);
             double endTime = timer + travelTime(destination);
-            return new FullMovement(id, -1, timer, endTime, new Coordinate(x,y), destination);
+            return new CraneMovement(this, destination, timer);
         }
-        else if (xmin + 1 <= minMovement) {
+//        else if (xmin + 1 <= minMovement) {
+        else {
             Coordinate destination = new Coordinate(minMovement-1, y);
             double endTime = timer + travelTime(destination);
-            return new FullMovement(id, -1, timer, endTime, new Coordinate(x,y), destination);
+            return new CraneMovement(this, destination, timer);
         }
+    }
+    public CraneMovement moveToSaveDistance(double timer, CraneMovement move) {
+        double maxMovement = Math.max(move.getStartPoint().getX(), move.getEndPoint().getX());
+        double minMovement = Math.min(move.getStartPoint().getX(), move.getEndPoint().getX());
+        if (xmax >= maxMovement + 1) {
+            Coordinate destination = new Coordinate(maxMovement+1, y);
+            double endTime = timer + travelTime(destination);
+            return new CraneMovement(this, destination, timer);
+        }
+//        else if (xmin + 1 <= minMovement) {
         else {
-            System.out.println("Crane "+ id + " cannot move out of the way");
-            return null;
+            Coordinate destination = new Coordinate(minMovement-1, y);
+            double endTime = timer + travelTime(destination);
+            return new CraneMovement(this, destination, timer);
         }
     }
 /*    public boolean SafetyDistances(Crane crane2, int safeDistance) {

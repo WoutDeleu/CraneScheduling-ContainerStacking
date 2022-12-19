@@ -61,4 +61,8 @@ public class CraneMovement {
         return (move.getStartPoint().getX()+safeDistance <= endPoint.getX() && move.getEndPoint().getX() >= startPoint.getX()+safeDistance);
 
     }
+
+    public void updateTimer(double timer) {
+        startTime = timer;
+    }
 }

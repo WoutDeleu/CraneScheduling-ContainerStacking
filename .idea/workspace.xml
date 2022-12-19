@@ -5,20 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" name="Changes" comment="Checkpoint - In the middle of adding crane">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WorkPlan" beforeDir="false" afterPath="$PROJECT_DIR$/WorkPlan" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Crane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Crane.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/CraneMovement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/CraneMovement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Difference.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Difference.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Field.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/FullMovement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/FullMovement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Util.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Crane.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Crane.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Field.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Field.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/InputData.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/InputData.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Util.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Util.class" afterDir="false" />
     </list>
@@ -127,7 +120,9 @@
       <workItem from="1671004995469" duration="13360000" />
       <workItem from="1671267777442" duration="16465000" />
       <workItem from="1671288007085" duration="4677000" />
-      <workItem from="1671351003929" duration="28788000" />
+      <workItem from="1671351003929" duration="28799000" />
+      <workItem from="1671436233834" duration="7324000" />
+      <workItem from="1671444397869" duration="6737000" />
     </task>
     <task id="LOCAL-00001" summary="InitialPush">
       <created>1666197741595</created>
@@ -262,7 +257,14 @@
       <option name="project" value="LOCAL" />
       <updated>1671398829054</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Checkpoint - In the middle of adding crane">
+      <created>1671398836508</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1671398836508</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -332,7 +334,7 @@
         </breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
-          <line>336</line>
+          <line>478</line>
           <option name="timeStamp" value="92" />
         </line-breakpoint>
       </breakpoints>

@@ -17,6 +17,26 @@ public class FullMovement {
         this.endTime = endTime;
     }
 
+    public FullMovement(CraneMovement cm) {
+        this.craneId = cm.getCraneId();
+        this.containerId = -1;
+        this.pickupTime = cm.getStartTime();
+        this.endTime = cm.getEndTime();
+        this.pickupPosX = cm.getStartPoint().getX();
+        this.pickupPosY = cm.getStartPoint().getY();
+        this.endPosX = cm.getEndPoint().getX();
+        this.endPosY = cm.getEndPoint().getY();
+    }
+    public FullMovement(ContainerMovement containerMovement, CraneMovement craneMovement) {
+        this.craneId = craneMovement.getCraneId();
+        this.containerId = containerMovement.getContainerId();
+        this.pickupTime = craneMovement.getStartTime();
+        this.endTime = craneMovement.getEndTime();
+        this.pickupPosX = craneMovement.getStartPoint().getX();
+        this.pickupPosY = craneMovement.getStartPoint().getY();
+        this.endPosX = craneMovement.getEndPoint().getX();
+        this.endPosY = craneMovement.getEndPoint().getY();
+    }
     public FullMovement(int craneId, int containerId, double pickupTime, double endTime, Coordinate startPosition, Coordinate endPosition) {
         this.craneId = craneId;
         this.containerId = containerId;
