@@ -8,7 +8,6 @@ public class Main {
     private static Map<Integer,Container> containers = new HashMap<>();
 
     public static void main(String[] args) throws Exception {
-        printIntro();
         int choice = chooseInputFile();
         System.out.println("inputFile: " + inputFiles[choice]);
         InputData inputData = InputData.readFile("data/" + inputFiles[choice] + ".json");
@@ -73,21 +72,47 @@ public class Main {
                 System.out.println("Crane " + movingContainer.getCrane().getId() + " succesfully moved Container " + containerMovement.getContainerId());
             }
             else {
-                // pass container to another crane
-//                Coordinate intermediate = calculateMeetingPoint(crane, movingContainer);
+                Crane crane1 = crane;
+                // Pass container to another crane, calculate meetup point
+                Coordinate intermediateLocation = calculateMeetingPoint(crane1, containerMovement);
+
+                /**Movements of crane 1
+                    Moving container from startingpoint to meeting point*/
+                CraneMovement moveToContainer_cr1 = new CraneMovement(crane1, containerStartLocation, timer);
+                CraneMovement movingContainer_cr1 = new CraneMovement(crane1, containerStartLocation, intermediateLocation, timer + moveToContainer_cr1.travelTime()+1);
+
+                solveCollisions(schedule, moveToContainer_cr1, movingContainer_cr1, craneTimeLocks, timer);
+
+                addToSchedule_withContainer(containerMovement, movingContainer_cr1, schedule, craneTimeLocks);
+                System.out.println("Crane " + movingContainer.getCrane().getId() + " succesfully moved Container " + containerMovement.getContainerId() +  " to intermediateLocation Location");
+                timer = updateTimeStamp(movingContainer_cr1.getEndTime()+1, craneTimeLocks);
+
+
+                /**Movements of crane 2
+                    Moving container from meetingPoint to final destination*/
+                ContainerMovement toFinalDestination = new ContainerMovement(containerMovement.getContainerId(), intermediateLocation, containerDestination);
+                Crane crane2 = findBestCrane(toFinalDestination);
+                if(crane2.isInUse()) timer = updateTimeStamp(craneTimeLocks.get(crane2.getId())+1, craneTimeLocks);
+
+                CraneMovement moveToContainer_cr2 = new CraneMovement(crane2, intermediateLocation, timer);
+                CraneMovement movingContainer_cr2 = new CraneMovement(crane2, intermediateLocation, containerDestination, timer + moveToContainer_cr2.travelTime()+1);
+
+                solveCollisions(schedule, moveToContainer_cr2, movingContainer_cr2, craneTimeLocks, timer);
+
+                addToSchedule_withContainer(toFinalDestination, movingContainer_cr2, schedule, craneTimeLocks);
+                System.out.println("Crane " + movingContainer.getCrane().getId() + " succesfully moved Container " + toFinalDestination.getContainerId() +  " from intermediateLocation Location to final point");
+                timer = updateTimeStamp(movingContainer_cr2.getEndTime()+1, craneTimeLocks);
 
             }
         }
         return schedule;
     }
 
-//    private static Coordinate calculateMeetingPoint(Crane crane, CraneMovement movingContainer) {
-//        double x = crane.getXmax();
-//        boolean found = false;
-//        while(!found) {
-//            for()
-//        }
-//    }
+    private static Coordinate calculateMeetingPoint(Crane crane, ContainerMovement containerMovement) {
+        double xMax = crane.getXmax();
+        double xMin = crane.getXmin();
+        return field.getMeetingPoint(xMax, xMin, containerMovement, containers.get(containerMovement.getContainerId()));
+    }
 
     // solve collisions for full container & crane movement
     private static double solveCollisions(List<FullMovement> schedule, CraneMovement moveToContainer, CraneMovement movingContainer, Map<Integer, Double> craneTimeLocks, double timer) throws Exception {
@@ -345,7 +370,7 @@ public class Main {
             int containerId = containersToMove.get(currentIndex);
             Container container = containers.get(containerId);
 
-            List<Integer> destinationSlots = field.findAvailableSlots(container, containersToMove);
+           List<Integer> destinationSlots = field.findAvailableSlots(container, containersToMove);
 
             moveContainerMovement(container, destinationSlots, containerMoves);
             executed.push(currentIndex);
@@ -455,9 +480,6 @@ public class Main {
             int height = diff[1];
             int slotId = diff[2];
 
-            if(containerId == 88) {
-                System.out.println();
-            }
             // Check if assignment of this container is already filled in
             boolean containsContainer = false;
             for(Difference diff_alreayPresent : differences) {
@@ -481,17 +503,6 @@ public class Main {
     }
     /*************************************************FIND DIFFERENCES*************************************************/
 
-
-    /**************************************TESTING**************************************/
-    public static void printIntro() {
-        System.out.println("*************************************** CONTAINER STACKING *********************************************************");
-        System.out.println("* Additional notes (for the report)");
-        System.out.println("\t * Parallelisation? Yes, but for the moment only for moving containers out of the way");
-        System.out.println("\t * Fout in file benoemen + oplossing");
-        System.out.println("\t * Design Pattern");
-        System.out.println("\t * Recursion - collision");
-        System.out.println("*************************************** CONTAINER STACKING *********************************************************");
-    }
     private static void printOfficialResult(List<FullMovement> schedule) {
         System.out.println();
         System.out.println("\nFull schedule: ");

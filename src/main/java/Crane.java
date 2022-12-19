@@ -28,6 +28,10 @@ public class Crane {
         return xmax;
     }
 
+    public double getXmin() {
+        return xmin;
+    }
+
     public List<CraneMovement> getTrajectory() {
         return trajectory;
     }

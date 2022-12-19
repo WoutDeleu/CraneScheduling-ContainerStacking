@@ -1,3 +1,4 @@
+import java.awt.event.ContainerAdapter;
 import java.util.*;
 
 public class Field {
@@ -28,6 +29,27 @@ public class Field {
         return slots;
     }
 
+    private int getMaxY() {
+        int maxY = -1;
+        for(Slot slot : slots) {
+            if(slot.getY() > maxY) maxY = slot.getY();
+        }
+        return maxY;
+    }
+    private int getMaxX() {
+        int maxX = -1;
+        for(Slot slot : slots) {
+            if(slot.getX() > maxX) maxX = slot.getX();
+        }
+        return maxX;
+    }
+    private int getMinX() {
+        int minX = Integer.MAX_VALUE;
+        for(Slot slot : slots) {
+            if(slot.getX() < minX) minX = slot.getX();
+        }
+        return minX;
+    }
 
 
     // Return a list of slots on which the container is placed
@@ -42,6 +64,14 @@ public class Field {
             }
         }
         return returnList;
+    }
+
+    private List<Slot> getSlots_slotIds(List<Integer> slotIds) {
+        List<Slot> result = new ArrayList<>();
+        for(int id : slotIds) {
+            result.add(getSlot_slotId(id));
+        }
+        return result;
     }
 
     public Slot getSlot_slotId(int slotId) {
@@ -68,6 +98,38 @@ public class Field {
         return returnList;
     }
 
+    public Coordinate getMeetingPoint(double xMax, double xMin, ContainerMovement movingContainer, Container container) {
+        boolean leftToRightMovement = (movingContainer.getStart().getX() <= movingContainer.getEnd().getX());
+        Coordinate meetingPoint = null;
+        if(xMax > getMaxX()) xMax = getMaxX();
+        if(xMin < getMinX()) xMin = getMinX();
+        while(meetingPoint == null) {
+            for(int y = 0; y<getMaxY(); y++) {
+                List<Integer> destinationSlots = new ArrayList<>();
+                for(int i =0; i<container.getLength(); i++) {
+                    if(leftToRightMovement) destinationSlots.add(getSlotId_coordinates(xMax - i, y));
+                    else destinationSlots.add(getSlotId_coordinates(xMin + i, y));
+                }
+                Collections.sort(destinationSlots);
+                assert slotsAreSequential(destinationSlots) : "Slots are not sequential! Fault";
+                if(isValidContainerDestination(container, destinationSlots)) {
+                    meetingPoint =  getCenterPoint(destinationSlots);
+                }
+            }
+            if(leftToRightMovement) xMax--;
+            else xMin++;
+        }
+        return meetingPoint;
+    }
+
+    private int getSlotId_coordinates(double x, int y) {
+        for(Slot slot : slots) {
+            if(slot.getX() == x && slot.getY() == y) return slot.getId();
+        }
+        assert false :  "No slot found for that coordinate";
+        return 0;
+    }
+
 
     // Find fittintg slots to move a container to
     public List<Integer> findAvailableSlots(Container container, List<Integer> containersToMove) {
@@ -87,16 +149,14 @@ public class Field {
         }
         assert availableSlots.length != 0 : "No slots available...";
 
-        // todo  hier een logica , best in een aparte functie die den besten deruit haalt
         // Check if there aren't any slots with containers who still have to be moved
-
         for (int i = 0; i < availableSlots.length; i++) {
             List<Integer> currentSlotSet = availableSlots[i];
-            for (int j = 0; j <currentSlotSet.size(); j++) {
+            for (int j = 0; j < currentSlotSet.size(); j++) {
                 Slot slot =  getSlot_slotId(currentSlotSet.get(j));
                 for (int k = 0; k <containersToMove.size(); k++) {
                     //delete the list with containers to move
-                    if (slot.containsContainer(containersToMove.get(k))){
+                    if (slot.containsContainer(containersToMove.get(k))) {
                         for (int l = i; l < availableSlots.length-1; l++) {
                             availableSlots[l] = availableSlots[l+1];
                         }
@@ -104,8 +164,8 @@ public class Field {
                 }
             }
         }
-        //calculate distances, the returned list contains on index i the distance from the container to the slots on availableSLots[i]
-        //then, we look up the minimum value, and finally we return availableSlots[minIndex]
+        // Calculate distances, the returned list contains on index i the distance from the container to the slots on availableSLots[i]
+        // then, we look up the minimum value, and finally we return availableSlots[minIndex]
         double[] destinationLenghts = calculateDistances(availableSlots, container);
         double min = destinationLenghts[0];
         int minindex = 0;
@@ -118,6 +178,7 @@ public class Field {
 
         return availableSlots[minindex];
     }
+
 
     private double[] calculateDistances(List<Integer>[] availableSlots, Container container) {
         double[] lengths = new double[availableSlots.length];
@@ -293,6 +354,18 @@ public class Field {
         }
         return new Coordinate(sum/ slots.size(), y+0.5);
     }
+    public Coordinate getCenterPoint(List<Integer> slotIds) {
+        List<Slot> slots = getSlots_slotIds(slotIds);
+        List<Integer> x = new ArrayList<>();
+        double y = slots.get(0).getY();
+        double sum = 0;
+        for (Slot slot : slots) {
+            assert slot.getY() == y: "Fault in grabbing slots...";
+            sum += slot.getX();
+        }
+        return new Coordinate(sum/ slots.size(), y+0.5);
+    }
+
     /**************************************MOVE CONTAINER**************************************/
 
     public Slot[][] getFieldMatrix() {

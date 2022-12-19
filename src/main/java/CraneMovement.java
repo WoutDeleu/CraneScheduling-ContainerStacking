@@ -10,14 +10,14 @@ public class CraneMovement {
         this.startPoint = crane.getLocation();
         this.endPoint = end;
         this.startTime = startTime;
-        this.intermediatePoint = crane.calculateIntermediatePoint(endPoint);
+//        this.intermediatePoint = crane.calculateIntermediatePoint(endPoint);
     }
     public CraneMovement(Crane crane, Coordinate begin, Coordinate end, double startTime) {
         this.crane = crane;
         this.startPoint = begin;
         this.endPoint = end;
         this.startTime = startTime;
-        this.intermediatePoint = crane.calculateIntermediatePoint(begin, endPoint);
+//        this.intermediatePoint = crane.calculateIntermediatePoint(begin, endPoint);
     }
 
     public double getStartTime() {
