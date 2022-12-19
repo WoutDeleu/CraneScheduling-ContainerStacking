@@ -40,7 +40,7 @@ public class Main {
             containerMovements = generateContainerMovements(inputData.getTargetHeight());
         }
         List<FullMovement> schedule = addCranesToMovement(containerMovements);
-        printFullResult(schedule);
+        printDebugginResult(schedule);
 
     }
 
@@ -68,44 +68,12 @@ public class Main {
                 timer = solveCollisions(schedule, moveToContainer, movingContainer, craneTimeLocks, timer);
 
                 // Add the movement itself to the schedule
-                addToSchedule(moveToContainer, schedule, craneTimeLocks);
-
+                addToSchedule_withContainer(containerMovement, movingContainer, schedule, craneTimeLocks);
             }
             else {
                 // pass container to another crane
 
             }
-            // todo effectieve move naar container
-
-            // todo effectieve movement
-
-            // todo Wachten tot huidige container geplaatst is
-/*            // Move crane to container starting location
-            CraneMovement moveToContainer = new CraneMovement(crane, containerStartLocation, timer);
-            crane.addToTrajectory(moveToContainer);
-            crane.updateLocation(containerStartLocation);
-
-            // Prevent collisions
-            // todo
-
-            if(crane.inRange(containerDestination)) {
-                // Move the container
-                CraneMovement craneMovingContainer = new CraneMovement(crane, containerDestination, timer);
-                FullMovement movingContainer = moveCrane(craneMovingContainer, containerMovement.getContainerId(), timer);
-                schedule.add(movingContainer);
-                crane.addToTrajectory(moveToContainer);
-                crane.updateLocation(containerDestination);
-
-                // Prevent collisions
-                // todo
-            }
-            else {
-                // Pass on container to another crane
-                // todo
-
-                // Prevent collisions
-                // todo
-            }*/
         }
         return schedule;
     }
@@ -139,7 +107,7 @@ public class Main {
                     movingContainer.updateTimer(moveToContainer.getEndTime());
 
                     if(previousTimer == timer) {
-                        addToSchedule(moveCraneOutWay, schedule, craneTimeLocks);
+                        addToSchedule_withoutContainer(moveCraneOutWay, schedule, craneTimeLocks);
 
                         timer = moveCraneOutWay.getEndTime()+1;
                         moveToContainer.updateTimer(timer);
@@ -188,7 +156,7 @@ public class Main {
                     moveCraneOutWay.updateTimer(timer);
                     if(previousTimer == timer) {
                         // update timer to the last movement, in this case to the move out of the way from the container
-                        addToSchedule(moveOtherCraneOutWay, schedule, craneTimeLocks);
+                        addToSchedule_withoutContainer(moveOtherCraneOutWay, schedule, craneTimeLocks);
                         timer = updateTimeStamp(moveOtherCraneOutWay.getEndTime()+1, craneTimeLocks);
                         moveCraneOutWay.updateTimer(timer);
                     }
@@ -207,12 +175,22 @@ public class Main {
         return timer;
     }
 
-    private static void addToSchedule(CraneMovement craneMove, List<FullMovement> schedule, Map<Integer, Double> craneTimeLocks) {
+    private static void addToSchedule_withoutContainer(CraneMovement craneMove, List<FullMovement> schedule, Map<Integer, Double> craneTimeLocks) {
         Crane crane = getCraneWithId(craneMove.getCraneId());
         crane.setInUse();
         crane.addToTrajectory(craneMove);
         craneTimeLocks.put(crane.getId(), craneMove.getEndTime());
         schedule.add(new FullMovement(craneMove));
+        crane.updateLocation(craneMove.getEndPoint());
+    }
+
+    private static void addToSchedule_withContainer(ContainerMovement containerMovement, CraneMovement craneMove, List<FullMovement> schedule, Map<Integer, Double> craneTimeLocks) {
+        Crane crane = getCraneWithId(craneMove.getCraneId());
+        crane.setInUse();
+        crane.addToTrajectory(craneMove);
+        craneTimeLocks.put(crane.getId(), craneMove.getEndTime());
+        schedule.add(new FullMovement(containerMovement, craneMove));
+        crane.updateLocation(craneMove.getEndPoint());
     }
 
     private static double updateTimeStamp(double newTimer, Map<Integer, Double> craneTimeLocks) {
@@ -281,12 +259,6 @@ public class Main {
         return collisions;
     }
 
-    private static FullMovement moveCrane(CraneMovement movement, int containerId, double timer) {
-        FullMovement movingContainer = new FullMovement(movement.getCraneId(), containerId, timer, timer+ movement.travelTime());
-        movingContainer.setStartLocation(movement.getStartPoint());
-        movingContainer.setEndLocation(movement.getEndPoint());
-        return movingContainer;
-    }
     public static Crane findBestCrane(ContainerMovement containerMovement) {
         Crane selectedCrane;
         List<Crane> cranedidates = new ArrayList<>();
@@ -355,10 +327,9 @@ public class Main {
             int containerId = containersToMove.get(currentIndex);
             Container container = containers.get(containerId);
 
-            List<Integer>[] possibleDestinations = field.findAvailableSlots(container);
-            // todo: bepaal de possible destination met de laagste afstand tss (destination - currentContainerLocation)
+            List<Integer> destinationSlots = field.findAvailableSlots(container);
 
-            moveContainerMovement(container, possibleDestinations[0], containerMoves);
+            moveContainerMovement(container, destinationSlots, containerMoves);
             executed.push(currentIndex);
             currentIndex++;
 
@@ -500,11 +471,20 @@ public class Main {
         System.out.println("\t * Parallelisation? Yes, but for the moment only for moving containers out of the way");
         System.out.println("*************************************** CONTAINER STACKING *********************************************************");
     }
-    private static void printFullResult(List<FullMovement> schedule) {
+    private static void printOfficialResult(List<FullMovement> schedule) {
         System.out.println();
         System.out.println("\nFull schedule: ");
+        System.out.println("%CraneId;ContainerId;PickupTime;EndTime;PickupPosX;PickupPosY;EndPosX;EndPosY;");
         for(FullMovement f : schedule) {
             System.out.println(f);
+        }
+    }
+    private static void printDebugginResult(List<FullMovement> schedule) {
+        System.out.println();
+        System.out.println("\nFull schedule: ");
+        System.out.println("%CraneId;ContainerId;PickupTime;EndTime;PickupPosX;PickupPosY;EndPosX;EndPosY;");
+        for(FullMovement f : schedule) {
+            System.out.println(f.testToString());
         }
     }
     public static void visualizeField() {

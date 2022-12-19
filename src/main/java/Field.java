@@ -70,7 +70,7 @@ public class Field {
 
 
     // Find fittintg slots to move a container to
-    public List<Integer>[] findAvailableSlots(Container container) {
+    public List<Integer> findAvailableSlots(Container container) {
         int length = container.getLength();
         List<Integer>[] availableSlots = new List[0];
         List<Integer> possibleDestinations = new ArrayList<>();
@@ -86,7 +86,9 @@ public class Field {
             possibleDestinations.clear();
         }
         assert availableSlots.length != 0 : "No slots available...";
-        return availableSlots;
+
+        // todo  hier een locica , best in een aparte functie die den besten deruit haalt
+        return availableSlots[0];
     }
 
     public List<Integer> findContainersExceedingHeight(int targetHeight) {
@@ -221,7 +223,7 @@ public class Field {
 
         placeContainer(container, destinationSlotIs);
 
-        System.out.println("Container " + container.getId() + " is succesfully moved");
+        System.out.println("Container " + container.getId() + " is succesfully moved from " + slotsToString(oldSlots) + " -> " + slotIdsToString(destinationSlotIs));
     }
 
     public void placeContainer(Container container, List<Integer> destinationSlotIds) {
@@ -245,7 +247,7 @@ public class Field {
             assert slot.getY() == y: "Fault in grabbing slots...";
             sum += slot.getX();
         }
-        return new Coordinate(sum/ slots.size(), y);
+        return new Coordinate(sum/ slots.size(), y+0.5);
     }
     /**************************************MOVE CONTAINER**************************************/
 
@@ -270,6 +272,35 @@ public class Field {
 
         }
         return matrix;
+    }
+    private String slotIdsToString(List<Integer> slots) {
+        String str = "[";
+        for(int i : slots) {
+            str += " (";
+            Slot s = getSlot_slotId(i);
+            if (s.getX() <10) str += " " + s.getX();
+            else str += s.getX();
+            str += ", ";
+            if (s.getY() <10) str += " " + s.getY();
+            else str += s.getY();
+            str += ") ";
+        }
+        str += " ]";
+        return str;
+    }
+    private String slotsToString(List<Slot> slots) {
+        String str = "[";
+        for(Slot s : slots) {
+            str += " (";
+            if (s.getX() <10) str += " " + s.getX();
+            else str += s.getX();
+            str += ", ";
+            if (s.getY() <10) str += " " + s.getY();
+            else str += s.getY();
+            str += ") ";
+        }
+        str += " ]";
+        return str;
     }
 
 }

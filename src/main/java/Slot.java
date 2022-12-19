@@ -84,7 +84,7 @@ public class Slot {
 
     public void addContainersExceedingHeight(int targetHeight, List<Integer> containersToMove) {
         for(int containerId : containerStack) {
-            if(getHeightContainer(containerId) > targetHeight) containersToMove.add(containerId);
+            if(getHeightContainer(containerId) > targetHeight && !containersToMove.contains(containerId)) containersToMove.add(containerId);
         }
     }
 }

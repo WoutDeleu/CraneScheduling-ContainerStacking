@@ -77,8 +77,21 @@ public class FullMovement {
 
     @Override
     public String toString() {
-        if(containerId != -1) return craneId + ";" + containerId + ";" + pickupTime + ";" + endTime + ";" + ";" + pickupPosX + ";" + pickupPosY + ";" + endPosX + ";" + endPosY + ";";
-        else return craneId + ";" + ";" + pickupTime + ";" + endTime + ";" + ";" + pickupPosX + ";" + pickupPosY + ";" + endPosX + ";" + endPosY + ";";
+        if(containerId != -1) return craneId + ";" + containerId + ";" + pickupTime + ";" + endTime + ";" + pickupPosX + ";" + pickupPosY + ";" + endPosX + ";" + endPosY + ";";
+        else return craneId + ";" + ";" + pickupTime + ";" + endTime + ";" + pickupPosX + ";" + pickupPosY + ";" + endPosX + ";" + endPosY + ";";
 
+    }
+
+    public String testToString() {
+        return "FullMovement{" +
+                "craneId=" + craneId +
+                ", containerId=" + containerId +
+                ", pickupTime=" + pickupTime +
+                ", endTime=" + endTime +
+                ", pickupPosX=" + pickupPosX +
+                ", pickupPosY=" + pickupPosY +
+                ", endPosX=" + endPosX +
+                ", endPosY=" + endPosY +
+                '}';
     }
 }

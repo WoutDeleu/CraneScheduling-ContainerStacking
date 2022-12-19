@@ -39,13 +39,6 @@ public class Crane {
     public Coordinate getLocation() {
         return new Coordinate(x, y);
     }
-    public double getVx() {
-        return Vx;
-    }
-
-    public double getVy() {
-        return Vy;
-    }
     public void setInUse() {
         assert !inUse : "Crane was already in use";
         inUse = true;
@@ -126,36 +119,5 @@ public class Crane {
             return new CraneMovement(this, destination, timer);
         }
     }
-/*    public boolean SafetyDistances(Crane crane2, int safeDistance) {
-        List<Integer> times1 = new ArrayList(trajectory.keySet());
-        Collections.sort(times1);
-        for(int i=0; i<times1.size(); i++) {
-            int t1 = times1.get(i);
-            int t2 = times1.get(i+1);
 
-            List<Integer> times2 = new ArrayList(crane2.getTrajectory().keySet());
-            Collections.sort(times2);
-            for(int j = 0; j <times2.size(); j++) {
-                int t3 = times2.get(j);
-                int t4 = times2.get(j);
-
-                if(t1 < t2 && t2 < t3) {
-                    Coordinate coordinate1 = trajectory.get(t1);
-                    Coordinate coordinate2 = trajectory.get(t2);
-
-                    Coordinate coordinate3 = crane2.getTrajectory().get(t3);
-                    Coordinate coordinate4 = crane2.getTrajectory().get(t4);
-
-                    double x1 = Math.min(coordinate1.getX(), coordinate2.getX());
-                    double x2 = Math.max(coordinate1.getX(), coordinate2.getX());
-
-                    double x3 = Math.min(coordinate4.getX(), coordinate3.getX());
-                    double x4 = Math.max(coordinate4.getX(), coordinate3.getX());
-                    ;
-                    return !(x2+safeDistance >= x3 && x1+safeDistance <= x4);
-                }
-            }
-        }
-        return true;
-    }*/
 }
