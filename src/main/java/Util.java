@@ -34,7 +34,6 @@ public class Util {
                 result.add(entry.getKey());
             }
         }
-        assert false: "No crane entry found for crane with release time " + time + ".";
         return result;
     }
 }
