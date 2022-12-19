@@ -86,8 +86,6 @@ public class Field {
             possibleDestinations.clear();
         }
         assert availableSlots.length != 0 : "No slots available...";
-
-        // todo  hier een locica , best in een aparte functie die den besten deruit haalt
         return availableSlots[0];
     }
 
@@ -223,7 +221,7 @@ public class Field {
 
         placeContainer(container, destinationSlotIs);
 
-        System.out.println("Container " + container.getId() + " is succesfully moved from " + slotsToString(oldSlots) + " -> " + slotIdsToString(destinationSlotIs));
+        System.out.println("Container " + container.getId() + " will be moved from " + slotsToString(oldSlots) + " -> " + slotIdsToString(destinationSlotIs));
     }
 
     public void placeContainer(Container container, List<Integer> destinationSlotIds) {
@@ -247,6 +245,7 @@ public class Field {
             assert slot.getY() == y: "Fault in grabbing slots...";
             sum += slot.getX();
         }
+        if(slots.size() == 1) return new Coordinate(sum + 0.5, y + 0.5);
         return new Coordinate(sum/ slots.size(), y+0.5);
     }
     /**************************************MOVE CONTAINER**************************************/

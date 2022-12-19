@@ -4,22 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" name="Changes" comment="Checkpoint - Fixed until no overtaking">
+    <list default="true" id="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" name="Changes" comment="Checkpoint - Branch to findAvailableSlots">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Crane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Crane.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Field.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/FullMovement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/FullMovement.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Slot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Slot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Crane.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Crane.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Field.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Field.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Slot.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Slot.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Util.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Util.class" afterDir="false" />
     </list>
-    <list id="b363ba78-062e-4681-9841-d4b316555293" name="Changes by lucas" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-    </list>
+    <list id="b363ba78-062e-4681-9841-d4b316555293" name="Changes by lucas" comment="Changes by lucas" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -34,27 +27,6 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="LineStatusTrackerManager">
-    <file path="$PROJECT_DIR$/src/main/java/Main.java">
-      <ranges>
-        <range start1="42" end1="43" start2="42" end2="43" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="70" end1="72" start2="70" end2="71" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="77" end1="108" start2="76" end2="76" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="141" end1="142" start2="109" end2="110" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="190" end1="191" start2="158" end2="159" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="209" end1="210" start2="177" end2="178" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="215" end1="215" start2="183" end2="184" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="216" end1="216" start2="185" end2="194" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="283" end1="289" start2="261" end2="261" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="357" end1="359" start2="329" end2="330" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="360" end1="361" start2="331" end2="332" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="371" end1="371" start2="342" end2="344" changelist="b363ba78-062e-4681-9841-d4b316555293" />
-        <range start1="502" end1="503" start2="475" end2="476" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="505" end1="505" start2="478" end2="479" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="509" end1="509" start2="483" end2="491" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-      </ranges>
-    </file>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -147,7 +119,7 @@
       <workItem from="1671288007085" duration="4677000" />
       <workItem from="1671351003929" duration="28799000" />
       <workItem from="1671436233834" duration="7324000" />
-      <workItem from="1671444397869" duration="11575000" />
+      <workItem from="1671444397869" duration="17982000" />
     </task>
     <task id="LOCAL-00001" summary="InitialPush">
       <created>1666197741595</created>
@@ -303,7 +275,21 @@
       <option name="project" value="LOCAL" />
       <updated>1671452972445</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="Checkpoint - Branch to findAvailableSlots">
+      <created>1671459571284</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1671459571284</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Changes by lucas">
+      <created>1671459603684</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1671459603684</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -342,7 +328,6 @@
     <MESSAGE value="Update json" />
     <MESSAGE value="small foault" />
     <MESSAGE value="Fully input" />
-    <MESSAGE value="Changes by lucas" />
     <MESSAGE value="Small bugs in find_difference" />
     <MESSAGE value="Startup of generate_newFormat" />
     <MESSAGE value="First good results" />
@@ -351,7 +336,9 @@
     <MESSAGE value="Begin van de cranes + workplan" />
     <MESSAGE value="Checkpoint - In the middle of adding crane" />
     <MESSAGE value="Checkpoint - Fixed until no overtaking" />
-    <option name="LAST_COMMIT_MESSAGE" value="Checkpoint - Fixed until no overtaking" />
+    <MESSAGE value="Checkpoint - Branch to findAvailableSlots" />
+    <MESSAGE value="Changes by lucas" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changes by lucas" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -374,33 +361,18 @@
         </breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
-          <line>442</line>
+          <line>458</line>
           <option name="timeStamp" value="92" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
-          <line>132</line>
+          <line>143</line>
           <option name="timeStamp" value="96" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
-          <line>85</line>
+          <line>96</line>
           <option name="timeStamp" value="103" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Crane.java</url>
-          <line>50</line>
-          <option name="timeStamp" value="105" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
-          <line>52</line>
-          <option name="timeStamp" value="106" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
-          <line>324</line>
-          <option name="timeStamp" value="108" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

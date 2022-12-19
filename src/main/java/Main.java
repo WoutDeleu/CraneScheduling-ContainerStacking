@@ -58,10 +58,11 @@ public class Main {
             Crane crane = findBestCrane(containerMovement);
             if(crane.isInUse()) timer = updateTimeStamp(craneTimeLocks.get(crane.getId())+1, craneTimeLocks);
 
+            CraneMovement moveToContainer = new CraneMovement(crane, containerStartLocation, timer);
+            CraneMovement movingContainer = new CraneMovement(crane, containerStartLocation, containerDestination, timer + moveToContainer.travelTime()+1);
+
             // Check if crane can move the container all alone
             if(crane.inRange(containerMovement.getEnd())) {
-                CraneMovement moveToContainer = new CraneMovement(crane, containerStartLocation, timer);
-                CraneMovement movingContainer = new CraneMovement(crane, containerStartLocation, containerDestination, timer + moveToContainer.travelTime()+1);
 
                 // Assumption: when a container must be moved to a position which needs the previous container being placed,
                 // when this case takes place, it will be solved/fixed during the solveCollisions
@@ -69,14 +70,24 @@ public class Main {
 
                 // Add the movement itself to the schedule
                 addToSchedule_withContainer(containerMovement, movingContainer, schedule, craneTimeLocks);
+                System.out.println("Crane " + movingContainer.getCrane().getId() + " succesfully moved Container " + containerMovement.getContainerId());
             }
             else {
                 // pass container to another crane
+//                Coordinate intermediate = calculateMeetingPoint(crane, movingContainer);
 
             }
         }
         return schedule;
     }
+
+//    private static Coordinate calculateMeetingPoint(Crane crane, CraneMovement movingContainer) {
+//        double x = crane.getXmax();
+//        boolean found = false;
+//        while(!found) {
+//            for()
+//        }
+//    }
 
     // solve collisions for full container & crane movement
     private static double solveCollisions(List<FullMovement> schedule, CraneMovement moveToContainer, CraneMovement movingContainer, Map<Integer, Double> craneTimeLocks, double timer) throws Exception {
@@ -234,7 +245,6 @@ public class Main {
         return null;
     }
 
-
     // solve collisions for full container & crane movement
     private static List<Crane> detectCollision(CraneMovement moveCraneOutWay) {
         List<Crane> collisions = new ArrayList<>();
@@ -264,6 +274,7 @@ public class Main {
         List<Crane> cranedidates = new ArrayList<>();
         boolean fullRangeFound = false;
         boolean perfectFound = false;
+        boolean acceptableFound = false;
         for(Crane crane : cranes) {
             if(crane.inRange(containerMovement.getStart())) {
                 if(!crane.isInUse()) {
@@ -272,10 +283,12 @@ public class Main {
                             cranedidates.clear();
                             fullRangeFound = true;
                             perfectFound = true;
+                            acceptableFound = true;
                         }
                         cranedidates.add(crane);
                     }
                     else if(!fullRangeFound) {
+                        acceptableFound = true;
                         cranedidates.add(crane);
                     }
                 }
@@ -285,10 +298,15 @@ public class Main {
                             if(!fullRangeFound) {
                                 cranedidates.clear();
                                 fullRangeFound = true;
+                                acceptableFound = true;
                             }
                             cranedidates.add(crane);
                         }
                     }
+                    else if(!acceptableFound) {
+                        cranedidates.add(crane);
+                    }
+
                 }
             }
         }
@@ -340,8 +358,6 @@ public class Main {
         }
         return containerMoves;
     }
-
-
     /**************************************************MAX HEIGHT**************************************************/
 
 
@@ -471,6 +487,9 @@ public class Main {
         System.out.println("*************************************** CONTAINER STACKING *********************************************************");
         System.out.println("* Additional notes (for the report)");
         System.out.println("\t * Parallelisation? Yes, but for the moment only for moving containers out of the way");
+        System.out.println("\t * Fout in file benoemen + oplossing");
+        System.out.println("\t * Design Pattern");
+        System.out.println("\t * Recursion - collision");
         System.out.println("*************************************** CONTAINER STACKING *********************************************************");
     }
     private static void printOfficialResult(List<FullMovement> schedule) {

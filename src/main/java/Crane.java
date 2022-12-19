@@ -24,6 +24,10 @@ public class Crane {
     private double Vy; // Velocity in Y-direction
     List<CraneMovement> trajectory = new ArrayList<>();
 
+    public double getXmax() {
+        return xmax;
+    }
+
     public List<CraneMovement> getTrajectory() {
         return trajectory;
     }
