@@ -47,6 +47,7 @@ public class Crane {
         return inUse;
     }
     public void setInUse() {
+        System.out.println("Use crane " + id );
         assert !inUse : "Crane was already in use";
         inUse = true;
     }

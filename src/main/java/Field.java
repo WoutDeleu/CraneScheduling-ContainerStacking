@@ -495,7 +495,6 @@ public class Field {
         }
         return new Coordinate(sum/ slots.size(), y+0.5);
     }
-
     /**************************************MOVE CONTAINER**************************************/
 
     public Slot[][] getFieldMatrix() {
