@@ -26,7 +26,7 @@ public class Slot {
         return y;
     }
 
-    public void deleteTopStack() {
+    public void popTopStack() {
         containerStack.pop();
     }
 
@@ -82,9 +82,18 @@ public class Slot {
         return containerStack.contains(containerId);
     }
 
-    public void addContainersExceedingHeight(int targetHeight, List<Integer> containersToMove) {
+    public void addContainersExceedingHeight(Field field, int targetHeight, List<Integer> containersToMove) {
         for(int containerId : containerStack) {
-            if(getHeightContainer(containerId) > targetHeight && !containersToMove.contains(containerId)) containersToMove.add(containerId);
+            if(getHeightContainer(containerId) > targetHeight && !containersToMove.contains(containerId)) {
+                int length = Main.containers.get(containerId).getLength();
+                int index = 0;
+                for(int id : containersToMove) {
+                    if(Main.containers.get(id).getLength() >= length) break;
+                    else index++;
+                }
+
+                containersToMove.add(index, containerId);
+            }
         }
     }
 }

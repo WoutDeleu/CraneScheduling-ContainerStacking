@@ -4,21 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" name="Changes" comment="Checkpoint - Branch to findAvailableSlots">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+    <list default="true" id="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" name="Changes" comment="Working except case 5">
+      <change afterPath="$PROJECT_DIR$/data/10t/TerminalC_10_10_3_2_100.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/10t/targetTerminalC_10_10_3_2_100.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/5tUPDATE/TerminalB_20_10_3_2_160.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/5tUPDATE/targetTerminalB_20_10_3_2_160UPDATE.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/7t/TerminalC_10_10_3_2_80.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/7t/targetTerminalC_10_10_3_2_80.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/8t/TerminalC_10_10_3_2_80.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/8t/targetTerminalC_10_10_3_2_80.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/9t/TerminalC_10_10_3_2_100.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/9t/targetTerminalC_10_10_3_2_100.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WorkPlan" beforeDir="false" afterPath="$PROJECT_DIR$/WorkPlan" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Crane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Crane.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/CraneMovement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/CraneMovement.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Field.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Crane.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Crane.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Slot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Slot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Util.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Field.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Field.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Slot.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Slot.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Util.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Util.class" afterDir="false" />
     </list>
-    <list id="cf150217-d5da-4a25-9c65-20f8665781c7" name="Changes by lucas" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Field.java" afterDir="false" />
-    </list>
+    <list id="cf150217-d5da-4a25-9c65-20f8665781c7" name="Changes by lucas" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -34,25 +42,6 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="LineStatusTrackerManager">
-    <file path="$PROJECT_DIR$/src/main/java/Field.java">
-      <ranges>
-        <range start1="0" end1="0" start2="0" end2="1" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="30" end1="30" start2="31" end2="52" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="45" end1="45" start2="67" end2="75" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="70" end1="70" start2="100" end2="132" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="89" end1="90" start2="151" end2="151" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="91" end1="92" start2="152" end2="152" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="94" end1="95" start2="154" end2="155" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="98" end1="99" start2="158" end2="159" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="106" end1="108" start2="166" end2="168" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="121" end1="121" start2="181" end2="182" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-        <range start1="125" end1="126" start2="186" end2="187" changelist="cf150217-d5da-4a25-9c65-20f8665781c7" />
-        <range start1="130" end1="131" start2="191" end2="192" changelist="cf150217-d5da-4a25-9c65-20f8665781c7" />
-        <range start1="295" end1="295" start2="356" end2="368" changelist="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" />
-      </ranges>
-    </file>
-  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -64,23 +53,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "TODO_SCOPE": "All Places",
-    "WebServerToolWindowFactoryState": "false",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "last_opened_file_path": "/home/woutd/Documents/School/Industriele Ingenieurswetenschappen/Ma1/Sem1/Algoritmen/Project/ContainerStacking/data",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Problems",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.keymap"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;TODO_SCOPE&quot;: &quot;All Places&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/woutd/Documents/School/Industriele Ingenieurswetenschappen/Ma1/Sem1/Algoritmen/Project/ContainerStacking/data&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Problems&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/data" />
@@ -146,6 +134,8 @@
       <workItem from="1671351003929" duration="28799000" />
       <workItem from="1671436233834" duration="7324000" />
       <workItem from="1671444397869" duration="17982000" />
+      <workItem from="1671521056448" duration="17232000" />
+      <workItem from="1671542921435" duration="4927000" />
     </task>
     <task id="LOCAL-00001" summary="InitialPush">
       <created>1666197741595</created>
@@ -403,6 +393,6 @@
     <select />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/ContainerStacking$Main.ic" NAME="Main Coverage Results" MODIFIED="1671272035845" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/ContainerStacking$Main.ic" NAME="Main Coverage Results" MODIFIED="1671544509485" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

@@ -1,4 +1,3 @@
-import java.awt.event.ContainerAdapter;
 import java.util.*;
 
 public class Field {
@@ -132,23 +131,26 @@ public class Field {
 
 
     // Find fittintg slots to move a container to
-    public List<Integer> findAvailableSlots(Container container, List<Integer> containersToMove) {
+    public List<Integer>[] findAvailableSlots(Container container, List<Integer> containersToMove) {
         int length = container.getLength();
         List<Integer>[] availableSlots = new List[0];
         List<Integer> possibleDestinations = new ArrayList<>();
-        for(int slotId1 = 0; slotId1 < slots.size()-length; slotId1++) {
-            for(int i = 0; i < length; i++) {
+        for (int slotId1 = 0; slotId1 < slots.size() - length; slotId1++) {
+            for (int i = 0; i < length; i++) {
                 possibleDestinations.add(slotId1 + i);
             }
             if (slotsAreSequential(possibleDestinations)) {
-                if(isValidContainerDestination(container, possibleDestinations)) {
+                if (isValidContainerDestination(container, possibleDestinations)) {
                     availableSlots = Util.addToArray(availableSlots, new ArrayList<>(possibleDestinations));
                 }
             }
             possibleDestinations.clear();
         }
-        assert availableSlots.length != 0 : "No slots available...";
+//        assert availableSlots.length == 0: "No available slots";
+        return availableSlots;
+    }
 
+    public List<Integer> findMostFittingSlot(Container container, List<Integer>[] availableSlots, List<Integer> containersToMove) {
         // Check if there aren't any slots with containers who still have to be moved
         for (int i = 0; i < availableSlots.length; i++) {
             List<Integer> currentSlotSet = availableSlots[i];
@@ -179,6 +181,117 @@ public class Field {
         return availableSlots[minindex];
     }
 
+    public List<Integer>[] findLowest(List<Integer>[] availableSlots, List<Integer> containersToMove) {
+        // Check if there aren't any slots with containers who still have to be moved
+        for (int i = 0; i < availableSlots.length; i++) {
+            List<Integer> currentSlotSet = availableSlots[i];
+            for (int j = 0; j < currentSlotSet.size(); j++) {
+                Slot slot =  getSlot_slotId(currentSlotSet.get(j));
+                for (int k = 0; k <containersToMove.size(); k++) {
+                    //delete the list with containers to move
+                    if (slot.containsContainer(containersToMove.get(k))) {
+                        for (int l = i; l < availableSlots.length-1; l++) {
+                            availableSlots[l] = availableSlots[l+1];
+                        }
+                    }
+                }
+            }
+        }
+
+        List<Integer>[] possibleSlots = new List[0];
+        int minHeight = Integer.MAX_VALUE;
+        for(List<Integer> availalbeSlot : availableSlots) {
+            Slot currentSlot = getSlot_slotId(availalbeSlot.get(0));
+            if(minHeight >= currentSlot.getTotalHeight()) {
+                if(minHeight > currentSlot.getTotalHeight()) {
+                    possibleSlots = new List[0];
+                    minHeight = currentSlot.getTotalHeight();
+                }
+                possibleSlots = Util.addToArray(possibleSlots, new ArrayList<>(availalbeSlot));
+            }
+        }
+        return possibleSlots;
+    }
+
+    public ContainerMovement makeRoom(Container container, List<Integer> containersToMove) {
+        int length = container.getLength();
+        ArrayList<Integer> possibleLengths = Util.calculatePossibleSums(length);
+        Collections.sort(possibleLengths, Collections.reverseOrder());
+        Map<Integer, Container> containers = Main.containers;
+        for(int curr_length : possibleLengths) {
+            for (Container tempContainer : containers.values()) {
+                if(tempContainer.getLength() == curr_length && isMovableContainer(container)) {
+                    for(Slot slot : slots) {
+                        List<Integer> tempDestinationSlots = new ArrayList<>();
+                        int id = slot.getId();
+                        int x = slot.getX();
+                        boolean edgeReached = false;
+                        for(int i = 0; i<curr_length; i++) {
+                            if(x+i>getMaxX()) {
+                                edgeReached = true;
+                                break;
+                            }
+                            else tempDestinationSlots.add(getSlotId_coordinates(x+i, slot.getY()));
+                        }
+                        if(!edgeReached) {
+                            assert slotsAreSequential(tempDestinationSlots) : "Slots are not sequential...";
+                            assert tempDestinationSlots.size() == tempContainer.getLength() : "Not correct destination slots";
+                            if (isValidContainerDestination(tempContainer, tempDestinationSlots)) {
+                                List<Slot> originSlots = getSlot_containerId(tempContainer.getId());
+                                for(Slot s : originSlots) {
+                                    s.popTopStack();
+                                }
+                                List<Slot> tryoutSlots = getSlots_slotIds(tempDestinationSlots);
+                                for(Slot s : tryoutSlots) {
+                                    s.addToContainerStack(tempContainer.getId());
+                                }
+                                List<Integer> finalSlots_forward = new ArrayList<>(tempDestinationSlots);
+                                while(finalSlots_forward.size() < length) {
+                                    int currentMaxX = getSlot_slotId(finalSlots_forward.get(finalSlots_forward.size() -1)).getX();
+                                    if(currentMaxX +1 > getMaxX()) break;
+                                    else finalSlots_forward.add(getSlotId_coordinates(currentMaxX + 1, slot.getY()));
+                                }
+
+                                Collections.sort(tempDestinationSlots);
+                                List<Integer> finalSlots_reversed = new ArrayList<>(tempDestinationSlots);
+                                while(finalSlots_reversed.size() < length) {
+                                    int currentMinX = getSlot_slotId(finalSlots_reversed.get(0)).getX();
+                                    if(currentMinX-1 < getMinX()) break;
+                                    else finalSlots_reversed.add(0, getSlotId_coordinates(currentMinX-1, slot.getY()));
+                                }
+
+                                boolean forward = isValidContainerDestination(container, finalSlots_forward);
+                                boolean reverse = isValidContainerDestination(container, finalSlots_reversed);
+
+                                for(Slot s : tryoutSlots) {
+                                    s.popTopStack();
+                                }
+                                for(Slot s : originSlots) {
+                                    s.addToContainerStack(tempContainer.getId());
+                                }
+
+                                if(forward) {
+                                    Coordinate start = getGrabbingPoint(tempContainer.getId());
+                                    moveContainer(tempContainer, tempDestinationSlots);
+                                    Coordinate end = getGrabbingPoint(tempContainer.getId());
+                                    System.out.println("Made room by moving container " + tempContainer.getId() +  " -> " + slotIdsToString(tempDestinationSlots));
+                                    return (new ContainerMovement(tempContainer.getId(), start, end));
+                                }
+                                if(reverse) {
+                                    Coordinate start = getGrabbingPoint(tempContainer.getId());
+                                    moveContainer(tempContainer, tempDestinationSlots);
+                                    Coordinate end = getGrabbingPoint(tempContainer.getId());
+                                    System.out.println("Made room by moving container " + tempContainer.getId() + " -> " + slotIdsToString(tempDestinationSlots));
+                                    return (new ContainerMovement(tempContainer.getId(), start, end));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
     private double[] calculateDistances(List<Integer>[] availableSlots, Container container) {
         double[] lengths = new double[availableSlots.length];
@@ -200,7 +313,7 @@ public class Field {
         List<Integer> containersToMove = new ArrayList<>();
         for(Slot slot : slots) {
             if(targetHeight < slot.getTotalHeight()) {
-                slot.addContainersExceedingHeight(targetHeight, containersToMove);
+                slot.addContainersExceedingHeight(this, targetHeight, containersToMove);
             }
         }
         return containersToMove;
@@ -219,18 +332,19 @@ public class Field {
         if(!isSameHeight(height, destinationSlotIds, container.getId())) return false;
 
         // Check if new height doesn't maxHeight
-        if(height == MAX_HEIGHT) {
-            System.out.println("Container "+ container.getId()+" cannot be placed -> Max height exceeded.");
+        if(height >= MAX_HEIGHT) {
+//            System.out.println("Container "+ container.getId()+" cannot be placed -> Max height exceeded.");
             return false;
         }
 
         // Check if destinationSlots have enough space
         if(destinationSlotIds.size() != container.getLength()) {
-            System.out.println("Container "+ container.getId()+" cannot be placed -> Not enough space to place the container.");
+//            System.out.println("Container "+ container.getId()+" cannot be placed -> Not enough space to place the container.");
             return false;
         }
 
         // Check if slots contain current container
+
         if(slotsContainCurrentContainer(container, destinationSlotIds)) return false;
 
         // Check if corners container can snap
@@ -243,7 +357,7 @@ public class Field {
         for(int slotId : destinationSlotIds) {
             Slot slot =  getSlot_slotId(slotId);
             if (slot.containsContainer(container.getId())) {
-                System.out.println("The destinationslot is the slot which has the container already on it.");
+//                System.out.println("The destinationslot is the slot which has the container already on it.");
                 return true;
             }
         }
@@ -258,7 +372,7 @@ public class Field {
                 List<Integer> slot_ids = assignments.get(container_id).getSlotIds();
                 for(int slot_id : slot_ids) {
                     if(!destinationSlotIds.contains(slot_id)) {
-                        System.out.println("Container "+ id + " cannot be placed -> Edges don't snap.");
+//                        System.out.println("Container "+ id + " cannot be placed -> Edges don't snap.");
                         return false;
                     }
                 }
@@ -268,15 +382,15 @@ public class Field {
     }
     public boolean isSameHeight(int startingHeight, List<Integer> slotIds, int containerId) {
         for(int slotId : slotIds) {
-            if(slots.get(slotId) != null) {
+            if(getSlot_slotId(slotId) != null) {
                 if(startingHeight != getSlot_slotId(slotId).getTotalHeight()) {
-                    System.out.println("Container "+ containerId+" cannot be placed -> Destination surface is not flat.");
+//                    System.out.println("Container "+ containerId+" cannot be placed -> Destination surface is not flat.");
                     return false;
                 }
             }
             else {
                 if(startingHeight != 0) {
-                    System.out.println("Container "+ containerId+" cannot be placed -> Destination surface is not flat.");
+//                    System.out.println("Container "+ containerId+" cannot be placed -> Destination surface is not flat.");
                     return false;
                 }
             }
@@ -322,7 +436,7 @@ public class Field {
         // the old slots, and clear the slot ids in the assignments.
         List<Slot> oldSlots = getSlot_containerId(container.getId());
         for (Slot s : oldSlots) {
-            s.deleteTopStack();
+            s.popTopStack();
         }
         assignments.remove(container.getId());
 
@@ -345,14 +459,16 @@ public class Field {
 
     public Coordinate getGrabbingPoint(int containerId) {
         List<Slot> slots = getSlot_containerId(containerId);
-        List<Integer> x = new ArrayList<>();
         double y = slots.get(0).getY();
+        List<Integer> x = new ArrayList<>();
         double sum = 0;
         for (Slot slot : slots) {
             assert slot.getY() == y: "Fault in grabbing slots...";
-            sum += slot.getX();
+            x.add(slot.getX());
         }
-        return new Coordinate(sum/ slots.size(), y+0.5);
+        Collections.sort(x);
+        double resultingX = x.get(0) + slots.size()/2;
+        return new Coordinate(resultingX, y+0.5);
     }
     public Coordinate getCenterPoint(List<Integer> slotIds) {
         List<Slot> slots = getSlots_slotIds(slotIds);

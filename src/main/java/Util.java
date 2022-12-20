@@ -36,4 +36,13 @@ public class Util {
         }
         return result;
     }
+
+    public static ArrayList<Integer> calculatePossibleSums(int value) {
+        ArrayList<Integer> result = new ArrayList<>();
+        while(value > 1) {
+            value--;
+            result.add(value);
+        }
+        return result;
+    }
 }

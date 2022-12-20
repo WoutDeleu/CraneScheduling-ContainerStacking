@@ -5,10 +5,11 @@ public class Main {
     private static Field field;
     private static List<Crane> cranes;
     private static final int SAFE_DISTANCE = 1;
-    private static Map<Integer,Container> containers = new HashMap<>();
+    public static Map<Integer,Container> containers = new HashMap<>();
 
     public static void main(String[] args) throws Exception {
-        int choice = chooseInputFile();
+//        int choice = chooseInputFile();
+        int choice = 4;
         System.out.println("inputFile: " + inputFiles[choice]);
         InputData inputData = InputData.readFile("data/" + inputFiles[choice] + ".json");
         inputData.formatAssignment();
@@ -40,7 +41,6 @@ public class Main {
         }
         List<FullMovement> schedule = addCranesToMovement(containerMovements);
         printDebugginResult(schedule);
-
     }
 
     /**************************************************CRANES**************************************************/
@@ -370,9 +370,19 @@ public class Main {
             int containerId = containersToMove.get(currentIndex);
             Container container = containers.get(containerId);
 
-           List<Integer> destinationSlots = field.findAvailableSlots(container, containersToMove);
+            List<Integer>[] possibleDestinationSlots = new List[0];
+            while (possibleDestinationSlots.length == 0) {
+                possibleDestinationSlots = field.findAvailableSlots(container, containersToMove);
+                if (possibleDestinationSlots.length == 0) {
+                    ContainerMovement containerMovingTemp = field.makeRoom(container, containersToMove);
+                    assert containerMovingTemp != null: "Cannot make room for container";
+                    containerMoves.add(containerMovingTemp);
+                }
+            }
+            possibleDestinationSlots = field.findLowest(possibleDestinationSlots, containersToMove);
+            List<Integer> destinationSlots = field.findMostFittingSlot(container, possibleDestinationSlots, containersToMove);
 
-            moveContainerMovement(container, destinationSlots, containerMoves);
+            moveContainer(container, destinationSlots, containerMoves);
             executed.push(currentIndex);
             currentIndex++;
 
@@ -406,7 +416,7 @@ public class Main {
 
             if (field.isValidContainerDestination(container, destinationSlotIds) && field.isMovableContainer(container)) {
                 if (field.containerHasCorrectHeight(destinationSlotIds, diff.getHeight(), containerId)) {
-                    moveContainerMovement(container, destinationSlotIds, containerMoves);
+                    moveContainer(container, destinationSlotIds, containerMoves);
                     executed.push(currentIndex);
                 }
             }
@@ -427,7 +437,7 @@ public class Main {
             differences.remove(index);
         }
     }
-    private static void moveContainerMovement(Container container, List<Integer> destinationSlotIds, List<ContainerMovement> containerMoves) {
+    private static void moveContainer(Container container, List<Integer> destinationSlotIds, List<ContainerMovement> containerMoves) {
         Coordinate start = field.getGrabbingPoint(container.getId());
         field.moveContainer(container, destinationSlotIds);
         Coordinate end = field.getGrabbingPoint(container.getId());
@@ -552,8 +562,8 @@ public class Main {
 
 
     /*************************************************I/O*************************************************/
-    private static String[] inputFiles = new String[]{"terminal22_1_100_1_10", "Terminal_20_10_3_2_100-HEIGHT", "1t/TerminalA_20_10_3_2_100", "2mh/MH2Terminal_20_10_3_2_100","3t/TerminalA_20_10_3_2_160", "4mh/MH2Terminal_20_10_3_2_160", "5t/TerminalB_20_10_3_2_160" , "6t/Terminal_10_10_3_1_100"};
-    private static String[] targetFiles = new String[]{"terminal22_1_100_1_10target", null, "1t/targetTerminalA_20_10_3_2_100", null, "3t/targetTerminalA_20_10_3_2_160", null, "5t/targetTerminalB_20_10_3_2_160" , "6t/targetTerminal_10_10_3_1_100"};
+    private static String[] inputFiles = new String[]{"terminal22_1_100_1_10", "1t/TerminalA_20_10_3_2_100", "2mh/MH2Terminal_20_10_3_2_100","3t/TerminalA_20_10_3_2_160", "4mh/MH2Terminal_20_10_3_2_160", "5t/TerminalB_20_10_3_2_160", "5tUPDATE/TerminalB_20_10_3_2_160" , "6t/Terminal_10_10_3_1_100", "7t/TerminalC_10_10_3_2_80", "8t/TerminalC_10_10_3_2_80", "9t/TerminalC_10_10_3_2_100", "10t/TerminalC_10_10_3_2_100", "Terminal_20_10_3_2_100-HEIGHT"};
+    private static String[] targetFiles = new String[]{"terminal22_1_100_1_10target", "1t/targetTerminalA_20_10_3_2_100", null, "3t/targetTerminalA_20_10_3_2_160", null, "5t/targetTerminalB_20_10_3_2_160" , "5tUPDATE/targetTerminalB_20_10_3_2_160UPDATE   ", "6t/targetTerminal_10_10_3_1_100", "7t/targetTerminalC_10_10_3_2_80", "8t/targetTerminalC_10_10_3_2_80", "9t/targetTerminalC_10_10_3_2_100", "10t/targetTerminalC_10_10_3_2_100", null};
     private static int chooseInputFile() {
         for(int i=0; i<inputFiles.length; i++) {
             System.out.print(i + ": ");
