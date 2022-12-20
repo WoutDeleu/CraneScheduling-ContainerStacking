@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" name="Changes" comment="One step closer to the edge">
+    <list default="true" id="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" name="Changes" comment="Clean up">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Crane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Crane.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/CraneMovement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/CraneMovement.java" afterDir="false" />
@@ -124,7 +124,7 @@
       <workItem from="1671436233834" duration="7324000" />
       <workItem from="1671444397869" duration="17982000" />
       <workItem from="1671521056448" duration="17232000" />
-      <workItem from="1671542921435" duration="16194000" />
+      <workItem from="1671542921435" duration="16592000" />
     </task>
     <task id="LOCAL-00001" summary="InitialPush">
       <created>1666197741595</created>
@@ -301,7 +301,14 @@
       <option name="project" value="LOCAL" />
       <updated>1671548151379</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Clean up">
+      <created>1671559672357</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1671559672357</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -351,7 +358,8 @@
     <MESSAGE value="Checkpoint - Branch to findAvailableSlots" />
     <MESSAGE value="Changes by lucas" />
     <MESSAGE value="One step closer to the edge" />
-    <option name="LAST_COMMIT_MESSAGE" value="One step closer to the edge" />
+    <MESSAGE value="Clean up" />
+    <option name="LAST_COMMIT_MESSAGE" value="Clean up" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -383,7 +391,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
-          <line>489</line>
+          <line>490</line>
           <option name="timeStamp" value="161" />
         </line-breakpoint>
       </breakpoints>
