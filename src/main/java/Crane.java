@@ -35,6 +35,9 @@ public class Crane {
     public List<CraneMovement> getTrajectory() {
         return trajectory;
     }
+    public Coordinate getLocation() {
+        return new Coordinate(x, y);
+    }
 
     public int getId() {
         return id;
@@ -42,10 +45,6 @@ public class Crane {
 
     public boolean isInUse() {
         return inUse;
-    }
-
-    public Coordinate getLocation() {
-        return new Coordinate(x, y);
     }
     public void setInUse() {
         assert !inUse : "Crane was already in use";
@@ -55,6 +54,7 @@ public class Crane {
         assert inUse : "Crane not in use";
         inUse = false;
     }
+
     public double travelTime(Coordinate destination) {
         Coordinate startPoint = getLocation();
         double x_time_component = startPoint.getXdistance(destination)/Vx;
@@ -71,7 +71,6 @@ public class Crane {
         // else if(x_time_component<=y_time_component) ....
         else return (new Coordinate(end.getX(), (start.getY() + Vy*x_time_component)));
     }
-
     public Coordinate calculateIntermediatePoint(Coordinate start, Coordinate end) {
         double x_time_component = start.getXdistance(end)/Vx;
         double y_time_component = start.getYdistance(end)/Vy;
@@ -80,10 +79,6 @@ public class Crane {
         // else if(x_time_component<=y_time_component) ....
         else return (new Coordinate(end.getX(), (start.getY() + Vy*x_time_component)));
     }
-    public void addToTrajectory(FullMovement movement) {
-        CraneMovement craneMovement = new CraneMovement(this, movement.getStartPoint(), movement.getEndPoint(), movement.getPickupTime());
-        trajectory.add(craneMovement);
-    }
     public void addToTrajectory(CraneMovement movement) {
         trajectory.add(movement);
     }
@@ -91,7 +86,6 @@ public class Crane {
     public boolean inRange(Coordinate start) {
         return xmin <= start.getX() && start.getX() <= xmax && ymin <= start.getY() && start.getY() <= ymax;
     }
-
     public void updateLocation(Coordinate containerLocation) {
         x = containerLocation.getX();
         y = containerLocation.getY();

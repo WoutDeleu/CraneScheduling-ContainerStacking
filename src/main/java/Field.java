@@ -11,7 +11,6 @@ public class Field {
         this.slots = deepCopy(slot);
         this.assignments = assignment;
     }
-
     private List<Slot> deepCopy(List<Slot> slot) {
         List<Slot>ret_slots = new ArrayList<>();
         for (Slot s : slot) {
@@ -19,6 +18,7 @@ public class Field {
         }
         return ret_slots;
     }
+
 
     public void setMAX_HEIGHT(int targetHeight) {
         this.MAX_HEIGHT = targetHeight;
@@ -82,22 +82,7 @@ public class Field {
         return null;
     }
 
-    // For each slot, determine how many and which containers are on top.
-    public Stack<Container> getContainers(int slotId, Map<Integer, Container> containers) {
-        Stack<Container> returnList = new Stack<>();
-        // loop over all assignments, where value == slotId
-        // add to return list
-        for(Assignment assignment : this.assignments.values()){
-            for(int id : assignment.getSlotIds()) {
-                if (slotId==id) {
-                    returnList.push(containers.get(id));
-                }
-            }
-        }
-        return returnList;
-    }
-
-    public Coordinate getMeetingPoint(double xMax, double xMin, ContainerMovement movingContainer, Container container) {
+    public Coordinate calculatetMeetingPoint(double xMax, double xMin, ContainerMovement movingContainer, Container container) {
         boolean leftToRightMovement = (movingContainer.getStart().getX() <= movingContainer.getEnd().getX());
         Coordinate meetingPoint = null;
         if(xMax > getMaxX()) xMax = getMaxX();
@@ -130,8 +115,17 @@ public class Field {
     }
 
 
+    private List<Integer> findBestAvailableSlot(Container container, List<Integer> containersToMove) {
+        List<Integer>[] availableSlots = findAvailableSlots(container);
+        availableSlots = findLowest(availableSlots, containersToMove);
+        return findMostFittingSlot(container, availableSlots, containersToMove);
+    }
+    public List<Integer> findBestAvailableSlot(Container container, List<Integer> containersToMove, List<Integer>[] availableSlots) {
+        availableSlots = findLowest(availableSlots, containersToMove);
+        return findMostFittingSlot(container, availableSlots, containersToMove);
+    }
     // Find fittintg slots to move a container to
-    public List<Integer>[] findAvailableSlots(Container container, List<Integer> containersToMove) {
+    public List<Integer>[] findAvailableSlots(Container container) {
         int length = container.getLength();
         List<Integer>[] availableSlots = new List[0];
         List<Integer> possibleDestinations = new ArrayList<>();
@@ -213,6 +207,26 @@ public class Field {
         return possibleSlots;
     }
 
+    public ContainerMovement lowerContainers(int targetHeight, List<Integer> containersToMove) {
+        List<Integer> containersToMoveLower = findContainersExceedingHeight(targetHeight);
+        for(int containerId : containersToMoveLower) {
+            Container containerToMove = Main.containers.get(containerId);
+            List<Integer> destinationSlot = findBestAvailableSlot(containerToMove, containersToMove);
+
+            if(targetHeight >= getSlot_slotId(destinationSlot.get(0)).getTotalHeight() +1) {
+                return generateContainerMovement(containerToMove, destinationSlot);
+            }
+        }
+        return null;
+    }
+
+    private ContainerMovement generateContainerMovement(Container container, List<Integer> destinationSlot) {
+        Coordinate start = getGrabbingPoint(container.getId());
+        moveContainer(container, destinationSlot);
+        Coordinate end = getGrabbingPoint(container.getId());
+        System.out.println("Made room by moving container " + container.getId() + " -> " + slotIdsToString(destinationSlot));
+        return (new ContainerMovement(container.getId(), start, end));
+    }
     public ContainerMovement makeRoom(Container container, List<Integer> containersToMove) {
         int length = container.getLength();
         ArrayList<Integer> possibleLengths = Util.calculatePossibleSums(length);
@@ -313,7 +327,7 @@ public class Field {
         List<Integer> containersToMove = new ArrayList<>();
         for(Slot slot : slots) {
             if(targetHeight < slot.getTotalHeight()) {
-                slot.addContainersExceedingHeight(this, targetHeight, containersToMove);
+                slot.addContainersExceedingHeight(targetHeight, containersToMove);
             }
         }
         return containersToMove;

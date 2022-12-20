@@ -5,14 +5,13 @@ public class Slot {
     private int id;
     private int x;
     private int y;
+    Stack<Integer> containerStack = new Stack<>();
 
     public Slot(Slot s) {
         this.id = s.getId();
         this.x = s.getX();
         this.y = s.getY();
     }
-
-    Stack<Integer> containerStack = new Stack<>();
 
     public void addToContainerStack(int id) {
         containerStack.push(id);
@@ -26,19 +25,13 @@ public class Slot {
         return y;
     }
 
+    public int getId() {
+        return id;
+    }
     public void popTopStack() {
         containerStack.pop();
     }
 
-    public int getId() {
-        return id;
-    }
-    public int getContainerIdByHeight(int height){
-        int stackHeight = getTotalHeight();
-        int containerId= containerStack.get(stackHeight-height);
-
-        return containerId;
-    }
 
     public boolean isStackEmpty() {
         return !containerStack.isEmpty();
@@ -81,8 +74,8 @@ public class Slot {
     public boolean containsContainer(int containerId) {
         return containerStack.contains(containerId);
     }
-
-    public void addContainersExceedingHeight(Field field, int targetHeight, List<Integer> containersToMove) {
+    // added in order of length
+    public void addContainersExceedingHeight(int targetHeight, List<Integer> containersToMove) {
         for(int containerId : containerStack) {
             if(getHeightContainer(containerId) > targetHeight && !containersToMove.contains(containerId)) {
                 int length = Main.containers.get(containerId).getLength();

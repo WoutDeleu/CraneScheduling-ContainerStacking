@@ -4,29 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" name="Changes" comment="Working except case 5">
-      <change afterPath="$PROJECT_DIR$/data/10t/TerminalC_10_10_3_2_100.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/10t/targetTerminalC_10_10_3_2_100.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/5tUPDATE/TerminalB_20_10_3_2_160.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/5tUPDATE/targetTerminalB_20_10_3_2_160UPDATE.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/7t/TerminalC_10_10_3_2_80.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/7t/targetTerminalC_10_10_3_2_80.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/8t/TerminalC_10_10_3_2_80.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/8t/targetTerminalC_10_10_3_2_80.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/9t/TerminalC_10_10_3_2_100.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/9t/targetTerminalC_10_10_3_2_100.json" afterDir="false" />
+    <list default="true" id="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" name="Changes" comment="One step closer to the edge">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WorkPlan" beforeDir="false" afterPath="$PROJECT_DIR$/WorkPlan" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Crane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Crane.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/CraneMovement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/CraneMovement.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Field.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/FullMovement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/FullMovement.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Slot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Slot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Util.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Field.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Field.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Slot.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Slot.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Util.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Util.class" afterDir="false" />
     </list>
-    <list id="cf150217-d5da-4a25-9c65-20f8665781c7" name="Changes by lucas" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -135,7 +124,7 @@
       <workItem from="1671436233834" duration="7324000" />
       <workItem from="1671444397869" duration="17982000" />
       <workItem from="1671521056448" duration="17232000" />
-      <workItem from="1671542921435" duration="4927000" />
+      <workItem from="1671542921435" duration="16194000" />
     </task>
     <task id="LOCAL-00001" summary="InitialPush">
       <created>1666197741595</created>
@@ -305,7 +294,14 @@
       <option name="project" value="LOCAL" />
       <updated>1671459603684</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="One step closer to the edge">
+      <created>1671548151379</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1671548151379</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -354,7 +350,8 @@
     <MESSAGE value="Checkpoint - Fixed until no overtaking" />
     <MESSAGE value="Checkpoint - Branch to findAvailableSlots" />
     <MESSAGE value="Changes by lucas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changes by lucas" />
+    <MESSAGE value="One step closer to the edge" />
+    <option name="LAST_COMMIT_MESSAGE" value="One step closer to the edge" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -372,13 +369,23 @@
           <option name="timeStamp" value="69" />
         </breakpoint>
         <breakpoint enabled="true" type="java-exception">
-          <properties class="java.lang.AssertionError" package="java.lang" />
-          <option name="timeStamp" value="76" />
-        </breakpoint>
-        <breakpoint enabled="true" type="java-exception">
           <properties class="java.lang.NullPointerException" package="java.lang" />
           <option name="timeStamp" value="114" />
         </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.AssertionError" package="java.lang" />
+          <option name="timeStamp" value="143" />
+        </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
+          <line>195</line>
+          <option name="timeStamp" value="145" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
+          <line>489</line>
+          <option name="timeStamp" value="161" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>

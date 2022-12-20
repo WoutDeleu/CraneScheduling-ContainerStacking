@@ -1,3 +1,5 @@
+import java.util.Map;
+
 public class CraneMovement {
     private Crane crane;
     private Coordinate startPoint;
@@ -46,7 +48,23 @@ public class CraneMovement {
         return crane.travelTime(endPoint);
     }
 
-    public boolean colides(int safeDistance, Crane otherCrane) {
+    public boolean collidesPosition(int safeDistance, Crane otherCrane, Map<Integer, Double> craneTimeLocks) {
+        int craneId = otherCrane.getId();
+        if(!craneTimeLocks.containsKey(craneId)) {
+            if(startPoint.getX() < endPoint.getX()) {
+                if(startPoint.getX() + safeDistance < crane.getLocation().getX() && crane.getLocation().getX()+safeDistance < endPoint.getX()) {
+                    return true;
+                }
+            }
+            else {
+                if(startPoint.getX() > crane.getLocation().getX() + safeDistance && crane.getLocation().getX() > endPoint.getX() + safeDistance) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public boolean collidesTraject(int safeDistance, Crane otherCrane) {
         for(CraneMovement move : otherCrane.getTrajectory()) {
             if(hasOverlapTime(move)) {
                 if(hasOverlapTraject(safeDistance, move)) return true;
@@ -65,4 +83,5 @@ public class CraneMovement {
     public void updateTimer(double timer) {
         startTime = timer;
     }
+
 }

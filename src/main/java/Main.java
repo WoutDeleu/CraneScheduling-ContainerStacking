@@ -8,8 +8,8 @@ public class Main {
     public static Map<Integer,Container> containers = new HashMap<>();
 
     public static void main(String[] args) throws Exception {
-//        int choice = chooseInputFile();
-        int choice = 4;
+        int choice = chooseInputFile();
+//        int choice = 4;
         System.out.println("inputFile: " + inputFiles[choice]);
         InputData inputData = InputData.readFile("data/" + inputFiles[choice] + ".json");
         inputData.formatAssignment();
@@ -101,7 +101,7 @@ public class Main {
 
                 addToSchedule_withContainer(toFinalDestination, movingContainer_cr2, schedule, craneTimeLocks);
                 System.out.println("Crane " + movingContainer.getCrane().getId() + " succesfully moved Container " + toFinalDestination.getContainerId() +  " from intermediateLocation Location to final point");
-                timer = updateTimeStamp(movingContainer_cr2.getEndTime()+1, craneTimeLocks);
+//                timer = updateTimeStamp(movingContainer_cr2.getEndTime()+1, craneTimeLocks);
 
             }
         }
@@ -111,12 +111,12 @@ public class Main {
     private static Coordinate calculateMeetingPoint(Crane crane, ContainerMovement containerMovement) {
         double xMax = crane.getXmax();
         double xMin = crane.getXmin();
-        return field.getMeetingPoint(xMax, xMin, containerMovement, containers.get(containerMovement.getContainerId()));
+        return field.calculatetMeetingPoint(xMax, xMin, containerMovement, containers.get(containerMovement.getContainerId()));
     }
 
     // solve collisions for full container & crane movement
     private static double solveCollisions(List<FullMovement> schedule, CraneMovement moveToContainer, CraneMovement movingContainer, Map<Integer, Double> craneTimeLocks, double timer) throws Exception {
-        List<Crane> collisionCranes = detectCollision(moveToContainer, movingContainer);
+        List<Crane> collisionCranes = detectCollision(moveToContainer, movingContainer, craneTimeLocks);
         // Loop over cranes that give issues
         while(!collisionCranes.isEmpty()) {
             Crane dangerousCrane = collisionCranes.get(0);
@@ -128,7 +128,7 @@ public class Main {
                 moveToContainer.updateTimer(timer);
                 movingContainer.updateTimer(moveToContainer.getEndTime());
 
-                collisionCranes = detectCollision(moveToContainer, movingContainer);
+                collisionCranes = detectCollision(moveToContainer, movingContainer, craneTimeLocks);
                 assert !collisionCranes.contains(dangerousCrane) : "The collision with the current crane should be solved.";
             }
             // Move crane out of the way
@@ -150,7 +150,7 @@ public class Main {
                         movingContainer.updateTimer(moveToContainer.getEndTime());
                     }
                     else {
-                        collisionCranes = detectCollision(moveToContainer, movingContainer);
+                        collisionCranes = detectCollision(moveToContainer, movingContainer, craneTimeLocks);
                     }
                 }
                 else {
@@ -166,7 +166,7 @@ public class Main {
 
     // Solve collision for movement crane out of the way
     private static double solveCollisionsRecurs(List<FullMovement> schedule, CraneMovement moveCraneOutWay, Map<Integer, Double> craneTimeLocks, double timer) throws Exception {
-        List<Crane> collisionCranes = detectCollision(moveCraneOutWay);
+        List<Crane> collisionCranes = detectCollision(moveCraneOutWay, craneTimeLocks);
         // Loop over cranes that give issues
         while(!collisionCranes.isEmpty()) {
             Crane dangerousCrane = collisionCranes.get(0);
@@ -177,7 +177,7 @@ public class Main {
                 executeEvents(timer, craneTimeLocks);
                 moveCraneOutWay.updateTimer(timer);
 
-                collisionCranes = detectCollision(moveCraneOutWay);
+                collisionCranes = detectCollision(moveCraneOutWay, craneTimeLocks);
                 assert !collisionCranes.contains(dangerousCrane) : "The collision with the current crane should be solved.";
             }
             // Move crane out of the way
@@ -197,7 +197,7 @@ public class Main {
                         moveCraneOutWay.updateTimer(timer);
                     }
                     else {
-                        collisionCranes = detectCollision(moveCraneOutWay);
+                        collisionCranes = detectCollision(moveCraneOutWay, craneTimeLocks);
                     }
                 }
                 else {
@@ -234,14 +234,6 @@ public class Main {
         return newTimer;
     }
 
-    // Update to the next time slot which has an event
-    private static double updateTimeStamp_FirstFollowingEvent(Map<Integer, Double> craneTimeLocks) {
-        ArrayList<Double> timestamps = new ArrayList<>();
-        timestamps.addAll(craneTimeLocks.values());
-        double newTimer = Util.getSmallestValue(timestamps) + 1;
-        executeEvents(newTimer, craneTimeLocks);
-        return newTimer;
-    }
     private static void executeEvents(double newTimer, Map<Integer, Double> craneTimeLocks) {
         ArrayList<Integer> toRemove = new ArrayList<>();
         for(double time : craneTimeLocks.values()) {
@@ -271,10 +263,10 @@ public class Main {
     }
 
     // solve collisions for full container & crane movement
-    private static List<Crane> detectCollision(CraneMovement moveCraneOutWay) {
+    private static List<Crane> detectCollision(CraneMovement moveCraneOutWay, Map<Integer, Double> craneTimeLocks) {
         List<Crane> collisions = new ArrayList<>();
         for(Crane otherCrane : cranes) {
-            if(moveCraneOutWay.colides(SAFE_DISTANCE, otherCrane)) {
+            if(moveCraneOutWay.collidesTraject(SAFE_DISTANCE, otherCrane) || moveCraneOutWay.collidesPosition(SAFE_DISTANCE, otherCrane, craneTimeLocks)) {
                 collisions.add(otherCrane);
                 System.out.println("Problems with crane " + otherCrane.getId() + ".");
             }
@@ -283,10 +275,10 @@ public class Main {
     }
 
     // Solve collision for movement crane out of the way
-    private static List<Crane> detectCollision(CraneMovement moveToContainer, CraneMovement movingContainer) {
+    private static List<Crane> detectCollision(CraneMovement moveToContainer, CraneMovement movingContainer, Map<Integer, Double> craneTimeLocks) {
         List<Crane> collisions = new ArrayList<>();
         for(Crane otherCrane : cranes) {
-            if(moveToContainer.colides(SAFE_DISTANCE, otherCrane) || movingContainer.colides(SAFE_DISTANCE, otherCrane)) {
+            if(moveToContainer.collidesTraject(SAFE_DISTANCE, otherCrane) || movingContainer.collidesTraject(SAFE_DISTANCE, otherCrane) || moveToContainer.collidesPosition(SAFE_DISTANCE, otherCrane, craneTimeLocks) || movingContainer.collidesPosition(SAFE_DISTANCE, otherCrane, craneTimeLocks)) {
                 collisions.add(otherCrane);
                 System.out.println("Problems with crane " + otherCrane.getId() + ".");
             }
@@ -297,8 +289,8 @@ public class Main {
     public static Crane findBestCrane(ContainerMovement containerMovement) {
         Crane selectedCrane;
         List<Crane> cranedidates = new ArrayList<>();
-        boolean fullRangeFound = false;
         boolean perfectFound = false;
+        boolean fullRangeFound = false;
         boolean acceptableFound = false;
         for(Crane crane : cranes) {
             if(crane.inRange(containerMovement.getStart())) {
@@ -366,21 +358,14 @@ public class Main {
 
         List<Integer> containersToMove = field.findContainersExceedingHeight(targetHeight);
         Stack<Integer> executed = new Stack<>();
+
         while(!containersToMove.isEmpty()) {
             int containerId = containersToMove.get(currentIndex);
             Container container = containers.get(containerId);
 
-            List<Integer>[] possibleDestinationSlots = new List[0];
-            while (possibleDestinationSlots.length == 0) {
-                possibleDestinationSlots = field.findAvailableSlots(container, containersToMove);
-                if (possibleDestinationSlots.length == 0) {
-                    ContainerMovement containerMovingTemp = field.makeRoom(container, containersToMove);
-                    assert containerMovingTemp != null: "Cannot make room for container";
-                    containerMoves.add(containerMovingTemp);
-                }
-            }
-            possibleDestinationSlots = field.findLowest(possibleDestinationSlots, containersToMove);
-            List<Integer> destinationSlots = field.findMostFittingSlot(container, possibleDestinationSlots, containersToMove);
+            List<Integer>[] possibleDestinationSlots = generatePossibleDestinations(targetHeight, container, containersToMove, containerMoves);
+
+            List<Integer> destinationSlots = field.findBestAvailableSlot(container, containersToMove, possibleDestinationSlots);
 
             moveContainer(container, destinationSlots, containerMoves);
             executed.push(currentIndex);
@@ -392,6 +377,25 @@ public class Main {
             }
         }
         return containerMoves;
+    }
+    private static List<Integer>[] generatePossibleDestinations(int targetHeight, Container container, List<Integer> containersToMove, List<ContainerMovement> containerMoves) {
+        List<Integer>[] possibleDestinationSlots = new List[0];
+        int currentTargetHeight = targetHeight -1;
+        while (possibleDestinationSlots.length == 0) {
+            possibleDestinationSlots = field.findAvailableSlots(container);
+            if (possibleDestinationSlots.length == 0) {
+                ContainerMovement containerMovingTemp = field.makeRoom(container, containersToMove);
+                if (containerMovingTemp == null) {
+                    containerMovingTemp = field.lowerContainers(currentTargetHeight, containersToMove);
+                    if(containerMovingTemp == null) {
+                        assert currentTargetHeight > 1: "Cant lower containers";
+                        currentTargetHeight--;
+                    }
+                }
+                containerMoves.add(containerMovingTemp);
+            }
+        }
+        return possibleDestinationSlots;
     }
     /**************************************************MAX HEIGHT**************************************************/
 
@@ -563,7 +567,7 @@ public class Main {
 
     /*************************************************I/O*************************************************/
     private static String[] inputFiles = new String[]{"terminal22_1_100_1_10", "1t/TerminalA_20_10_3_2_100", "2mh/MH2Terminal_20_10_3_2_100","3t/TerminalA_20_10_3_2_160", "4mh/MH2Terminal_20_10_3_2_160", "5t/TerminalB_20_10_3_2_160", "5tUPDATE/TerminalB_20_10_3_2_160" , "6t/Terminal_10_10_3_1_100", "7t/TerminalC_10_10_3_2_80", "8t/TerminalC_10_10_3_2_80", "9t/TerminalC_10_10_3_2_100", "10t/TerminalC_10_10_3_2_100", "Terminal_20_10_3_2_100-HEIGHT"};
-    private static String[] targetFiles = new String[]{"terminal22_1_100_1_10target", "1t/targetTerminalA_20_10_3_2_100", null, "3t/targetTerminalA_20_10_3_2_160", null, "5t/targetTerminalB_20_10_3_2_160" , "5tUPDATE/targetTerminalB_20_10_3_2_160UPDATE   ", "6t/targetTerminal_10_10_3_1_100", "7t/targetTerminalC_10_10_3_2_80", "8t/targetTerminalC_10_10_3_2_80", "9t/targetTerminalC_10_10_3_2_100", "10t/targetTerminalC_10_10_3_2_100", null};
+    private static String[] targetFiles = new String[]{"terminal22_1_100_1_10target", "1t/targetTerminalA_20_10_3_2_100", null, "3t/targetTerminalA_20_10_3_2_160", null, "5t/targetTerminalB_20_10_3_2_160" , "5tUPDATE/targetTerminalB_20_10_3_2_160UPDATE", "6t/targetTerminal_10_10_3_1_100", "7t/targetTerminalC_10_10_3_2_80", "8t/targetTerminalC_10_10_3_2_80", "9t/targetTerminalC_10_10_3_2_100", "10t/targetTerminalC_10_10_3_2_100", null};
     private static int chooseInputFile() {
         for(int i=0; i<inputFiles.length; i++) {
             System.out.print(i + ": ");

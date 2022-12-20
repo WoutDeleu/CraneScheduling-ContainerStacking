@@ -48,32 +48,6 @@ public class FullMovement {
         this.endPosY = endPosition.getY();
     }
 
-    public double getPickupTime() {
-        return pickupTime;
-    }
-
-    public int getCraneId() {
-        return craneId;
-    }
-
-    public double getEndTime() {
-        return endTime;
-    }
-
-    public Coordinate getEndPoint() {
-        return new Coordinate(endPosX, endPosY);
-    }
-    public Coordinate getStartPoint() {
-        return new Coordinate(pickupPosX, pickupPosY);
-    }
-    public void setStartLocation(Coordinate coordinate) {
-        pickupPosX = (coordinate.getX());
-        pickupPosY = (coordinate.getY());
-    }
-    public void setEndLocation(Coordinate coordinate) {
-        endPosX = (coordinate.getX());
-        endPosX = (coordinate.getY());
-    }
 
     @Override
     public String toString() {
