@@ -53,11 +53,13 @@ public class CraneMovement {
         if(!craneTimeLocks.containsKey(craneId)) {
             if(startPoint.getX() < endPoint.getX()) {
                 if(startPoint.getX() + safeDistance < crane.getLocation().getX() && crane.getLocation().getX()+safeDistance < endPoint.getX()) {
+                    System.out.println("Colliding position");
                     return true;
                 }
             }
             else {
                 if(startPoint.getX() > crane.getLocation().getX() + safeDistance && crane.getLocation().getX() > endPoint.getX() + safeDistance) {
+                    System.out.println("Colliding position");
                     return true;
                 }
             }
@@ -67,7 +69,10 @@ public class CraneMovement {
     public boolean collidesTraject(int safeDistance, Crane otherCrane) {
         for(CraneMovement move : otherCrane.getTrajectory()) {
             if(hasOverlapTime(move)) {
-                if(hasOverlapTraject(safeDistance, move)) return true;
+                if(hasOverlapTraject(safeDistance, move)) {
+                    System.out.println("Colliding trajectory");
+                    return true;
+                }
             }
         }
         return false;

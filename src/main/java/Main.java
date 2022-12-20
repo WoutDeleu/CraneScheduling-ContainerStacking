@@ -40,16 +40,21 @@ public class Main {
             containerMovements = generateContainerMovements(inputData.getTargetHeight());
         }
         List<FullMovement> schedule = addCranesToMovement(containerMovements);
-        printDebugginResult(schedule);
+        printOfficialResult(schedule);
     }
 
     /**************************************************CRANES**************************************************/
-    private static List<FullMovement> addCranesToMovement(List<ContainerMovement> containerMovements) throws Exception {
+    private static List<FullMovement> addCranesToMovement(List<ContainerMovement> containerMovements_List) throws Exception {
+        Stack<ContainerMovement> containerMovements = new Stack();
+        Collections.reverse(containerMovements_List);
+        containerMovements.addAll(containerMovements_List);
+
         List<FullMovement> schedule = new ArrayList<>();
         // Contains times when cranes have finished their tasks
         Map<Integer, Double> craneTimeLocks = new HashMap<>(); // key = craneId, value = timestamp
         double timer = 0;
-        for (ContainerMovement containerMovement : containerMovements) {
+        while(!containerMovements.isEmpty()) {
+            ContainerMovement containerMovement = containerMovements.pop();
             Coordinate containerStartLocation = containerMovement.getStart();
             Coordinate containerDestination = containerMovement.getEnd();
 
@@ -85,24 +90,12 @@ public class Main {
 
                 addToSchedule_withContainer(containerMovement, movingContainer_cr1, schedule, craneTimeLocks);
                 System.out.println("Crane " + movingContainer.getCrane().getId() + " succesfully moved Container " + containerMovement.getContainerId() +  " to intermediateLocation Location");
-                timer = updateTimeStamp(movingContainer_cr1.getEndTime()+1, craneTimeLocks);
 
 
                 /**Movements of crane 2
                     Moving container from meetingPoint to final destination*/
                 ContainerMovement toFinalDestination = new ContainerMovement(containerMovement.getContainerId(), intermediateLocation, containerDestination);
-                Crane crane2 = findBestCrane(toFinalDestination);
-                if(crane2.isInUse()) timer = updateTimeStamp(craneTimeLocks.get(crane2.getId())+1, craneTimeLocks);
-
-                CraneMovement moveToContainer_cr2 = new CraneMovement(crane2, intermediateLocation, timer);
-                CraneMovement movingContainer_cr2 = new CraneMovement(crane2, intermediateLocation, containerDestination, timer + moveToContainer_cr2.travelTime()+1);
-
-                solveCollisions(schedule, moveToContainer_cr2, movingContainer_cr2, craneTimeLocks, timer);
-
-                addToSchedule_withContainer(toFinalDestination, movingContainer_cr2, schedule, craneTimeLocks);
-                System.out.println("Crane " + movingContainer.getCrane().getId() + " succesfully moved Container " + toFinalDestination.getContainerId() +  " from intermediateLocation Location to final point");
-//                timer = updateTimeStamp(movingContainer_cr2.getEndTime()+1, craneTimeLocks);
-
+                containerMovements.push(toFinalDestination);
             }
         }
         return schedule;
@@ -129,7 +122,11 @@ public class Main {
                 movingContainer.updateTimer(moveToContainer.getEndTime());
 
                 collisionCranes = detectCollision(moveToContainer, movingContainer, craneTimeLocks);
-                assert !collisionCranes.contains(dangerousCrane) : "The collision with the current crane should be solved.";
+//                assert !collisionCranes.contains(dangerousCrane) : "The collision with the current crane should be solved.";
+                if(collisionCranes.contains(dangerousCrane))  {
+                    System.out.println("The collision with the current crane should be solved.");
+                }
+
             }
             // Move crane out of the way
             else {
