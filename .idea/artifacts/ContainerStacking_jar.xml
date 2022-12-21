@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ContainerStacking:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ContainerStacking_jar</output-path>
+    <root id="archive" name="ContainerStacking.jar">
+      <element id="module-output" name="ContainerStacking" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.10/gson-2.10.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

@@ -1,3 +1,4 @@
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -44,7 +45,8 @@ public class Main_HandInFormat {
             containerMovements = generateContainerMovements(inputData.getTargetHeight());
         }
         List<FullMovement> schedule = addCranesToMovement(containerMovements);
-        printOfficialResult(schedule);
+//        printOfficialResult(schedule);
+        System.out.println("********************************");
         String outputFile = args[nextInputIndex];
         writeSolution(outputFile, schedule);
     }
@@ -588,9 +590,10 @@ public class Main_HandInFormat {
         }
         File checkFile = new File(file);
         if(!checkFile.exists()) checkFile.createNewFile();
-
-        FileWriter fw = new FileWriter(file);
-        fw.write(output);
+        System.out.println(output);
+        BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+        bw.write(output);
+        bw.close();
         System.out.println("Written to file");
     }
     /*************************************************I/O*************************************************/
