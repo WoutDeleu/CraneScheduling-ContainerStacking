@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ab324ca6-0b6c-4155-85a7-ce4ae6e4b1c1" name="Changes" comment="Clean up">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WorkPlan" beforeDir="false" afterPath="$PROJECT_DIR$/WorkPlan" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/CraneMovement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/CraneMovement.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Main.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -327,7 +323,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/findavailable" />
+                        <option value="origin/fix-error" />
                       </list>
                     </value>
                   </entry>
@@ -384,12 +380,12 @@
         </breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
-          <line>193</line>
+          <line>220</line>
           <option name="timeStamp" value="145" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
-          <line>126</line>
+          <line>153</line>
           <option name="timeStamp" value="177" />
         </line-breakpoint>
       </breakpoints>
@@ -406,6 +402,6 @@
     <select />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/ContainerStacking$Main.ic" NAME="Main Coverage Results" MODIFIED="1671544509485" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/ContainerStacking$Main.ic" NAME="Main Coverage Results" MODIFIED="1671572123559" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

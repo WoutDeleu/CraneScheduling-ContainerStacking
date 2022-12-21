@@ -121,6 +121,33 @@ public class Main {
                 moveToContainer.updateTimer(timer);
                 movingContainer.updateTimer(moveToContainer.getEndTime());
 
+                if(moveToContainer.collidesPosition(SAFE_DISTANCE, dangerousCrane, craneTimeLocks) || movingContainer.collidesPosition(SAFE_DISTANCE, dangerousCrane, craneTimeLocks)) {
+                    // solve collision when moving container out of the way
+                    CraneMovement moveCraneOutWay = dangerousCrane.moveToSaveDistance(timer, moveToContainer, movingContainer);
+
+                    if (moveCraneOutWay != null) {
+                        double previousTimer = timer;
+                        timer = solveCollisionsRecurs(schedule, moveCraneOutWay, craneTimeLocks, timer);
+                        moveToContainer.updateTimer(timer);
+                        movingContainer.updateTimer(moveToContainer.getEndTime());
+
+                        if (previousTimer == timer) {
+                            addToSchedule_withoutContainer(moveCraneOutWay, schedule, craneTimeLocks);
+
+                            timer = moveCraneOutWay.getEndTime() + 1;
+                            moveToContainer.updateTimer(timer);
+                            movingContainer.updateTimer(moveToContainer.getEndTime());
+                        } else {
+                            collisionCranes = detectCollision(moveToContainer, movingContainer, craneTimeLocks);
+                        }
+                    } else {
+                        // This would happen in a field where one crane cannot move out of the way, this would be an unlikely terminal setup
+                        // Assunption : there is no crane for which the crane1.xmax > crane2.xmax en crane1.xmin < crane2.xmin
+                        throw new Exception("Crane cannot be moved out of the way");
+                        //oplossing:  todo: pass container on
+                    }
+                }
+
                 collisionCranes = detectCollision(moveToContainer, movingContainer, craneTimeLocks);
 //                assert !collisionCranes.contains(dangerousCrane) : "The collision with the current crane should be solved.";
                 if(collisionCranes.contains(dangerousCrane))  {
@@ -263,9 +290,11 @@ public class Main {
     private static List<Crane> detectCollision(CraneMovement moveCraneOutWay, Map<Integer, Double> craneTimeLocks) {
         List<Crane> collisions = new ArrayList<>();
         for(Crane otherCrane : cranes) {
-            if(moveCraneOutWay.collidesTraject(SAFE_DISTANCE, otherCrane) || moveCraneOutWay.collidesPosition(SAFE_DISTANCE, otherCrane, craneTimeLocks)) {
-                collisions.add(otherCrane);
-                System.out.println("Problems with crane " + otherCrane.getId() + ".");
+            if (otherCrane.getId() != moveCraneOutWay.getCraneId()) {
+                if (moveCraneOutWay.collidesTraject(SAFE_DISTANCE, otherCrane) || moveCraneOutWay.collidesPosition(SAFE_DISTANCE, otherCrane, craneTimeLocks)) {
+                    collisions.add(otherCrane);
+                    System.out.println("Problems with crane " + otherCrane.getId() + ".");
+                }
             }
         }
         return collisions;
@@ -275,9 +304,11 @@ public class Main {
     private static List<Crane> detectCollision(CraneMovement moveToContainer, CraneMovement movingContainer, Map<Integer, Double> craneTimeLocks) {
         List<Crane> collisions = new ArrayList<>();
         for(Crane otherCrane : cranes) {
-            if(moveToContainer.collidesTraject(SAFE_DISTANCE, otherCrane) || movingContainer.collidesTraject(SAFE_DISTANCE, otherCrane) || moveToContainer.collidesPosition(SAFE_DISTANCE, otherCrane, craneTimeLocks) || movingContainer.collidesPosition(SAFE_DISTANCE, otherCrane, craneTimeLocks)) {
-                collisions.add(otherCrane);
-                System.out.println("Problems with crane " + otherCrane.getId() + ".");
+            if (otherCrane.getId() != movingContainer.getCraneId()) {
+                if (moveToContainer.collidesTraject(SAFE_DISTANCE, otherCrane) || movingContainer.collidesTraject(SAFE_DISTANCE, otherCrane) || moveToContainer.collidesPosition(SAFE_DISTANCE, otherCrane, craneTimeLocks) || movingContainer.collidesPosition(SAFE_DISTANCE, otherCrane, craneTimeLocks)) {
+                    collisions.add(otherCrane);
+                    System.out.println("Problems with crane " + otherCrane.getId() + ".");
+                }
             }
         }
         return collisions;
