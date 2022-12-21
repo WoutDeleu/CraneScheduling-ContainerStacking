@@ -124,66 +124,46 @@ public class Main {
                 if(moveToContainer.collidesPosition(SAFE_DISTANCE, dangerousCrane, craneTimeLocks) || movingContainer.collidesPosition(SAFE_DISTANCE, dangerousCrane, craneTimeLocks)) {
                     // solve collision when moving container out of the way
                     CraneMovement moveCraneOutWay = dangerousCrane.moveToSaveDistance(timer, moveToContainer, movingContainer);
+                    timer = moveCraneOutOfTheWay(moveCraneOutWay, timer, craneTimeLocks, schedule);
 
-                    if (moveCraneOutWay != null) {
-                        double previousTimer = timer;
-                        timer = solveCollisionsRecurs(schedule, moveCraneOutWay, craneTimeLocks, timer);
-                        moveToContainer.updateTimer(timer);
-                        movingContainer.updateTimer(moveToContainer.getEndTime());
+                    moveToContainer.updateTimer(timer);
+                    movingContainer.updateTimer(moveToContainer.getEndTime()+1);
 
-                        if (previousTimer == timer) {
-                            addToSchedule_withoutContainer(moveCraneOutWay, schedule, craneTimeLocks);
-
-                            timer = moveCraneOutWay.getEndTime() + 1;
-                            moveToContainer.updateTimer(timer);
-                            movingContainer.updateTimer(moveToContainer.getEndTime());
-                        } else {
-                            collisionCranes = detectCollision(moveToContainer, movingContainer, craneTimeLocks);
-                        }
-                    } else {
-                        // This would happen in a field where one crane cannot move out of the way, this would be an unlikely terminal setup
-                        // Assunption : there is no crane for which the crane1.xmax > crane2.xmax en crane1.xmin < crane2.xmin
-                        throw new Exception("Crane cannot be moved out of the way");
-                        //oplossing:  todo: pass container on
-                    }
                 }
 
                 collisionCranes = detectCollision(moveToContainer, movingContainer, craneTimeLocks);
-//                assert !collisionCranes.contains(dangerousCrane) : "The collision with the current crane should be solved.";
-                if(collisionCranes.contains(dangerousCrane))  {
-                    System.out.println("The collision with the current crane should be solved.");
-                }
+                assert !collisionCranes.contains(dangerousCrane) : "The collision with the current crane should be solved.";
 
             }
             // Move crane out of the way
             else {
                 // solve collision when moving container out of the way
                 CraneMovement moveCraneOutWay = dangerousCrane.moveToSaveDistance(timer, moveToContainer, movingContainer);
+                timer = moveCraneOutOfTheWay(moveCraneOutWay, timer, craneTimeLocks, schedule);
+                moveToContainer.updateTimer(timer);
+                movingContainer.updateTimer(moveToContainer.getEndTime()+1);
 
-                if (moveCraneOutWay != null) {
-                    double previousTimer = timer;
-                    timer = solveCollisionsRecurs(schedule, moveCraneOutWay, craneTimeLocks, timer);
-                    moveToContainer.updateTimer(timer);
-                    movingContainer.updateTimer(moveToContainer.getEndTime());
-
-                    if(previousTimer == timer) {
-                        addToSchedule_withoutContainer(moveCraneOutWay, schedule, craneTimeLocks);
-
-                        timer = moveCraneOutWay.getEndTime()+1;
-                        moveToContainer.updateTimer(timer);
-                        movingContainer.updateTimer(moveToContainer.getEndTime());
-                    }
-                    else {
-                        collisionCranes = detectCollision(moveToContainer, movingContainer, craneTimeLocks);
-                    }
-                }
-                else {
-                    // This would happen in a field where one crane cannot move out of the way, this would be an unlikely terminal setup
-                    // Assunption : there is no crane for which the crane1.xmax > crane2.xmax en crane1.xmin < crane2.xmin
-                    throw new Exception("Crane cannot be moved out of the way");
-                    //oplossing:  todo: pass container on
-                }
+                collisionCranes = detectCollision(moveToContainer, movingContainer, craneTimeLocks);
             }
+        }
+        return timer;
+    }
+
+    private static double moveCraneOutOfTheWay(CraneMovement moveCraneOutWay, double timer, Map<Integer, Double> craneTimeLocks, List<FullMovement> schedule) throws Exception {
+        if (moveCraneOutWay != null) {
+            double previousTimer = timer;
+            timer = solveCollisionsRecurs(schedule, moveCraneOutWay, craneTimeLocks, timer);
+
+            if (previousTimer == timer) {
+                addToSchedule_withoutContainer(moveCraneOutWay, schedule, craneTimeLocks);
+                timer = moveCraneOutWay.getEndTime() + 1;
+            }
+        }
+        else {
+            // This would happen in a field where one crane cannot move out of the way, this would be an unlikely terminal setup
+            // Assunption : there is no crane for which the crane1.xmax > crane2.xmax en crane1.xmin < crane2.xmin
+            throw new Exception("Crane cannot be moved out of the way");
+            //oplossing:  todo: pass container on
         }
         return timer;
     }
@@ -201,6 +181,13 @@ public class Main {
                 executeEvents(timer, craneTimeLocks);
                 moveCraneOutWay.updateTimer(timer);
 
+                if(moveCraneOutWay.collidesPosition(SAFE_DISTANCE, dangerousCrane, craneTimeLocks)) {
+                    // solve collision when moving container out of the way
+                    CraneMovement moveOtherCraneOutWay = dangerousCrane.moveToSaveDistance(timer, moveCraneOutWay);
+                    timer = moveCraneOutOfTheWay(moveOtherCraneOutWay, timer, craneTimeLocks, schedule);
+
+                    moveCraneOutWay.updateTimer(timer);
+                }
                 collisionCranes = detectCollision(moveCraneOutWay, craneTimeLocks);
                 assert !collisionCranes.contains(dangerousCrane) : "The collision with the current crane should be solved.";
             }
@@ -208,28 +195,9 @@ public class Main {
             else {
                 // solve collision when moving container out of the way
                 CraneMovement moveOtherCraneOutWay = dangerousCrane.moveToSaveDistance(timer, moveCraneOutWay);
-
-                if (moveOtherCraneOutWay != null) {
-                    double previousTimer = timer;
-                    System.out.println("RecursiveFunctionIsCalled...");
-                    timer = solveCollisionsRecurs(schedule, moveOtherCraneOutWay, craneTimeLocks, timer);
-                    moveCraneOutWay.updateTimer(timer);
-                    if(previousTimer == timer) {
-                        // update timer to the last movement, in this case to the move out of the way from the container
-                        addToSchedule_withoutContainer(moveOtherCraneOutWay, schedule, craneTimeLocks);
-                        timer = updateTimeStamp(moveOtherCraneOutWay.getEndTime()+1, craneTimeLocks);
-                        moveCraneOutWay.updateTimer(timer);
-                    }
-                    else {
-                        collisionCranes = detectCollision(moveCraneOutWay, craneTimeLocks);
-                    }
-                }
-                else {
-                    // This would happen in a field where one crane cannot move out of the way, this would be an unlikely terminal setup
-                    // Assunption : there is no crane for which the crane1.xmax > crane2.xmax en crane1.xmin < crane2.xmin
-                    throw new Exception("Crane cannot be moved out of the way");
-                    //oplossing:  todo: pass container on
-                }
+                timer =  moveCraneOutOfTheWay(moveOtherCraneOutWay, timer, craneTimeLocks, schedule);
+                moveCraneOutWay.updateTimer(timer);
+                collisionCranes = detectCollision(moveOtherCraneOutWay, craneTimeLocks);
             }
         }
         return timer;
