@@ -101,6 +101,12 @@ public class Main {
         return schedule;
     }
 
+    private static Coordinate calculateMeetingPoint(Crane crane, ContainerMovement containerMovement) {
+        double xMax = crane.getXmax();
+        double xMin = crane.getXmin();
+        return field.calculatetMeetingPoint(xMax, xMin, containerMovement, containers.get(containerMovement.getContainerId()));
+    }
+
     // solve collisions for full container & crane movement
     private static double solveCollisions(List<FullMovement> schedule, CraneMovement moveToContainer, CraneMovement movingContainer, Map<Integer, Double> craneTimeLocks, double timer) throws Exception {
         List<Crane> collisionCranes = detectCollision(moveToContainer, movingContainer, craneTimeLocks);
@@ -113,44 +119,44 @@ public class Main {
                 timer = craneTimeLocks.get(id)+1;
                 executeEvents(timer, craneTimeLocks);
                 moveToContainer.updateTimer(timer);
-                movingContainer.updateTimer(moveToContainer.getEndTime()+1);
+                movingContainer.updateTimer(moveToContainer.getEndTime());
 
                 if(moveToContainer.collidesPosition(SAFE_DISTANCE, dangerousCrane, craneTimeLocks) || movingContainer.collidesPosition(SAFE_DISTANCE, dangerousCrane, craneTimeLocks)) {
-                    moveCraneOutOfTheWay(timer, dangerousCrane, moveToContainer, movingContainer, craneTimeLocks, schedule, collisionCranes);
+                    // solve collision when moving container out of the way
+                    CraneMovement moveCraneOutWay = dangerousCrane.moveToSaveDistance(timer, moveToContainer, movingContainer);
+                    timer = moveCraneOutOfTheWay(moveCraneOutWay, timer, craneTimeLocks, schedule);
+
+                    moveToContainer.updateTimer(timer);
+                    movingContainer.updateTimer(moveToContainer.getEndTime()+1);
+
                 }
+
                 collisionCranes = detectCollision(moveToContainer, movingContainer, craneTimeLocks);
-//                assert !collisionCranes.contains(dangerousCrane) : "The collision with the current crane should be solved.";
-                if(collisionCranes.contains(dangerousCrane))  {
-                    System.out.println("The collision with the current crane should have been solved.");
-                }
+                assert !collisionCranes.contains(dangerousCrane) : "The collision with the current crane should be solved.";
+
             }
             // Move crane out of the way
             else {
-                collisionCranes = moveCraneOutOfTheWay(timer, dangerousCrane, moveToContainer, movingContainer, craneTimeLocks, schedule, collisionCranes);
+                // solve collision when moving container out of the way
+                CraneMovement moveCraneOutWay = dangerousCrane.moveToSaveDistance(timer, moveToContainer, movingContainer);
+                timer = moveCraneOutOfTheWay(moveCraneOutWay, timer, craneTimeLocks, schedule);
+                moveToContainer.updateTimer(timer);
+                movingContainer.updateTimer(moveToContainer.getEndTime()+1);
+
+                collisionCranes = detectCollision(moveToContainer, movingContainer, craneTimeLocks);
             }
         }
         return timer;
     }
-    public static List<Crane> moveCraneOutOfTheWay(double timer, Crane dangerousCrane, CraneMovement moveToContainer, CraneMovement movingContainer, Map<Integer, Double> craneTimeLocks, List<FullMovement> schedule, List<Crane> collisionCranes) throws Exception {
-        // solve collision when moving container out of the way
-        CraneMovement moveCraneOutWay = dangerousCrane.moveToSaveDistance(timer, moveToContainer, movingContainer);
 
+    private static double moveCraneOutOfTheWay(CraneMovement moveCraneOutWay, double timer, Map<Integer, Double> craneTimeLocks, List<FullMovement> schedule) throws Exception {
         if (moveCraneOutWay != null) {
             double previousTimer = timer;
             timer = solveCollisionsRecurs(schedule, moveCraneOutWay, craneTimeLocks, timer);
-            moveToContainer.updateTimer(timer);
-            movingContainer.updateTimer(moveToContainer.getEndTime()+1);
 
-            if(previousTimer == timer) {
+            if (previousTimer == timer) {
                 addToSchedule_withoutContainer(moveCraneOutWay, schedule, craneTimeLocks);
-
-                timer = moveCraneOutWay.getEndTime()+1;
-                executeEvents(timer, craneTimeLocks);
-                movingContainer.updateTimer(moveToContainer.getEndTime());
-            }
-            else {
-                executeEvents(timer, craneTimeLocks);
-                collisionCranes = detectCollision(moveToContainer, movingContainer, craneTimeLocks);
+                timer = moveCraneOutWay.getEndTime() + 1;
             }
         }
         else {
@@ -159,37 +165,9 @@ public class Main {
             throw new Exception("Crane cannot be moved out of the way");
             //oplossing:  todo: pass container on
         }
-        return collisionCranes;
+        return timer;
     }
-    public static List<Crane> moveCraneOutOfTheWay(double timer, Crane dangerousCrane, CraneMovement moveCraneOutWay, Map<Integer, Double> craneTimeLocks, List<FullMovement> schedule, List<Crane> collisionCranes) throws Exception {
-        // solve collision when moving container out of the way
-        // solve collision when moving container out of the way
-        CraneMovement moveOtherCraneOutWay = dangerousCrane.moveToSaveDistance(timer, moveCraneOutWay);
 
-        if (moveOtherCraneOutWay != null) {
-            double previousTimer = timer;
-            System.out.println("RecursiveFunctionIsCalled...");
-            timer = solveCollisionsRecurs(schedule, moveOtherCraneOutWay, craneTimeLocks, timer);
-            moveCraneOutWay.updateTimer(timer);
-            if(previousTimer == timer) {
-                // update timer to the last movement, in this case to the move out of the way from the container
-                addToSchedule_withoutContainer(moveOtherCraneOutWay, schedule, craneTimeLocks);
-                timer = updateTimeStamp(moveOtherCraneOutWay.getEndTime()+1, craneTimeLocks);
-                moveCraneOutWay.updateTimer(timer);
-            }
-            else {
-                collisionCranes = detectCollision(moveCraneOutWay, craneTimeLocks);
-            }
-        }
-        else {
-            // This would happen in a field where one crane cannot move out of the way, this would be an unlikely terminal setup
-            // Assunption : there is no crane for which the crane1.xmax > crane2.xmax en crane1.xmin < crane2.xmin
-            throw new Exception("Crane cannot be moved out of the way");
-            //oplossing:  todo: pass container on
-        }
-        return collisionCranes;
-
-    }
     // Solve collision for movement crane out of the way
     private static double solveCollisionsRecurs(List<FullMovement> schedule, CraneMovement moveCraneOutWay, Map<Integer, Double> craneTimeLocks, double timer) throws Exception {
         List<Crane> collisionCranes = detectCollision(moveCraneOutWay, craneTimeLocks);
@@ -204,24 +182,25 @@ public class Main {
                 moveCraneOutWay.updateTimer(timer);
 
                 if(moveCraneOutWay.collidesPosition(SAFE_DISTANCE, dangerousCrane, craneTimeLocks)) {
-                    collisionCranes = moveCraneOutOfTheWay(timer, dangerousCrane, moveCraneOutWay, craneTimeLocks, schedule, collisionCranes);
-                }
+                    // solve collision when moving container out of the way
+                    CraneMovement moveOtherCraneOutWay = dangerousCrane.moveToSaveDistance(timer, moveCraneOutWay);
+                    timer = moveCraneOutOfTheWay(moveOtherCraneOutWay, timer, craneTimeLocks, schedule);
 
+                    moveCraneOutWay.updateTimer(timer);
+                }
                 collisionCranes = detectCollision(moveCraneOutWay, craneTimeLocks);
                 assert !collisionCranes.contains(dangerousCrane) : "The collision with the current crane should be solved.";
             }
             // Move crane out of the way
             else {
-                moveCraneOutOfTheWay(timer, dangerousCrane, moveCraneOutWay, craneTimeLocks, schedule, collisionCranes);
+                // solve collision when moving container out of the way
+                CraneMovement moveOtherCraneOutWay = dangerousCrane.moveToSaveDistance(timer, moveCraneOutWay);
+                timer =  moveCraneOutOfTheWay(moveOtherCraneOutWay, timer, craneTimeLocks, schedule);
+                moveCraneOutWay.updateTimer(timer);
+                collisionCranes = detectCollision(moveOtherCraneOutWay, craneTimeLocks);
             }
         }
         return timer;
-    }
-
-    private static Coordinate calculateMeetingPoint(Crane crane, ContainerMovement containerMovement) {
-        double xMax = crane.getXmax();
-        double xMin = crane.getXmin();
-        return field.calculatetMeetingPoint(xMax, xMin, containerMovement, containers.get(containerMovement.getContainerId()));
     }
 
     private static void addToSchedule_withoutContainer(CraneMovement craneMove, List<FullMovement> schedule, Map<Integer, Double> craneTimeLocks) {
@@ -279,7 +258,7 @@ public class Main {
     private static List<Crane> detectCollision(CraneMovement moveCraneOutWay, Map<Integer, Double> craneTimeLocks) {
         List<Crane> collisions = new ArrayList<>();
         for(Crane otherCrane : cranes) {
-            if(otherCrane.getId() != moveCraneOutWay.getCraneId()) {
+            if (otherCrane.getId() != moveCraneOutWay.getCraneId()) {
                 if (moveCraneOutWay.collidesTraject(SAFE_DISTANCE, otherCrane) || moveCraneOutWay.collidesPosition(SAFE_DISTANCE, otherCrane, craneTimeLocks)) {
                     collisions.add(otherCrane);
                     System.out.println("Problems with crane " + otherCrane.getId() + ".");
@@ -293,7 +272,7 @@ public class Main {
     private static List<Crane> detectCollision(CraneMovement moveToContainer, CraneMovement movingContainer, Map<Integer, Double> craneTimeLocks) {
         List<Crane> collisions = new ArrayList<>();
         for(Crane otherCrane : cranes) {
-            if(otherCrane.getId() != moveToContainer.getCraneId()) {
+            if (otherCrane.getId() != movingContainer.getCraneId()) {
                 if (moveToContainer.collidesTraject(SAFE_DISTANCE, otherCrane) || movingContainer.collidesTraject(SAFE_DISTANCE, otherCrane) || moveToContainer.collidesPosition(SAFE_DISTANCE, otherCrane, craneTimeLocks) || movingContainer.collidesPosition(SAFE_DISTANCE, otherCrane, craneTimeLocks)) {
                     collisions.add(otherCrane);
                     System.out.println("Problems with crane " + otherCrane.getId() + ".");
