@@ -220,13 +220,6 @@ public class Field {
         return null;
     }
 
-    private ContainerMovement generateContainerMovement(Container container, List<Integer> destinationSlot) {
-        Coordinate start = getGrabbingPoint(container.getId());
-        moveContainer(container, destinationSlot);
-        Coordinate end = getGrabbingPoint(container.getId());
-        System.out.println("Made room by moving container " + container.getId() + " -> " + slotIdsToString(destinationSlot));
-        return (new ContainerMovement(container.getId(), start, end));
-    }
     public ContainerMovement makeRoom(Container container, List<Integer> containersToMove) {
         int length = container.getLength();
         ArrayList<Integer> possibleLengths = Util.calculatePossibleSums(length);
@@ -459,6 +452,13 @@ public class Field {
         System.out.println("Container " + container.getId() + " will be moved from " + slotsToString(oldSlots) + " -> " + slotIdsToString(destinationSlotIs));
     }
 
+    private ContainerMovement generateContainerMovement(Container container, List<Integer> destinationSlot) {
+        Coordinate start = getGrabbingPoint(container.getId());
+        moveContainer(container, destinationSlot);
+        Coordinate end = getGrabbingPoint(container.getId());
+        System.out.println("Made room by moving container " + container.getId() + " -> " + slotIdsToString(destinationSlot));
+        return (new ContainerMovement(container.getId(), start, end));
+    }
     public void placeContainer(Container container, List<Integer> destinationSlotIds) {
         // Add container to new slots
         // Add container to slots itself
